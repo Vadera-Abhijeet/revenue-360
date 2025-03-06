@@ -12,7 +12,7 @@ import {
 import {
   LayoutDashboard,
   AppWindow,
-  Megaphone,
+  // Megaphone,
   Bell,
   Settings,
   LogOut,
@@ -77,11 +77,11 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       icon: <LayoutDashboard size={20} />,
     },
     { name: t("common.apps"), path: "/apps", icon: <AppWindow size={20} /> },
-    {
-      name: t("common.campaigns"),
-      path: "/campaigns",
-      icon: <Megaphone size={20} />,
-    },
+    // {
+    //   name: t("common.campaigns"),
+    //   path: "/campaigns",
+    //   icon: <Megaphone size={20} />,
+    // },
     // {
     //   name: t("common.notifications"),
     //   path: "/notifications",
