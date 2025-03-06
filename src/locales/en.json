@@ -161,7 +161,7 @@
   },
   "auth": {
     "login": {
-      "title": "Welcome Back",
+      "title": "Welcome",
       "subtitle": "Sign in to your account to continue",
       "googleButton": "Continue with Google",
       "forgotPassword": "Forgot Password?",

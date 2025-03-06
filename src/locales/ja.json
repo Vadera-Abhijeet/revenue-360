@@ -161,7 +161,7 @@
   },
   "auth": {
     "login": {
-      "title": "おかえりなさい",
+      "title": "いらっしゃいませ",
       "subtitle": "続行するにはアカウントにサインインしてください",
       "googleButton": "Googleで続行",
       "forgotPassword": "パスワードをお忘れですか？",

@@ -161,7 +161,7 @@
   },
   "auth": {
     "login": {
-      "title": "Willkommen zurück",
+      "title": "Willkommen",
       "subtitle": "Melden Sie sich bei Ihrem Konto an, um fortzufahren",
       "googleButton": "Mit Google fortfahren",
       "forgotPassword": "Passwort vergessen?",

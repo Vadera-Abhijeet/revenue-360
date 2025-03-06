@@ -161,7 +161,7 @@
   },
   "auth": {
     "login": {
-      "title": "Bienvenido de nuevo",
+      "title": "Bienvenida",
       "subtitle": "Inicia sesión en tu cuenta para continuar",
       "googleButton": "Continuar con Google",
       "forgotPassword": "¿Olvidaste tu contraseña?",
