@@ -1,6 +1,13 @@
-import React, { useState } from 'react';
-import { Modal, Button, Label, TextInput, Select, Checkbox } from 'flowbite-react';
-import { useTranslation } from 'react-i18next';
+import React, { useState } from "react";
+import {
+  Modal,
+  Button,
+  Label,
+  TextInput,
+  Select,
+  Checkbox,
+} from "flowbite-react";
+import { useTranslation } from "react-i18next";
 
 interface ConnectAppModalProps {
   isOpen: boolean;
@@ -20,13 +27,17 @@ export interface AppFormData {
   };
 }
 
-const ConnectAppModal: React.FC<ConnectAppModalProps> = ({ isOpen, onClose, onSubmit }) => {
+const ConnectAppModal: React.FC<ConnectAppModalProps> = ({
+  isOpen,
+  onClose,
+  onSubmit,
+}) => {
   const { t } = useTranslation();
   const [formData, setFormData] = useState<AppFormData>({
-    name: '',
-    appId: '',
-    platform: 'android',
-    category: 'games',
+    name: "",
+    appId: "",
+    platform: "android",
+    category: "games",
     integrations: {
       googleAds: false,
       adMob: false,
@@ -34,7 +45,9 @@ const ConnectAppModal: React.FC<ConnectAppModalProps> = ({ isOpen, onClose, onSu
     },
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
@@ -58,10 +71,10 @@ const ConnectAppModal: React.FC<ConnectAppModalProps> = ({ isOpen, onClose, onSu
     onSubmit(formData);
     // Reset form
     setFormData({
-      name: '',
-      appId: '',
-      platform: 'android',
-      category: 'games',
+      name: "",
+      appId: "",
+      platform: "android",
+      category: "games",
       integrations: {
         googleAds: false,
         adMob: false,
@@ -72,18 +85,20 @@ const ConnectAppModal: React.FC<ConnectAppModalProps> = ({ isOpen, onClose, onSu
 
   return (
     <Modal show={isOpen} onClose={onClose} size="md">
-      <Modal.Header>
-        {t('apps.connect.title')}
+      <Modal.Header
+        theme={{
+          title: "text-xl font-medium text-indigo-600 dark:text-white",
+        }}
+      >
+        {t("apps.connect.title")}
       </Modal.Header>
       <Modal.Body>
         <div className="space-y-6">
-          <p className="text-sm text-gray-500">
-            {t('apps.connect.subtitle')}
-          </p>
+          <p className="text-sm text-gray-500">{t("apps.connect.subtitle")}</p>
           <form className="space-y-4" onSubmit={handleSubmit}>
             <div>
               <div className="mb-2 block">
-                <Label htmlFor="name" value={t('apps.connect.appName')} />
+                <Label htmlFor="name" value={t("apps.connect.appName")} />
               </div>
               <TextInput
                 id="name"
@@ -95,7 +110,7 @@ const ConnectAppModal: React.FC<ConnectAppModalProps> = ({ isOpen, onClose, onSu
             </div>
             <div>
               <div className="mb-2 block">
-                <Label htmlFor="appId" value={t('apps.connect.appId')} />
+                <Label htmlFor="appId" value={t("apps.connect.appId")} />
               </div>
               <TextInput
                 id="appId"
@@ -107,7 +122,7 @@ const ConnectAppModal: React.FC<ConnectAppModalProps> = ({ isOpen, onClose, onSu
             </div>
             <div>
               <div className="mb-2 block">
-                <Label htmlFor="platform" value={t('apps.connect.platform')} />
+                <Label htmlFor="platform" value={t("apps.connect.platform")} />
               </div>
               <Select
                 id="platform"
@@ -124,7 +139,7 @@ const ConnectAppModal: React.FC<ConnectAppModalProps> = ({ isOpen, onClose, onSu
             </div>
             <div>
               <div className="mb-2 block">
-                <Label htmlFor="category" value={t('apps.connect.category')} />
+                <Label htmlFor="category" value={t("apps.connect.category")} />
               </div>
               <Select
                 id="category"
@@ -148,7 +163,7 @@ const ConnectAppModal: React.FC<ConnectAppModalProps> = ({ isOpen, onClose, onSu
             </div>
             <div>
               <div className="mb-2 block">
-                <Label value={t('apps.connect.integrations')} />
+                <Label value={t("apps.connect.integrations")} />
               </div>
               <div className="space-y-2">
                 <div className="flex items-center gap-2">
@@ -183,12 +198,16 @@ const ConnectAppModal: React.FC<ConnectAppModalProps> = ({ isOpen, onClose, onSu
           </form>
         </div>
       </Modal.Body>
-      <Modal.Footer>
-        <Button onClick={() => handleSubmit({ preventDefault: () => {} } as any)}>
-          {t('apps.connect.submit')}
+      <Modal.Footer
+        theme={{
+          base: "flex items-center justify-end space-x-2 rounded-b border-gray-200 p-6 dark:border-gray-600",
+        }}
+      >
+        <Button color="light" onClick={onClose}>
+          {t("common.cancel")}
         </Button>
-        <Button color="gray" onClick={onClose}>
-          {t('common.cancel')}
+        <Button color={"indigo"} onClick={handleSubmit}>
+          {t("apps.connect.submit")}
         </Button>
       </Modal.Footer>
     </Modal>

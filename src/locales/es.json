@@ -2,7 +2,7 @@
   "common": {
     "appName": "Revenue-360",
     "loading": "Cargando...",
-    "error": "Se produjo un error",
+    "anErrorOccurred": "Se produjo un error",
     "success": "¡Éxito!",
     "save": "Guardar",
     "cancel": "Cancelar",
@@ -122,14 +122,16 @@
     "pending": "Pendiente",
     "completed": "Completado",
     "failed": "Fallido",
-    "success": "Éxito",
     "error": "Error",
     "warning": "Advertencia",
     "info": "Información",
     "debug": "Depuración",
     "trace": "Rastreo",
     "fatal": "Fatal",
-    "unknown": "Desconocido"
+    "unknown": "Desconocido",
+    "pause": "Pausa",
+    "activate": "Activar",
+    "configurations": "Configuración"
   },
   "landing": {
     "hero": {
@@ -220,7 +222,11 @@
       "retention": "Retención",
       "rating": "Calificación",
       "status": "Estado",
-      "actions": "Acciones"
+      "actions": "Acciones",
+      "estimateRevenue": "Estimar ingresos",
+      "totalCost": "Costo total",
+      "netUSD": "Neto en USD",
+      "percentage": "Porcentaje"
     },
     "connect": {
       "title": "Conectar aplicación",
@@ -300,6 +306,19 @@
       "timezone": "Zona horaria",
       "save": "Guardar cambios"
     },
+    "preferences": {
+      "title": "Preferencias",
+      "language": "Idioma",
+      "currency": "Moneda",
+      "theme": "Tema",
+      "notifications": "Notificaciones",
+      "emailNotifications": "Notificaciones por correo electrónico",
+      "pushNotifications": "Notificaciones push",
+      "dataRefresh": "Tasa de actualización de datos"
+    }
+  },
+  "configurations": {
+    "title": "Configuración",
     "integrations": {
       "title": "Integraciones",
       "googleAds": "Google Ads",
@@ -314,16 +333,6 @@
       "disconnect": "Desconectar",
       "connected": "Conectado",
       "notConnected": "No conectado"
-    },
-    "preferences": {
-      "title": "Preferencias",
-      "language": "Idioma",
-      "currency": "Moneda",
-      "theme": "Tema",
-      "notifications": "Notificaciones",
-      "emailNotifications": "Notificaciones por correo electrónico",
-      "pushNotifications": "Notificaciones push",
-      "dataRefresh": "Tasa de actualización de datos"
     },
     "team": {
       "title": "Gestión de equipo",

@@ -2,7 +2,7 @@
   "common": {
     "appName": "Revenue-360",
     "loading": "Wird geladen...",
-    "error": "Ein Fehler ist aufgetreten",
+    "anErrorOccurred": "Ein Fehler ist aufgetreten",
     "success": "Erfolg!",
     "save": "Speichern",
     "cancel": "Abbrechen",
@@ -122,14 +122,16 @@
     "pending": "Ausstehend",
     "completed": "Abgeschlossen",
     "failed": "Fehlgeschlagen",
-    "success": "Erfolg",
     "error": "Fehler",
     "warning": "Warnung",
     "info": "Info",
     "debug": "Debug",
     "trace": "Trace",
     "fatal": "Fatal",
-    "unknown": "Unbekannt"
+    "unknown": "Unbekannt",
+    "pause": "Pausa",
+    "activate": "Aktivieren",
+    "configurations": "Konfigurationen"
   },
   "landing": {
     "hero": {
@@ -220,7 +222,11 @@
       "retention": "Bindungsrate",
       "rating": "Bewertung",
       "status": "Status",
-      "actions": "Aktionen"
+      "actions": "Aktionen",
+      "estimateRevenue": "Einnahmen schätzen",
+      "totalCost": "Gesamtkosten",
+      "netUSD": "Net USD",
+      "percentage": "Prozentsatz"
     },
     "connect": {
       "title": "App verbinden",
@@ -300,6 +306,19 @@
       "timezone": "Zeitzone",
       "save": "Änderungen speichern"
     },
+    "preferences": {
+      "title": "Präferenzen",
+      "language": "Sprache",
+      "currency": "Währung",
+      "theme": "Design",
+      "notifications": "Benachrichtigungen",
+      "emailNotifications": "E-Mail-Benachrichtigungen",
+      "pushNotifications": "Push-Benachrichtigungen",
+      "dataRefresh": "Datenaktualisierungsrate"
+    }
+  },
+  "configurations": {
+    "title": "Konfigurationen",
     "integrations": {
       "title": "Integrationen",
       "googleAds": "Google Ads",
@@ -314,16 +333,6 @@
       "disconnect": "Trennen",
       "connected": "Verbunden",
       "notConnected": "Nicht verbunden"
-    },
-    "preferences": {
-      "title": "Präferenzen",
-      "language": "Sprache",
-      "currency": "Währung",
-      "theme": "Design",
-      "notifications": "Benachrichtigungen",
-      "emailNotifications": "E-Mail-Benachrichtigungen",
-      "pushNotifications": "Push-Benachrichtigungen",
-      "dataRefresh": "Datenaktualisierungsrate"
     },
     "team": {
       "title": "Team-Verwaltung",

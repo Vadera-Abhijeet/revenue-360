@@ -1,6 +1,8 @@
 // Mock API service for Revenue-360
 // In a real application, this would connect to a backend API
 
+import { IAccount, IPreferences, ISettings } from "../interfaces";
+
 // Helper function to generate random data
 const randomNumber = (min: number, max: number) => {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -10,10 +12,15 @@ const randomPercentage = (min: number, max: number) => {
   return +(Math.random() * (max - min) + min).toFixed(2);
 };
 
+const randomFloat = (min: number, max: number, decimals: number = 2) => {
+  const value = Math.random() * (max - min) + min;
+  return parseFloat(value.toFixed(decimals));
+};
+
 // Dashboard data
 export const fetchDashboardData = async (startDate: Date, endDate: Date) => {
   // Simulate API call delay
-  await new Promise(resolve => setTimeout(resolve, 800));
+  await new Promise((resolve) => setTimeout(resolve, 800));
 
   // Generate dates between start and end date
   const dates = [];
@@ -24,11 +31,11 @@ export const fetchDashboardData = async (startDate: Date, endDate: Date) => {
   }
 
   // Generate revenue vs spend data
-  const revenueVsSpend = dates.map(date => {
+  const revenueVsSpend = dates.map((date) => {
     const revenue = randomNumber(5000, 15000);
     const adSpend = randomNumber(2000, 8000);
     return {
-      date: date.toISOString().split('T')[0],
+      date: date.toISOString().split("T")[0],
       revenue,
       adSpend,
     };
@@ -36,31 +43,98 @@ export const fetchDashboardData = async (startDate: Date, endDate: Date) => {
 
   // Generate top apps data
   const topApps = [
-    { name: 'Puzzle Master', revenue: randomNumber(20000, 50000), installs: randomNumber(5000, 15000), roi: randomPercentage(10, 30) },
-    { name: 'Fitness Tracker', revenue: randomNumber(15000, 40000), installs: randomNumber(3000, 10000), roi: randomPercentage(8, 25) },
-    { name: 'Recipe Book', revenue: randomNumber(10000, 30000), installs: randomNumber(2000, 8000), roi: randomPercentage(5, 20) },
-    { name: 'Weather App', revenue: randomNumber(8000, 25000), installs: randomNumber(1500, 7000), roi: randomPercentage(3, 18) },
-    { name: 'Task Manager', revenue: randomNumber(5000, 20000), installs: randomNumber(1000, 5000), roi: randomPercentage(2, 15) },
+    {
+      name: "Puzzle Master",
+      revenue: randomNumber(20000, 50000),
+      installs: randomNumber(5000, 15000),
+      roi: randomPercentage(10, 30),
+    },
+    {
+      name: "Fitness Tracker",
+      revenue: randomNumber(15000, 40000),
+      installs: randomNumber(3000, 10000),
+      roi: randomPercentage(8, 25),
+    },
+    {
+      name: "Recipe Book",
+      revenue: randomNumber(10000, 30000),
+      installs: randomNumber(2000, 8000),
+      roi: randomPercentage(5, 20),
+    },
+    {
+      name: "Weather App",
+      revenue: randomNumber(8000, 25000),
+      installs: randomNumber(1500, 7000),
+      roi: randomPercentage(3, 18),
+    },
+    {
+      name: "Task Manager",
+      revenue: randomNumber(5000, 20000),
+      installs: randomNumber(1000, 5000),
+      roi: randomPercentage(2, 15),
+    },
   ];
 
   // Generate recent campaigns data
   const recentCampaigns = [
-    { id: 'c1', name: 'Summer Promotion', status: 'active', spend: randomNumber(5000, 10000), conversions: randomNumber(500, 2000), cpa: randomNumber(5, 15) },
-    { id: 'c2', name: 'New User Acquisition', status: 'active', spend: randomNumber(3000, 8000), conversions: randomNumber(300, 1500), cpa: randomNumber(6, 16) },
-    { id: 'c3', name: 'Re-engagement', status: 'paused', spend: randomNumber(2000, 6000), conversions: randomNumber(200, 1000), cpa: randomNumber(7, 17) },
-    { id: 'c4', name: 'Holiday Special', status: 'completed', spend: randomNumber(1000, 4000), conversions: randomNumber(100, 800), cpa: randomNumber(8, 18) },
-    { id: 'c5', name: 'Brand Awareness', status: 'active', spend: randomNumber(500, 3000), conversions: randomNumber(50, 500), cpa: randomNumber(9, 19) },
+    {
+      id: "c1",
+      name: "Summer Promotion",
+      status: "active",
+      spend: randomNumber(5000, 10000),
+      conversions: randomNumber(500, 2000),
+      cpa: randomNumber(5, 15),
+    },
+    {
+      id: "c2",
+      name: "New User Acquisition",
+      status: "active",
+      spend: randomNumber(3000, 8000),
+      conversions: randomNumber(300, 1500),
+      cpa: randomNumber(6, 16),
+    },
+    {
+      id: "c3",
+      name: "Re-engagement",
+      status: "paused",
+      spend: randomNumber(2000, 6000),
+      conversions: randomNumber(200, 1000),
+      cpa: randomNumber(7, 17),
+    },
+    {
+      id: "c4",
+      name: "Holiday Special",
+      status: "completed",
+      spend: randomNumber(1000, 4000),
+      conversions: randomNumber(100, 800),
+      cpa: randomNumber(8, 18),
+    },
+    {
+      id: "c5",
+      name: "Brand Awareness",
+      status: "active",
+      spend: randomNumber(500, 3000),
+      conversions: randomNumber(50, 500),
+      cpa: randomNumber(9, 19),
+    },
   ];
 
   // Calculate summary data
-  const totalRevenue = revenueVsSpend.reduce((sum, day) => sum + day.revenue, 0);
-  const totalAdSpend = revenueVsSpend.reduce((sum, day) => sum + day.adSpend, 0);
+  const totalRevenue = revenueVsSpend.reduce(
+    (sum, day) => sum + day.revenue,
+    0
+  );
+  const totalAdSpend = revenueVsSpend.reduce(
+    (sum, day) => sum + day.adSpend,
+    0
+  );
   const roi = ((totalRevenue - totalAdSpend) / totalAdSpend) * 100;
 
   // Previous period data (for comparison)
   const previousRevenue = totalRevenue * (1 - (Math.random() * 0.3 - 0.15)); // -15% to +15%
   const previousAdSpend = totalAdSpend * (1 - (Math.random() * 0.3 - 0.15)); // -15% to +15%
-  const previousRoi = ((previousRevenue - previousAdSpend) / previousAdSpend) * 100;
+  const previousRoi =
+    ((previousRevenue - previousAdSpend) / previousAdSpend) * 100;
 
   return {
     summary: {
@@ -79,43 +153,51 @@ export const fetchDashboardData = async (startDate: Date, endDate: Date) => {
   };
 };
 
-// App list data
 export const fetchApps = async () => {
   // Simulate API call delay
-  await new Promise(resolve => setTimeout(resolve, 800));
+  await new Promise((resolve) => setTimeout(resolve, 800));
 
-  const platforms = ['android', 'ios', 'web', 'cross-platform'];
-  const statuses = ['active', 'inactive', 'pending'];
+  const platforms = ["Android", "iOS"];
+  const appNames = [
+    "Android version update info",
+    "Typing Practice Master",
+    "GPS Photo: TimeStamp",
+    "My Stuff: Inventory Organiser",
+    "Draw Trace: Photos & Shape",
+    "Reading Assistant Plus",
+    "Countdown calendar widget",
+    "Expense Tracker Pro",
+    "Workout Planner",
+    "Travel Diary",
+  ];
 
-  // Generate 10 random apps
-  const apps = Array.from({ length: 10 }, (_, i) => {
-    const revenue = randomNumber(5000, 50000);
-    const installs = randomNumber(1000, 100000);
-    const uninstalls = randomNumber(100, installs * 0.3);
-    const retention = randomPercentage(30, 95);
-    const rating = randomNumber(30, 50) / 10; // 3.0 to 5.0
+  const platformIcons: Record<string, string> = {
+    Android: "https://cdn-icons-png.flaticon.com/512/174/174836.png", // Android logo
+    iOS: "https://cdn-icons-png.flaticon.com/512/0/747.png", // Apple logo
+  };
+
+  // Generate mock apps data
+  const apps = Array.from({ length: appNames.length }, (_, i) => {
+    const platform = platforms[randomNumber(0, platforms.length - 1)];
+    const estimateRevenueUSD = randomFloat(2, 800, 2);
+    const totalCostUSD = randomFloat(0, estimateRevenueUSD, 2);
+    const totalCostINR = totalCostUSD * 87; // Assume conversion rate ₹87
+    const netUSD = parseFloat((estimateRevenueUSD - totalCostUSD).toFixed(2));
+    const percentage = parseFloat(
+      ((netUSD / estimateRevenueUSD) * 1).toFixed(2)
+    );
 
     return {
       id: `app-${i + 1}`,
-      name: [
-        'Puzzle Master',
-        'Fitness Tracker',
-        'Recipe Book',
-        'Weather App',
-        'Task Manager',
-        'Music Player',
-        'Photo Editor',
-        'News Reader',
-        'Language Learner',
-        'Meditation Guide',
-      ][i],
-      platform: platforms[randomNumber(0, platforms.length - 1)],
-      revenue,
-      installs,
-      uninstalls,
-      retention,
-      rating,
-      status: statuses[randomNumber(0, statuses.length - 1)] as 'active' | 'inactive' | 'pending',
+      name: appNames[i],
+      platform,
+      icon: platformIcons[platform], // Assign platform-based icon
+      estimateRevenueUSD,
+      estimateRevenue: `${estimateRevenueUSD} USD`,
+      totalCostUSD,
+      totalCostINR: `${totalCostINR.toFixed(2)} INR`,
+      netUSD,
+      percentage,
     };
   });
 
@@ -123,9 +205,13 @@ export const fetchApps = async () => {
 };
 
 // App details data
-export const fetchAppDetails = async (appId: string, startDate: Date, endDate: Date) => {
+export const fetchAppDetails = async (
+  appId: string,
+  startDate: Date,
+  endDate: Date
+) => {
   // Simulate API call delay
-  await new Promise(resolve => setTimeout(resolve, 800));
+  await new Promise((resolve) => setTimeout(resolve, 800));
 
   // Generate dates between start and end date
   const dates = [];
@@ -136,9 +222,9 @@ export const fetchAppDetails = async (appId: string, startDate: Date, endDate: D
   }
 
   // Generate revenue trend data
-  const revenueData = dates.map(date => {
+  const revenueData = dates.map((date) => {
     return {
-      date: date.toISOString().split('T')[0],
+      date: date.toISOString().split("T")[0],
       revenue: randomNumber(500, 2000),
       adRevenue: randomNumber(300, 1000),
       iapRevenue: randomNumber(200, 1000),
@@ -146,11 +232,11 @@ export const fetchAppDetails = async (appId: string, startDate: Date, endDate: D
   });
 
   // Generate user data
-  const userData = dates.map(date => {
+  const userData = dates.map((date) => {
     const newUsers = randomNumber(100, 500);
     const activeUsers = randomNumber(500, 2000);
     return {
-      date: date.toISOString().split('T')[0],
+      date: date.toISOString().split("T")[0],
       newUsers,
       activeUsers,
       totalUsers: activeUsers + randomNumber(5000, 10000),
@@ -168,32 +254,92 @@ export const fetchAppDetails = async (appId: string, startDate: Date, endDate: D
 
   // Generate country data
   const countryData = [
-    { country: 'United States', users: randomNumber(5000, 10000), revenue: randomNumber(10000, 30000) },
-    { country: 'United Kingdom', users: randomNumber(2000, 5000), revenue: randomNumber(5000, 15000) },
-    { country: 'Germany', users: randomNumber(1500, 4000), revenue: randomNumber(3000, 10000) },
-    { country: 'Japan', users: randomNumber(1000, 3000), revenue: randomNumber(2000, 8000) },
-    { country: 'India', users: randomNumber(800, 2500), revenue: randomNumber(1500, 6000) },
-    { country: 'Brazil', users: randomNumber(600, 2000), revenue: randomNumber(1000, 5000) },
-    { country: 'Canada', users: randomNumber(500, 1500), revenue: randomNumber(800, 4000) },
-    { country: 'Australia', users: randomNumber(400, 1200), revenue: randomNumber(600, 3000) },
-    { country: 'France', users: randomNumber(300, 1000), revenue: randomNumber(500, 2500) },
-    { country: 'Italy', users: randomNumber(200, 800), revenue: randomNumber(400, 2000) },
+    {
+      country: "United States",
+      users: randomNumber(5000, 10000),
+      revenue: randomNumber(10000, 30000),
+    },
+    {
+      country: "United Kingdom",
+      users: randomNumber(2000, 5000),
+      revenue: randomNumber(5000, 15000),
+    },
+    {
+      country: "Germany",
+      users: randomNumber(1500, 4000),
+      revenue: randomNumber(3000, 10000),
+    },
+    {
+      country: "Japan",
+      users: randomNumber(1000, 3000),
+      revenue: randomNumber(2000, 8000),
+    },
+    {
+      country: "India",
+      users: randomNumber(800, 2500),
+      revenue: randomNumber(1500, 6000),
+    },
+    {
+      country: "Brazil",
+      users: randomNumber(600, 2000),
+      revenue: randomNumber(1000, 5000),
+    },
+    {
+      country: "Canada",
+      users: randomNumber(500, 1500),
+      revenue: randomNumber(800, 4000),
+    },
+    {
+      country: "Australia",
+      users: randomNumber(400, 1200),
+      revenue: randomNumber(600, 3000),
+    },
+    {
+      country: "France",
+      users: randomNumber(300, 1000),
+      revenue: randomNumber(500, 2500),
+    },
+    {
+      country: "Italy",
+      users: randomNumber(200, 800),
+      revenue: randomNumber(400, 2000),
+    },
   ];
 
   // Generate version data
   const versionData = [
-    { version: '3.2.1', users: randomNumber(5000, 10000), crashes: randomNumber(10, 50) },
-    { version: '3.2.0', users: randomNumber(2000, 5000), crashes: randomNumber(20, 80) },
-    { version: '3.1.5', users: randomNumber(1000, 3000), crashes: randomNumber(30, 100) },
-    { version: '3.1.0', users: randomNumber(500, 1500), crashes: randomNumber(40, 120) },
-    { version: '3.0.0', users: randomNumber(200, 800), crashes: randomNumber(50, 150) },
+    {
+      version: "3.2.1",
+      users: randomNumber(5000, 10000),
+      crashes: randomNumber(10, 50),
+    },
+    {
+      version: "3.2.0",
+      users: randomNumber(2000, 5000),
+      crashes: randomNumber(20, 80),
+    },
+    {
+      version: "3.1.5",
+      users: randomNumber(1000, 3000),
+      crashes: randomNumber(30, 100),
+    },
+    {
+      version: "3.1.0",
+      users: randomNumber(500, 1500),
+      crashes: randomNumber(40, 120),
+    },
+    {
+      version: "3.0.0",
+      users: randomNumber(200, 800),
+      crashes: randomNumber(50, 150),
+    },
   ];
 
   return {
     id: appId,
-    name: 'Fitness Tracker Pro',
-    platform: 'android',
-    category: 'Health & Fitness',
+    name: "Fitness Tracker Pro",
+    platform: "android",
+    category: "Health & Fitness",
     summary: {
       revenue: 85000,
       previousRevenue: 75000,
@@ -217,14 +363,14 @@ export const fetchAppDetails = async (appId: string, startDate: Date, endDate: D
 // Campaigns data
 export const fetchCampaigns = async () => {
   // Simulate API call delay
-  await new Promise(resolve => setTimeout(resolve, 800));
+  await new Promise((resolve) => setTimeout(resolve, 800));
 
   return [
     {
-      id: 'campaign1',
-      name: 'Summer Promotion',
-      platform: 'Google Ads',
-      status: 'active',
+      id: "campaign1",
+      name: "Summer Promotion",
+      platform: "Google Ads",
+      status: "active",
       budget: 10000,
       spend: 8500,
       impressions: 500000,
@@ -232,17 +378,17 @@ export const fetchCampaigns = async () => {
       ctr: 5.0,
       cpc: 0.34,
       installs: 5000,
-      cpi: 1.70,
+      cpi: 1.7,
       conversions: 1500,
       cpa: 5.67,
       revenue: 15000,
       roi: 76.5,
     },
     {
-      id: 'campaign2',
-      name: 'New User Acquisition',
-      platform: 'Facebook Ads',
-      status: 'active',
+      id: "campaign2",
+      name: "New User Acquisition",
+      platform: "Facebook Ads",
+      status: "active",
       budget: 8000,
       spend: 6500,
       impressions: 400000,
@@ -257,10 +403,10 @@ export const fetchCampaigns = async () => {
       roi: 84.6,
     },
     {
-      id: 'campaign3',
-      name: 'Re-engagement',
-      platform: 'Google Ads',
-      status: 'paused',
+      id: "campaign3",
+      name: "Re-engagement",
+      platform: "Google Ads",
+      status: "paused",
       budget: 5000,
       spend: 4200,
       impressions: 300000,
@@ -268,17 +414,17 @@ export const fetchCampaigns = async () => {
       ctr: 5.0,
       cpc: 0.28,
       installs: 3000,
-      cpi: 1.40,
+      cpi: 1.4,
       conversions: 900,
       cpa: 4.67,
       revenue: 9000,
       roi: 114.3,
     },
     {
-      id: 'campaign4',
-      name: 'Holiday Special',
-      platform: 'TikTok Ads',
-      status: 'ended',
+      id: "campaign4",
+      name: "Holiday Special",
+      platform: "TikTok Ads",
+      status: "ended",
       budget: 6000,
       spend: 6000,
       impressions: 350000,
@@ -293,10 +439,10 @@ export const fetchCampaigns = async () => {
       roi: 75.0,
     },
     {
-      id: 'campaign5',
-      name: 'Brand Awareness',
-      platform: 'Apple Search Ads',
-      status: 'active',
+      id: "campaign5",
+      name: "Brand Awareness",
+      platform: "Apple Search Ads",
+      status: "active",
       budget: 4000,
       spend: 3200,
       impressions: 200000,
@@ -304,17 +450,17 @@ export const fetchCampaigns = async () => {
       ctr: 5.0,
       cpc: 0.32,
       installs: 2000,
-      cpi: 1.60,
+      cpi: 1.6,
       conversions: 600,
       cpa: 5.33,
       revenue: 6000,
       roi: 87.5,
     },
     {
-      id: 'campaign6',
-      name: 'Retargeting Campaign',
-      platform: 'Facebook Ads',
-      status: 'active',
+      id: "campaign6",
+      name: "Retargeting Campaign",
+      platform: "Facebook Ads",
+      status: "active",
       budget: 3000,
       spend: 2500,
       impressions: 150000,
@@ -329,10 +475,10 @@ export const fetchCampaigns = async () => {
       roi: 80.0,
     },
     {
-      id: 'campaign7',
-      name: 'Video Campaign',
-      platform: 'TikTok Ads',
-      status: 'paused',
+      id: "campaign7",
+      name: "Video Campaign",
+      platform: "TikTok Ads",
+      status: "paused",
       budget: 5500,
       spend: 4800,
       impressions: 280000,
@@ -352,62 +498,68 @@ export const fetchCampaigns = async () => {
 // Notifications data
 export const fetchNotifications = async () => {
   // Simulate API call delay
-  await new Promise(resolve => setTimeout(resolve, 500));
-  
+  await new Promise((resolve) => setTimeout(resolve, 500));
+
   return [
     {
-      id: '1',
-      type: 'warning',
-      title: 'High Spend Alert',
-      message: 'Your Google Ads campaign "Summer Promotion" has exceeded the daily budget by 15%.',
+      id: "1",
+      type: "warning",
+      title: "High Spend Alert",
+      message:
+        'Your Google Ads campaign "Summer Promotion" has exceeded the daily budget by 15%.',
       timestamp: new Date(Date.now() - 1 * 60 * 60 * 1000),
       read: false,
     },
     {
-      id: '2',
-      type: 'info',
-      title: 'New Version Detected',
-      message: 'A new version of "Fitness Tracker Pro" (v3.2.1) has been detected on the Play Store.',
+      id: "2",
+      type: "info",
+      title: "New Version Detected",
+      message:
+        'A new version of "Fitness Tracker Pro" (v3.2.1) has been detected on the Play Store.',
       timestamp: new Date(Date.now() - 3 * 60 * 60 * 1000),
       read: false,
     },
     {
-      id: '3',
-      type: 'success',
-      title: 'Campaign Goal Reached',
-      message: 'Your "New User Acquisition" campaign has reached its conversion goal.',
+      id: "3",
+      type: "success",
+      title: "Campaign Goal Reached",
+      message:
+        'Your "New User Acquisition" campaign has reached its conversion goal.',
       timestamp: new Date(Date.now() - 5 * 60 * 60 * 1000),
       read: true,
     },
     {
-      id: '4',
-      type: 'error',
-      title: 'Integration Error',
-      message: 'Failed to sync data from AdMob. Please check your integration settings.',
+      id: "4",
+      type: "error",
+      title: "Integration Error",
+      message:
+        "Failed to sync data from AdMob. Please check your integration settings.",
       timestamp: new Date(Date.now() - 8 * 60 * 60 * 1000),
       read: false,
     },
     {
-      id: '5',
-      type: 'warning',
-      title: 'Retention Drop',
-      message: 'Day 7 retention for "Budget Planner" has dropped by 8% in the last week.',
+      id: "5",
+      type: "warning",
+      title: "Retention Drop",
+      message:
+        'Day 7 retention for "Budget Planner" has dropped by 8% in the last week.',
       timestamp: new Date(Date.now() - 12 * 60 * 60 * 1000),
       read: true,
     },
     {
-      id: '6',
-      type: 'info',
-      title: 'New Review',
+      id: "6",
+      type: "info",
+      title: "New Review",
       message: 'Your app "Meditation Master" received a new 5-star review.',
       timestamp: new Date(Date.now() - 24 * 60 * 60 * 1000),
       read: true,
     },
     {
-      id: '7',
-      type: 'success',
-      title: 'Revenue Milestone',
-      message: 'Congratulations! Your app "Fitness Tracker Pro" has reached $100,000 in lifetime revenue.',
+      id: "7",
+      type: "success",
+      title: "Revenue Milestone",
+      message:
+        'Congratulations! Your app "Fitness Tracker Pro" has reached $100,000 in lifetime revenue.',
       timestamp: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
       read: true,
     },
@@ -417,67 +569,65 @@ export const fetchNotifications = async () => {
 // Settings data
 export const fetchUserSettings = async () => {
   // Simulate API call delay
-  await new Promise(resolve => setTimeout(resolve, 600));
-  
+  await new Promise((resolve) => setTimeout(resolve, 600));
+
   return {
     account: {
-      name: 'Demo User',
-      email: 'demo@example.com',
-      company: 'Demo Company',
-      role: 'Administrator',
-      timezone: 'America/New_York',
+      name: "Demo User",
+      email: "demo@example.com",
+      company: "Demo Company",
+      role: "Administrator",
+      timezone: "America/New_York",
     },
     integrations: {
       googleAds: true,
       adMob: true,
-      firebase: true,
-      playStore: true,
-      appStore: false,
       facebook: false,
-      appsFlyer: false,
-      adjust: false,
     },
     preferences: {
-      language: 'en',
-      currency: 'USD',
-      theme: 'light',
+      language: "en",
+      currency: "USD",
+      theme: "light",
       emailNotifications: true,
       pushNotifications: true,
-      dataRefreshRate: '1h',
+      dataRefreshRate: "1h",
     },
     team: [
       {
-        id: 'user1',
-        name: 'Demo User',
-        email: 'demo@example.com',
-        role: 'Administrator',
-        status: 'active',
+        id: "user1",
+        name: "Demo User",
+        email: "demo@example.com",
+        role: "Administrator",
+        status: "active",
       },
       {
-        id: 'user2',
-        name: 'John Doe',
-        email: 'john@example.com',
-        role: 'Editor',
-        status: 'active',
+        id: "user2",
+        name: "John Doe",
+        email: "john@example.com",
+        role: "Editor",
+        status: "active",
       },
       {
-        id: 'user3',
-        name: 'Jane Smith',
-        email: 'jane@example.com',
-        role: 'Viewer',
-        status: 'pending',
+        id: "user3",
+        name: "Jane Smith",
+        email: "jane@example.com",
+        role: "Viewer",
+        status: "pending",
       },
     ],
-  };
+  } as ISettings;
 };
 
 // Update user settings
-export const updateUserSettings = async (settings: any) => {
+export const updateUserSettings = async (settings: {
+  account: IAccount;
+  preferences: IPreferences;
+}) => {
   // Simulate API call delay
-  await new Promise(resolve => setTimeout(resolve, 800));
-  
+  await new Promise((resolve) => setTimeout(resolve, 800));
+
   // In a real app, this would send the updated settings to the server
-  console.log('Settings updated:', settings);
-  
+  console.log("Settings updated:", settings);
+
   return { success: true };
 };

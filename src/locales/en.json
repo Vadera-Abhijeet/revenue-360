@@ -2,7 +2,7 @@
   "common": {
     "appName": "Revenue-360",
     "loading": "Loading...",
-    "error": "An error occurred",
+    "anErrorOccurred": "An error occurred",
     "success": "Success!",
     "save": "Save",
     "cancel": "Cancel",
@@ -122,14 +122,16 @@
     "pending": "Pending",
     "completed": "Completed",
     "failed": "Failed",
-    "success": "Success",
     "error": "Error",
     "warning": "Warning",
     "info": "Info",
     "debug": "Debug",
     "trace": "Trace",
     "fatal": "Fatal",
-    "unknown": "Unknown"
+    "unknown": "Unknown",
+    "pause": "Pause",
+    "activate": "Activate",
+    "configurations": "Configuration"
   },
   "landing": {
     "hero": {
@@ -220,7 +222,11 @@
       "retention": "Retention",
       "rating": "Rating",
       "status": "Status",
-      "actions": "Actions"
+      "actions": "Actions",
+      "estimateRevenue": "Estimate revenue",
+      "totalCost": "Total cost",
+      "netUSD": "Net usd",
+      "percentage": "Percentage"
     },
     "connect": {
       "title": "Connect App",
@@ -300,6 +306,19 @@
       "timezone": "Timezone",
       "save": "Save Changes"
     },
+    "preferences": {
+      "title": "Preferences",
+      "language": "Language",
+      "currency": "Currency",
+      "theme": "Theme",
+      "notifications": "Notifications",
+      "emailNotifications": "Email Notifications",
+      "pushNotifications": "Push Notifications",
+      "dataRefresh": "Data Refresh Rate"
+    }
+  },
+  "configurations": {
+    "title": "Configurations",
     "integrations": {
       "title": "Integrations",
       "googleAds": "Google Ads",
@@ -314,16 +333,6 @@
       "disconnect": "Disconnect",
       "connected": "Connected",
       "notConnected": "Not Connected"
-    },
-    "preferences": {
-      "title": "Preferences",
-      "language": "Language",
-      "currency": "Currency",
-      "theme": "Theme",
-      "notifications": "Notifications",
-      "emailNotifications": "Email Notifications",
-      "pushNotifications": "Push Notifications",
-      "dataRefresh": "Data Refresh Rate"
     },
     "team": {
       "title": "Team Management",

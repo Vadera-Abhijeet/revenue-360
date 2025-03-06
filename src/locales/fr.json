@@ -2,7 +2,7 @@
   "common": {
     "appName": "Revenue-360",
     "loading": "Chargement...",
-    "error": "Une erreur s'est produite",
+    "anErrorOccurred": "Une erreur s'est produite",
     "success": "Succès !",
     "save": "Enregistrer",
     "cancel": "Annuler",
@@ -122,14 +122,16 @@
     "pending": "En attente",
     "completed": "Terminé",
     "failed": "Échoué",
-    "success": "Succès",
     "error": "Erreur",
     "warning": "Avertissement",
     "info": "Info",
     "debug": "Débogage",
     "trace": "Trace",
     "fatal": "Fatal",
-    "unknown": "Inconnu"
+    "unknown": "Inconnu",
+    "pause": "Pause",
+    "activate": "Activer",
+    "configurations": "Configurations"
   },
   "landing": {
     "hero": {
@@ -220,7 +222,11 @@
       "retention": "Rétention",
       "rating": "Évaluation",
       "status": "Statut",
-      "actions": "Actions"
+      "actions": "Actions",
+      "estimateRevenue": "Estimation des revenus",
+      "totalCost": "Coût total",
+      "netUSD": "USD net",
+      "percentage": "Pourcentage"
     },
     "connect": {
       "title": "Connecter une application",
@@ -300,6 +306,19 @@
       "timezone": "Fuseau horaire",
       "save": "Enregistrer les modifications"
     },
+    "preferences": {
+      "title": "Préférences",
+      "language": "Langue",
+      "currency": "Devise",
+      "theme": "Thème",
+      "notifications": "Notifications",
+      "emailNotifications": "Notifications par email",
+      "pushNotifications": "Notifications push",
+      "dataRefresh": "Taux de rafraîchissement des données"
+    }
+  },
+  "configurations": {
+    "title": "Configurations",
     "integrations": {
       "title": "Intégrations",
       "googleAds": "Google Ads",
@@ -314,16 +333,6 @@
       "disconnect": "Déconnecter",
       "connected": "Connecté",
       "notConnected": "Non connecté"
-    },
-    "preferences": {
-      "title": "Préférences",
-      "language": "Langue",
-      "currency": "Devise",
-      "theme": "Thème",
-      "notifications": "Notifications",
-      "emailNotifications": "Notifications par email",
-      "pushNotifications": "Notifications push",
-      "dataRefresh": "Taux de rafraîchissement des données"
     },
     "team": {
       "title": "Gestion d'équipe",

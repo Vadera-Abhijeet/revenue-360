@@ -147,7 +147,7 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
   return (
     <div className="relative">
       <Button
-        color="gray"
+        color="light"
         onClick={toggleDropdown}
         className="flex items-center gap-2"
       >
@@ -201,7 +201,7 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
             </div>
 
             <div className="flex justify-end gap-2 mt-4">
-              <Button color="gray" size="sm" onClick={() => setIsOpen(false)}>
+              <Button color="light" size="sm" onClick={() => setIsOpen(false)}>
                 {t("common.cancel")}
               </Button>
               <Button color="indigo" size="sm" onClick={handleApply}>

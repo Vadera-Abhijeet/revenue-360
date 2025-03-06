@@ -1,8 +1,8 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
-import { Button } from 'flowbite-react';
-import { Home, ArrowLeft } from 'lucide-react';
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import { Button } from "flowbite-react";
+import { Home, ArrowLeft } from "lucide-react";
 
 const NotFound: React.FC = () => {
   const { t } = useTranslation();
@@ -16,14 +16,19 @@ const NotFound: React.FC = () => {
           Page Not Found
         </h2>
         <p className="text-gray-600 mb-8 max-w-md mx-auto">
-          The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.
+          The page you are looking for might have been removed, had its name
+          changed, or is temporarily unavailable.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Button onClick={() => navigate('/')} className="flex items-center">
+          <Button onClick={() => navigate("/")} className="flex items-center">
             <Home className="mr-2 h-5 w-5" />
             Go to Home
           </Button>
-          <Button color="gray" onClick={() => navigate(-1)} className="flex items-center">
+          <Button
+            color="light"
+            onClick={() => navigate(-1)}
+            className="flex items-center"
+          >
             <ArrowLeft className="mr-2 h-5 w-5" />
             Go Back
           </Button>
