@@ -15,7 +15,6 @@ const Notifications: React.FC = () => {
     removeNotification,
     clearAll,
   } = useNotifications();
-  console.log(" notifications:", notifications);
 
   return (
     <div className="space-y-6">

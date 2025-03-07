@@ -131,7 +131,8 @@
     "unknown": "Inconnu",
     "pause": "Pause",
     "activate": "Activer",
-    "configurations": "Configurations"
+    "configurations": "Configurations",
+    "confirmation": "Confirmation"
   },
   "landing": {
     "hero": {
@@ -332,7 +333,23 @@
       "connect": "Connecter",
       "disconnect": "Déconnecter",
       "connected": "Connecté",
-      "notConnected": "Non connecté"
+      "notConnected": "Non connecté",
+      "addNew": "Ajouter une nouvelle intégration",
+      "accountEmail": "E-mail du compte",
+      "accountId": "ID du compte",
+      "connectionType": "Type de connexion",
+      "inward": "Entrant",
+      "outward": "Sortant",
+      "disconnected": "Déconnecté",
+      "reconnect": "Reconnecter",
+      "editEmail": "Modifier l'e-mail",
+      "confirmEmailUpdate": "Êtes-vous sûr de vouloir mettre à jour l'e-mail ?",
+      "confirmConnect": "Êtes-vous sûr de vouloir connecter cette intégration ?",
+      "confirmDisconnect": "Êtes-vous sûr de vouloir déconnecter cette intégration ?",
+      "add_new_integration": "Ajouter une nouvelle intégration",
+      "select_platform": "Sélectionner une plateforme",
+      "email": "E-mail",
+      "connection_status": "Statut de connexion"
     },
     "team": {
       "title": "Gestion d'équipe",

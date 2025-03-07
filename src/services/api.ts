@@ -579,11 +579,50 @@ export const fetchUserSettings = async () => {
       role: "Administrator",
       timezone: "America/New_York",
     },
-    integrations: {
-      googleAds: true,
-      adMob: true,
-      facebook: false,
-    },
+    integrations: [
+      {
+        inward: {
+          platform: "googleAds",
+          connected: true,
+          accountEmail: "user1@example.com",
+          accountId: "123-456-7890",
+        },
+        outward: {
+          platform: "adMob",
+          connected: true,
+          accountEmail: "user2@example.com",
+          accountId: "987-654-3210",
+        },
+      },
+      {
+        inward: {
+          platform: "facebook",
+          connected: true,
+          accountEmail: "user3@example.com",
+          accountId: "FB-123456",
+        },
+        outward: {
+          platform: "adMob",
+          connected: false,
+          accountEmail: "user4@example.com",
+          accountId: "987-654-3210",
+        },
+      },
+      {
+        inward: {
+          platform: "facebook",
+          connected: false,
+          accountEmail: "user5@example.com",
+          accountId: "FB-789101",
+        },
+        outward: {
+          platform: "googleAds",
+          connected: true,
+          accountEmail: "user6@example.com",
+          accountId: "456-789-0123",
+        },
+      },
+    ],
     preferences: {
       language: "en",
       currency: "USD",

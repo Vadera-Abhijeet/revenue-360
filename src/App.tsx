@@ -4,15 +4,15 @@ import { Flowbite } from "flowbite-react";
 import { useTranslation } from "react-i18next";
 
 // Pages
-import Landing from "./pages/Landing";
-import Auth from "./pages/Auth";
-import Dashboard from "./pages/Dashboard";
-import AppList from "./pages/AppList";
-import AppDetail from "./pages/AppDetail";
-import Campaigns from "./pages/Campaigns";
-import Notifications from "./pages/Notifications";
-import Settings from "./pages/Settings";
-import NotFound from "./pages/NotFound";
+import Landing from "./features/Landing";
+import Auth from "./features/Auth";
+import Dashboard from "./features/Dashboard";
+import AppList from "./features/AppList";
+import AppDetail from "./features/AppDetail";
+import Campaigns from "./features/Campaigns";
+import Notifications from "./features/Notifications";
+import Settings from "./features/Settings";
+import NotFound from "./features/NotFound";
 
 // Components
 import Layout from "./components/Layout";
@@ -25,7 +25,7 @@ import { NotificationProvider } from "./contexts/NotificationContext";
 
 // Theme
 import { flowbiteTheme } from "./theme";
-import Configurations from "./pages/Configurations";
+import Configurations from "./features/Configurations/Integration/container";
 
 function App() {
   const { i18n } = useTranslation();

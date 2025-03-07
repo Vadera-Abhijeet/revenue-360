@@ -131,7 +131,8 @@
     "unknown": "不明",
     "pause": "一時停止",
     "activate": "活性化",
-    "configurations": "構成"
+    "configurations": "構成",
+    "confirmation": "確認"
   },
   "landing": {
     "hero": {
@@ -332,7 +333,23 @@
       "connect": "接続",
       "disconnect": "切断",
       "connected": "接続済み",
-      "notConnected": "未接続"
+      "notConnected": "未接続",
+      "addNew": "新しい統合を追加",
+      "accountEmail": "アカウントのメール",
+      "accountId": "アカウントID",
+      "connectionType": "接続タイプ",
+      "inward": "内向き",
+      "outward": "外向き",
+      "disconnected": "切断されました",
+      "reconnect": "再接続",
+      "editEmail": "メールを編集",
+      "confirmEmailUpdate": "メールを更新してもよろしいですか？",
+      "confirmConnect": "この統合を接続してもよろしいですか？",
+      "confirmDisconnect": "この統合を切断してもよろしいですか？",
+      "add_new_integration": "新しい統合を追加",
+      "select_platform": "プラットフォームを選択",
+      "email": "メール",
+      "connection_status": "接続状況"
     },
     "team": {
       "title": "チーム管理",

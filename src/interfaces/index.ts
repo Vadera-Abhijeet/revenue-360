@@ -2,7 +2,7 @@ import { CurrencyCode } from "../contexts/CurrencyContext";
 
 export interface ISettings {
   account: IAccount;
-  integrations: IIntegrations;
+  integrations: IIntegrations[];
   preferences: IPreferences;
   team?: ITeamEntity[] | null;
 }
@@ -13,10 +13,16 @@ export interface IAccount {
   role: string;
   timezone: string;
 }
+
 export interface IIntegrations {
-  googleAds: boolean;
-  adMob: boolean;
-  facebook: boolean;
+  inward: IIntegrationsSet;
+  outward: IIntegrationsSet;
+}
+export interface IIntegrationsSet {
+  platform: "googleAds" | "adMob" | "facebook";
+  connected: boolean;
+  accountEmail: string;
+  accountId: string;
 }
 export interface IPreferences {
   language: string;
@@ -33,3 +39,5 @@ export interface ITeamEntity {
   role: string;
   status: string;
 }
+
+export type TPlatformsType = "googleAds" | "adMob" | "facebook";

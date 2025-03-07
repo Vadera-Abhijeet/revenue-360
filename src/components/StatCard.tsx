@@ -1,7 +1,7 @@
-import React from 'react';
-import { Card } from 'flowbite-react';
-import { ArrowUp, ArrowDown } from 'lucide-react';
-import { useCurrency } from '../contexts/CurrencyContext';
+import React from "react";
+import { Card } from "flowbite-react";
+import { ArrowUp, ArrowDown } from "lucide-react";
+import { useCurrency } from "../contexts/CurrencyContext";
 
 interface StatCardProps {
   title: string;
@@ -20,7 +20,7 @@ const StatCard: React.FC<StatCardProps> = ({
   isCurrency = false,
   isPercentage = false,
   icon,
-  color = 'primary',
+  color = "primary",
 }) => {
   const { formatCurrency } = useCurrency();
 
@@ -41,17 +41,18 @@ const StatCard: React.FC<StatCardProps> = ({
   };
 
   const colorClasses = {
-    primary: 'bg-primary-50 text-primary-600',
-    secondary: 'bg-secondary-50 text-secondary-600',
-    success: 'bg-green-50 text-green-600',
-    danger: 'bg-red-50 text-red-600',
-    warning: 'bg-yellow-50 text-yellow-600',
-    info: 'bg-blue-50 text-blue-600',
-    purple: 'bg-purple-50 text-purple-600',
-    yellow: 'bg-yellow-50 text-yellow-600'
+    primary: "bg-primary-50 text-primary-600",
+    secondary: "bg-secondary-50 text-secondary-600",
+    success: "bg-green-50 text-green-600",
+    danger: "bg-red-50 text-red-600",
+    warning: "bg-yellow-50 text-yellow-600",
+    info: "bg-blue-50 text-blue-600",
+    purple: "bg-purple-50 text-purple-600",
+    yellow: "bg-yellow-50 text-yellow-600",
   };
 
-  const iconColorClass = colorClasses[color as keyof typeof colorClasses] || colorClasses.primary;
+  const iconColorClass =
+    colorClasses[color as keyof typeof colorClasses] || colorClasses.primary;
 
   return (
     <Card className="overflow-hidden">
@@ -62,19 +63,27 @@ const StatCard: React.FC<StatCardProps> = ({
 
           {previousValue !== undefined && (
             <div className="flex items-center mt-2">
-              <span className={`text-sm font-medium ${isPositive ? 'text-green-600' : 'text-red-600'}`}>
-                {isPositive ? <ArrowUp size={16} className="inline" /> : <ArrowDown size={16} className="inline" />}
+              <span
+                className={`text-sm font-medium ${
+                  isPositive ? "text-green-600" : "text-red-600"
+                }`}
+              >
+                {isPositive ? (
+                  <ArrowUp size={16} className="inline" />
+                ) : (
+                  <ArrowDown size={16} className="inline" />
+                )}
                 {Math.abs(percentChange).toFixed(1)}%
               </span>
-              <span className="text-xs text-gray-500 ml-1">vs previous period</span>
+              <span className="text-xs text-gray-500 ml-1">
+                vs previous period
+              </span>
             </div>
           )}
         </div>
 
         {icon && (
-          <div className={`p-3 rounded-full ${iconColorClass}`}>
-            {icon}
-          </div>
+          <div className={`p-3 rounded-full ${iconColorClass}`}>{icon}</div>
         )}
       </div>
     </Card>

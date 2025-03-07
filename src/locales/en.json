@@ -131,7 +131,8 @@
     "unknown": "Unknown",
     "pause": "Pause",
     "activate": "Activate",
-    "configurations": "Configuration"
+    "configurations": "Configuration",
+    "confirmation": "Confirmation"
   },
   "landing": {
     "hero": {
@@ -332,7 +333,23 @@
       "connect": "Connect",
       "disconnect": "Disconnect",
       "connected": "Connected",
-      "notConnected": "Not Connected"
+      "notConnected": "Not Connected",
+      "addNew": "Add New Integration",
+      "accountEmail": "Account Email",
+      "accountId": "Account ID",
+      "connectionType": "Connection Type",
+      "inward": "Inward",
+      "outward": "Outward",
+      "disconnected": "Disconnected",
+      "reconnect": "Reconnect",
+      "editEmail": "Edit Email",
+      "confirmEmailUpdate": "Are you sure you want to update the email?",
+      "confirmConnect": "Are you sure you want to connect this integration?",
+      "confirmDisconnect": "Are you sure you want to disconnect this integration?",
+      "add_new_integration": "Add New Integration",
+      "select_platform": "Select Platform",
+      "email": "Email",
+      "connection_status": "Connection status"
     },
     "team": {
       "title": "Team Management",
