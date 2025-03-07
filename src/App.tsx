@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 import { Flowbite } from "flowbite-react";
 import { useTranslation } from "react-i18next";
@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 // Pages
 import Landing from "./features/Landing";
 import Auth from "./features/Auth";
-import Dashboard from "./features/Dashboard";
+import Dashboard from "./features/Dashboard/container";
 import AppList from "./features/AppList";
 import AppDetail from "./features/AppDetail";
 import Campaigns from "./features/Campaigns";

@@ -9,8 +9,11 @@ interface StatCardProps {
   previousValue?: number;
   isCurrency?: boolean;
   isPercentage?: boolean;
+  showINRValue?: boolean;
+  inrValue?: number; // New prop for custom INR value
   icon?: React.ReactNode;
   color?: string;
+  onClick?: () => void;
 }
 
 const StatCard: React.FC<StatCardProps> = ({
@@ -19,8 +22,11 @@ const StatCard: React.FC<StatCardProps> = ({
   previousValue,
   isCurrency = false,
   isPercentage = false,
+  showINRValue = false,
+  inrValue, // Optional custom INR value
   icon,
   color = "primary",
+  onClick,
 }) => {
   const { formatCurrency } = useCurrency();
 
@@ -40,6 +46,18 @@ const StatCard: React.FC<StatCardProps> = ({
     return value.toLocaleString();
   };
 
+  // Format value as INR
+  const formatINRValue = () => {
+    // Use inrValue if provided, otherwise use the main value
+    const valueToFormat = inrValue !== undefined ? inrValue : value;
+
+    return new Intl.NumberFormat("en-IN", {
+      style: "currency",
+      currency: "INR",
+      maximumFractionDigits: 0,
+    }).format(valueToFormat);
+  };
+
   const colorClasses = {
     primary: "bg-primary-50 text-primary-600",
     secondary: "bg-secondary-50 text-secondary-600",
@@ -55,11 +73,19 @@ const StatCard: React.FC<StatCardProps> = ({
     colorClasses[color as keyof typeof colorClasses] || colorClasses.primary;
 
   return (
-    <Card className="overflow-hidden">
+    <Card
+      className={`overflow-hidden ${onClick ? "cursor-pointer" : ""}`}
+      onClick={onClick}
+    >
       <div className="flex items-center justify-between">
         <div>
           <p className="text-sm font-medium text-gray-500">{title}</p>
           <h3 className="text-2xl font-bold mt-1">{formatValue()}</h3>
+
+          {/* Display INR value if showINRValue is true */}
+          {showINRValue && (
+            <p className="text-sm text-gray-600 mt-1">{formatINRValue()}</p>
+          )}
 
           {previousValue !== undefined && (
             <div className="flex items-center mt-2">

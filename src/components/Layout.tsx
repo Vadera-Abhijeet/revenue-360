@@ -21,6 +21,7 @@ import {
   Globe,
   DollarSign,
   User,
+  Megaphone,
 } from "lucide-react";
 import { useAuth } from "../contexts/AuthContext";
 import { useNotifications } from "../contexts/NotificationContext";
@@ -77,11 +78,11 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       icon: <LayoutDashboard size={20} />,
     },
     { name: t("common.apps"), path: "/apps", icon: <AppWindow size={20} /> },
-    // {
-    //   name: t("common.campaigns"),
-    //   path: "/campaigns",
-    //   icon: <Megaphone size={20} />,
-    // },
+    {
+      name: t("common.campaigns"),
+      path: "/campaigns",
+      icon: <Megaphone size={20} />,
+    },
     // {
     //   name: t("common.notifications"),
     //   path: "/notifications",

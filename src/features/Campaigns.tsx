@@ -113,6 +113,12 @@ const Campaigns: React.FC = () => {
   }));
 
   return (
+    <div className="h-full w-full flex items-center justify-center">
+      <h1 className="text-6xl">Under progress</h1>
+    </div>
+  );
+
+  return (
     <div className="space-y-6">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <h1 className="text-2xl font-bold text-gray-900">

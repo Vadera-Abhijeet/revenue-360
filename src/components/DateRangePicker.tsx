@@ -165,7 +165,7 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
               {presets.slice(0, 10).map((preset) => (
                 <Button
                   key={preset.id}
-                  color={selectedPreset === preset.id ? "primary" : "gray"}
+                  color={selectedPreset === preset.id ? "primary" : "light"}
                   size="sm"
                   onClick={() => handlePresetSelect(preset.id)}
                   className="text-sm"
