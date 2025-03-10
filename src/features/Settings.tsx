@@ -19,11 +19,44 @@ import {
   Moon,
   Sun,
   RefreshCw,
+  Box,
+  CheckCircle,
+  XCircle,
 } from "lucide-react";
 import { fetchUserSettings, updateUserSettings } from "../services/api";
 import { IAccount, IPreferences } from "../interfaces";
 import { CurrencyCode, useCurrency } from "../contexts/CurrencyContext";
+import RazorpayButton from "../components/RazorPayButton";
 
+const plans = [
+  {
+    name: "Free",
+    priceDisplay: "₹0/mo",
+    price: 0,
+    features: ["Basic Features", "Limited Support"],
+    unavailable: ["Advanced Analytics", "Priority Support"],
+    buttonText: "Get Started",
+    buttonVariant: "active",
+  },
+  {
+    name: "Basic",
+    priceDisplay: "₹9/mo",
+    price: 9,
+    features: ["All Free Features", "Advanced Analytics"],
+    unavailable: ["Priority Support"],
+    buttonText: "Subscribe",
+    buttonVariant: "default",
+  },
+  {
+    name: "Pro",
+    priceDisplay: "₹19/mo",
+    price: 19,
+    features: ["All Basic Features", "Priority Support", "Customization"],
+    unavailable: [],
+    buttonText: "Go Pro",
+    buttonVariant: "primary",
+  },
+];
 const Settings: React.FC = () => {
   const { setCurrency, currency } = useCurrency();
   const { t, i18n } = useTranslation();
@@ -401,6 +434,60 @@ const Settings: React.FC = () => {
                   t("common.save")
                 )}
               </Button>
+            </div>
+          </Card>
+        </Tabs.Item>
+        <Tabs.Item title={"Subscription"} icon={Box}>
+          <Card>
+            <h2 className="text-xl font-semibold mb-4">Subscription</h2>
+            <div className="flex flex-col items-center py-10 bg-gray-100">
+              <h2 className="text-3xl font-bold mb-6">Choose Your Plan</h2>
+              <div className="grid md:grid-cols-3 gap-6">
+                {plans.map((plan) => (
+                  <Card
+                    key={plan.name}
+                    className={`p-6 w-80 shadow-lg ${
+                      plan.buttonVariant === "active"
+                        ? "border-2 border-blue-600"
+                        : ""
+                    }`}
+                    theme={{
+                      root: {
+                        children:
+                          "flex h-full flex-col justify-between gap-4 p-6",
+                      },
+                    }}
+                  >
+                    <div>
+                      <h3 className="text-xl font-semibold text-center">
+                        {plan.name}
+                      </h3>
+                      <p className="text-2xl font-bold text-center my-4">
+                        {plan.priceDisplay}
+                      </p>
+                      <ul className="space-y-2">
+                        {plan.features.map((feature) => (
+                          <li
+                            key={feature}
+                            className="flex items-center text-green-600"
+                          >
+                            <CheckCircle className="w-5 h-5 mr-2" /> {feature}
+                          </li>
+                        ))}
+                        {plan.unavailable.map((feature) => (
+                          <li
+                            key={feature}
+                            className="flex items-center text-red-500 line-through"
+                          >
+                            <XCircle className="w-5 h-5 mr-2" /> {feature}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                    <RazorpayButton amount={plan.price} />
+                  </Card>
+                ))}
+              </div>
             </div>
           </Card>
         </Tabs.Item>
