@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { DollarSign, TrendingUp, BarChart2, Smartphone } from "lucide-react";
+import {
+  DollarSign,
+  TrendingUp,
+  BarChart2,
+  Smartphone,
+  Calculator,
+} from "lucide-react";
 import { fetchDashboardData } from "../../../services/api";
 import DateRangePicker from "../../../components/DateRangePicker";
 import StatCard from "../../../components/StatCard";
@@ -9,11 +15,13 @@ import { useNavigate } from "react-router-dom";
 import RevenueAndSpendChart from "../components/RevenueAndSpendChart";
 import TopPerformingAppChart from "../components/TopPerformingAppChart";
 import RecentCampaigns from "../components/RecentCampaigns";
+import { useCurrency } from "../../../contexts/CurrencyContext";
 // import { useNotifications } from "../../../contexts/NotificationContext";
 
 const Dashboard: React.FC = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const { currency, convertCurrency } = useCurrency();
   //   const { addNotification } = useNotifications();
   const [isLoading, setIsLoading] = useState(true);
   const [dashboardData, setDashboardData] = useState<IDashboard | undefined>();
@@ -63,9 +71,8 @@ const Dashboard: React.FC = () => {
   };
 
   // Calculate profit amount (revenue - adSpend)
-  const calculateProfit = () => {
-    if (!dashboardData) return 0;
-    return dashboardData.summary.revenue - dashboardData.summary.adSpend;
+  const convertToINR = (value: number) => {
+    return convertCurrency(value, currency, "INR");
   };
 
   return (
@@ -83,12 +90,22 @@ const Dashboard: React.FC = () => {
       ) : (
         <div className="space-y-6">
           {/* Summary Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 3xl:grid-cols-5 gap-4">
+            <StatCard
+              title={t("dashboard.summary.estimatedRevenue")}
+              value={dashboardData.summary.estimatedRevenue}
+              previousValue={dashboardData.summary.previousEstimatedRevenue}
+              isCurrency={true}
+              valueInINR={convertToINR(dashboardData.summary.estimatedRevenue)}
+              icon={<Calculator size={24} />}
+              color="info"
+            />
             <StatCard
               title={t("dashboard.summary.revenue")}
               value={dashboardData.summary.revenue}
               previousValue={dashboardData.summary.previousRevenue}
               isCurrency={true}
+              valueInINR={convertToINR(dashboardData.summary.revenue)}
               icon={<DollarSign size={24} />}
               color="success"
             />
@@ -97,25 +114,32 @@ const Dashboard: React.FC = () => {
               value={dashboardData.summary.adSpend}
               previousValue={dashboardData.summary.previousAdSpend}
               isCurrency={true}
+              valueInINR={convertToINR(dashboardData.summary.adSpend)}
               icon={<TrendingUp size={24} />}
               color="danger"
             />
             <StatCard
-              title={t("dashboard.summary.roi")}
-              value={dashboardData.summary.roi}
-              previousValue={dashboardData.summary.previousRoi}
-              isPercentage={true}
+              title={t("dashboard.summary.totalNet")}
+              value={
+                dashboardData.summary.revenue - dashboardData.summary.adSpend
+              }
+              previousValue={
+                dashboardData.summary.previousRevenue -
+                dashboardData.summary.previousAdSpend
+              }
+              isCurrency={true}
+              valueInINR={convertToINR(
+                dashboardData.summary.revenue - dashboardData.summary.adSpend
+              )}
               icon={<BarChart2 size={24} />}
               color="primary"
-              showINRValue={true}
-              inrValue={calculateProfit()} // Pass the profit amount
             />
             <StatCard
               title={t("dashboard.summary.apps")}
               value={dashboardData.summary.activeApps}
               previousValue={dashboardData.summary.previousActiveApps}
               icon={<Smartphone size={24} />}
-              color="info"
+              color="secondary"
               onClick={() => handleNavigation("/apps")}
             />
           </div>

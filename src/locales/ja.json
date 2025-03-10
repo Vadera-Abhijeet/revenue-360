@@ -185,7 +185,9 @@
       "revenue": "総収益",
       "spend": "総広告支出",
       "roi": "ROI",
-      "apps": "アクティブアプリ"
+      "totalNet": "総ネット",
+      "apps": "アクティブアプリ",
+      "estimatedRevenue": "推定総収益"
     },
     "revenueVsSpend": {
       "title": "収益 vs. 広告支出",

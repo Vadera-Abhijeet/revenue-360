@@ -185,7 +185,9 @@
       "revenue": "Total Revenue",
       "spend": "Total Ad Spend",
       "roi": "ROI",
-      "apps": "Active Apps"
+      "totalNet": "Total Net",
+      "apps": "Active Apps",
+      "estimatedRevenue": "Total Estimated Revenue"
     },
     "revenueVsSpend": {
       "title": "Revenue vs. Ad Spend",

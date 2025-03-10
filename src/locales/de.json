@@ -185,7 +185,9 @@
       "revenue": "Gesamteinnahmen",
       "spend": "Gesamte Werbeausgaben",
       "roi": "ROI",
-      "apps": "Aktive Apps"
+      "totalNet": "Gesamtnetz",
+      "apps": "Aktive Apps",
+      "estimatedRevenue": "Geschätzter Gesamtumsatz"
     },
     "revenueVsSpend": {
       "title": "Einnahmen vs. Werbeausgaben",

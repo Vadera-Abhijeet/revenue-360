@@ -36,13 +36,13 @@ const RecentCampaigns = ({
         onClick={() => setActiveFilter(value)}
         className={`px-4 py-2 text-sm font-medium rounded-md mr-2 ${
           isActive
-            ? "bg-gray-100 text-gray-900"
+            ? "bg-purple-100 text-gray-900"
             : "text-gray-500 hover:text-gray-700 hover:bg-gray-50"
         }`}
       >
         {color && (
           <span
-            className={`inline-block w-2 h-2 rounded-full bg-${color}-500 mr-2`}
+            className={`inline-block w-2 h-2 rounded-full bg-${color}-400 mr-2`}
           ></span>
         )}
         {label}
@@ -57,7 +57,7 @@ const RecentCampaigns = ({
           <h5 className="text-xl font-bold text-gray-900 mb-3">
             {t("dashboard.recentCampaigns.title")}
           </h5>
-          <div className="flex flex-wrap border-b border-gray-200 pb-2">
+          <div className="flex flex-wrap  pb-2">
             <FilterButton value="all" label="All" />
             <FilterButton value="active" label="Active" color="green" />
             <FilterButton value="paused" label="Paused" color="yellow" />

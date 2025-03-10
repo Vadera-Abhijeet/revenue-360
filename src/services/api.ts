@@ -136,10 +136,17 @@ export const fetchDashboardData = async (startDate: Date, endDate: Date) => {
   const previousRoi =
     ((previousRevenue - previousAdSpend) / previousAdSpend) * 100;
 
+  // Estimated Revenue Calculation (Example: applying a future growth factor)
+  const estimatedRevenue = totalRevenue * (1 + randomPercentage(5, 15) / 100);
+  const previousEstimatedRevenue =
+    previousRevenue * (1 + randomPercentage(5, 15) / 100);
+
   return {
     summary: {
       revenue: totalRevenue,
       previousRevenue,
+      estimatedRevenue,
+      previousEstimatedRevenue,
       adSpend: totalAdSpend,
       previousAdSpend,
       roi,

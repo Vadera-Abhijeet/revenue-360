@@ -9,8 +9,7 @@ interface StatCardProps {
   previousValue?: number;
   isCurrency?: boolean;
   isPercentage?: boolean;
-  showINRValue?: boolean;
-  inrValue?: number; // New prop for custom INR value
+  valueInINR?: number;
   icon?: React.ReactNode;
   color?: string;
   onClick?: () => void;
@@ -22,8 +21,7 @@ const StatCard: React.FC<StatCardProps> = ({
   previousValue,
   isCurrency = false,
   isPercentage = false,
-  showINRValue = false,
-  inrValue, // Optional custom INR value
+  valueInINR,
   icon,
   color = "primary",
   onClick,
@@ -44,18 +42,6 @@ const StatCard: React.FC<StatCardProps> = ({
       return `${value.toFixed(2)}%`;
     }
     return value.toLocaleString();
-  };
-
-  // Format value as INR
-  const formatINRValue = () => {
-    // Use inrValue if provided, otherwise use the main value
-    const valueToFormat = inrValue !== undefined ? inrValue : value;
-
-    return new Intl.NumberFormat("en-IN", {
-      style: "currency",
-      currency: "INR",
-      maximumFractionDigits: 0,
-    }).format(valueToFormat);
   };
 
   const colorClasses = {
@@ -81,10 +67,11 @@ const StatCard: React.FC<StatCardProps> = ({
         <div>
           <p className="text-sm font-medium text-gray-500">{title}</p>
           <h3 className="text-2xl font-bold mt-1">{formatValue()}</h3>
-
-          {/* Display INR value if showINRValue is true */}
-          {showINRValue && (
-            <p className="text-sm text-gray-600 mt-1">{formatINRValue()}</p>
+          {valueInINR !== undefined && (
+            <p className="text-sm text-gray-500 mt-1">
+              ₹
+              {valueInINR.toLocaleString("en-IN", { maximumFractionDigits: 2 })}
+            </p>
           )}
 
           {previousValue !== undefined && (

@@ -185,7 +185,9 @@
       "revenue": "Ingresos totales",
       "spend": "Gasto total en anuncios",
       "roi": "ROI",
-      "apps": "Aplicaciones activas"
+      "totalNet": "Neta total",
+      "apps": "Aplicaciones activas",
+      "estimatedRevenue": "Ingresos Totales Estimados"
     },
     "revenueVsSpend": {
       "title": "Ingresos vs. Gasto en anuncios",

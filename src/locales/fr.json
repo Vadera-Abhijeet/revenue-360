@@ -185,7 +185,9 @@
       "revenue": "Revenu total",
       "spend": "Dépenses publicitaires totales",
       "roi": "ROI",
-      "apps": "Applications actives"
+      "totalNet": "Net total",
+      "apps": "Applications actives",
+      "estimatedRevenue": "Revenu Total Estimé"
     },
     "revenueVsSpend": {
       "title": "Revenus vs. Dépenses publicitaires",
