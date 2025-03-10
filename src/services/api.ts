@@ -46,31 +46,31 @@ export const fetchDashboardData = async (startDate: Date, endDate: Date) => {
     {
       name: "Puzzle Master",
       revenue: randomNumber(20000, 50000),
-      installs: randomNumber(5000, 15000),
+      cost: randomNumber(5000, 15000),
       roi: randomPercentage(10, 30),
     },
     {
       name: "Fitness Tracker",
       revenue: randomNumber(15000, 40000),
-      installs: randomNumber(3000, 10000),
+      cost: randomNumber(3000, 10000),
       roi: randomPercentage(8, 25),
     },
     {
       name: "Recipe Book",
       revenue: randomNumber(10000, 30000),
-      installs: randomNumber(2000, 8000),
+      cost: randomNumber(2000, 8000),
       roi: randomPercentage(5, 20),
     },
     {
       name: "Weather App",
       revenue: randomNumber(8000, 25000),
-      installs: randomNumber(1500, 7000),
+      cost: randomNumber(1500, 7000),
       roi: randomPercentage(3, 18),
     },
     {
       name: "Task Manager",
       revenue: randomNumber(5000, 20000),
-      installs: randomNumber(1000, 5000),
+      cost: randomNumber(1000, 5000),
       roi: randomPercentage(2, 15),
     },
   ];
@@ -372,134 +372,88 @@ export const fetchCampaigns = async () => {
   // Simulate API call delay
   await new Promise((resolve) => setTimeout(resolve, 800));
 
-  return [
-    {
-      id: "campaign1",
-      name: "Summer Promotion",
-      platform: "Google Ads",
-      status: "active",
-      budget: 10000,
-      spend: 8500,
-      impressions: 500000,
-      clicks: 25000,
-      ctr: 5.0,
-      cpc: 0.34,
-      installs: 5000,
-      cpi: 1.7,
-      conversions: 1500,
-      cpa: 5.67,
-      revenue: 15000,
-      roi: 76.5,
-    },
-    {
-      id: "campaign2",
-      name: "New User Acquisition",
-      platform: "Facebook Ads",
-      status: "active",
-      budget: 8000,
-      spend: 6500,
-      impressions: 400000,
-      clicks: 20000,
-      ctr: 5.0,
-      cpc: 0.33,
-      installs: 4000,
-      cpi: 1.63,
-      conversions: 1200,
-      cpa: 5.42,
-      revenue: 12000,
-      roi: 84.6,
-    },
-    {
-      id: "campaign3",
-      name: "Re-engagement",
-      platform: "Google Ads",
-      status: "paused",
-      budget: 5000,
-      spend: 4200,
-      impressions: 300000,
-      clicks: 15000,
-      ctr: 5.0,
-      cpc: 0.28,
-      installs: 3000,
-      cpi: 1.4,
-      conversions: 900,
-      cpa: 4.67,
-      revenue: 9000,
-      roi: 114.3,
-    },
-    {
-      id: "campaign4",
-      name: "Holiday Special",
-      platform: "TikTok Ads",
-      status: "ended",
-      budget: 6000,
-      spend: 6000,
-      impressions: 350000,
-      clicks: 17500,
-      ctr: 5.0,
-      cpc: 0.34,
-      installs: 3500,
-      cpi: 1.71,
-      conversions: 1050,
-      cpa: 5.71,
-      revenue: 10500,
-      roi: 75.0,
-    },
-    {
-      id: "campaign5",
-      name: "Brand Awareness",
-      platform: "Apple Search Ads",
-      status: "active",
-      budget: 4000,
-      spend: 3200,
-      impressions: 200000,
-      clicks: 10000,
-      ctr: 5.0,
-      cpc: 0.32,
-      installs: 2000,
-      cpi: 1.6,
-      conversions: 600,
-      cpa: 5.33,
-      revenue: 6000,
-      roi: 87.5,
-    },
-    {
-      id: "campaign6",
-      name: "Retargeting Campaign",
-      platform: "Facebook Ads",
-      status: "active",
-      budget: 3000,
-      spend: 2500,
-      impressions: 150000,
-      clicks: 7500,
-      ctr: 5.0,
-      cpc: 0.33,
-      installs: 1500,
-      cpi: 1.67,
-      conversions: 450,
-      cpa: 5.56,
-      revenue: 4500,
-      roi: 80.0,
-    },
-    {
-      id: "campaign7",
-      name: "Video Campaign",
-      platform: "TikTok Ads",
-      status: "paused",
-      budget: 5500,
-      spend: 4800,
-      impressions: 280000,
-      clicks: 14000,
-      ctr: 5.0,
-      cpc: 0.34,
-      installs: 2800,
-      cpi: 1.71,
-      conversions: 840,
-      cpa: 5.71,
-      revenue: 8400,
-      roi: 75.0,
-    },
+  const platforms = ["Android", "iOS"];
+  const appNames = [
+    "Android version update info",
+    "Typing Practice Master",
+    "GPS Photo: TimeStamp",
+    "My Stuff: Inventory Organiser",
+    "Draw Trace: Photos & Shape",
+    "Reading Assistant Plus",
+    "Countdown calendar widget",
+    "Expense Tracker Pro",
+    "Workout Planner",
+    "Travel Diary",
   ];
+  const countries = [
+    { name: "US", flag: "https://flagcdn.com/us.svg" },
+    { name: "UK", flag: "https://flagcdn.com/gb.svg" },
+    { name: "India", flag: "https://flagcdn.com/in.svg" },
+    { name: "Germany", flag: "https://flagcdn.com/de.svg" },
+    { name: "France", flag: "https://flagcdn.com/fr.svg" },
+    { name: "Canada", flag: "https://flagcdn.com/ca.svg" },
+    { name: "Australia", flag: "https://flagcdn.com/au.svg" },
+  ];
+
+  const platformIcons: Record<string, string> = {
+    Android: "https://cdn-icons-png.flaticon.com/512/174/174836.png", // Android logo
+    iOS: "https://cdn-icons-png.flaticon.com/512/0/747.png", // Apple logo
+  };
+
+  // Generate mock campaign data
+  const campaigns = appNames.map((name, i) => {
+    const platform = platforms[randomNumber(0, platforms.length - 1)];
+    const country = countries[randomNumber(0, countries.length - 1)];
+    const estimateRevenueUSD = randomFloat(2, 800, 2);
+    const totalCostUSD = randomFloat(0, estimateRevenueUSD, 2);
+    const totalCostINR = totalCostUSD * 87; // Assume conversion rate ₹87
+    const netUSD = parseFloat((estimateRevenueUSD - totalCostUSD).toFixed(2));
+    const percentage = parseFloat(
+      ((netUSD / estimateRevenueUSD) * 1).toFixed(2)
+    );
+    const lastBidINR = randomFloat(50, 200, 2);
+    const currentBidINR = randomFloat(50, 200, 2);
+
+    // Mock chart data (impressions, clicks, conversions, revenue trends)
+    const chartData = Array.from({ length: 7 }, (_, day) => ({
+      date: `Day ${day + 1}`,
+      impressions: randomNumber(500, 5000),
+      clicks: randomNumber(50, 500),
+      conversions: randomNumber(5, 50),
+      revenue: randomFloat(10, 200, 2),
+    }));
+
+    // Generate a random number of campaign entries
+    const campaignCount = randomNumber(2, 5);
+    const campaignData = Array.from({ length: campaignCount }, (_, index) => ({
+      campaign: `Campaign ${index + 1}`,
+      cost: randomFloat(50, 1500, 2),
+    }));
+
+    return {
+      id: `campaign-${i + 1}`,
+      name,
+      platform,
+      icon: platformIcons[platform],
+      country: country.name,
+      flag: country.flag,
+      estimateRevenueUSD,
+      estimateRevenue: `${estimateRevenueUSD} USD`,
+      totalCostUSD,
+      totalCostINR: `${totalCostINR.toFixed(2)} INR`,
+      netUSD,
+      percentage,
+      lastBidINR: `${lastBidINR.toFixed(2)} INR`,
+      currentBidINR: `${currentBidINR.toFixed(2)} INR`,
+      chartData,
+      campaigns: {
+        totalCost: campaignData.reduce((sum, c) => sum + c.cost, 0),
+        data: campaignData,
+      },
+    };
+  });
+
+  return campaigns;
 };
 
 // Notifications data

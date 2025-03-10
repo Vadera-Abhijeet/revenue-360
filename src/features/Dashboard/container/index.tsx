@@ -16,13 +16,11 @@ import RevenueAndSpendChart from "../components/RevenueAndSpendChart";
 import TopPerformingAppChart from "../components/TopPerformingAppChart";
 import RecentCampaigns from "../components/RecentCampaigns";
 import { useCurrency } from "../../../contexts/CurrencyContext";
-// import { useNotifications } from "../../../contexts/NotificationContext";
 
 const Dashboard: React.FC = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { currency, convertCurrency } = useCurrency();
-  //   const { addNotification } = useNotifications();
   const [isLoading, setIsLoading] = useState(true);
   const [dashboardData, setDashboardData] = useState<IDashboard | undefined>();
   const [startDate, setStartDate] = useState<Date>(
@@ -36,23 +34,8 @@ const Dashboard: React.FC = () => {
       try {
         const data: IDashboard = await fetchDashboardData(startDate, endDate);
         setDashboardData(data);
-
-        // Add sample notification
-        // if (Math.random() > 0.7) {
-        //   addNotification({
-        //     type: "warning",
-        //     title: "High Ad Spend Alert",
-        //     message:
-        //       'Your Google Ads campaign "Summer Promotion" has exceeded the daily budget by 15%.',
-        //   });
-        // }
       } catch (error) {
         console.error("Error loading dashboard data:", error);
-        // addNotification({
-        //   type: "error",
-        //   title: "Data Loading Error",
-        //   message: "Failed to load dashboard data. Please try again later.",
-        // });
       } finally {
         setIsLoading(false);
       }
@@ -78,7 +61,7 @@ const Dashboard: React.FC = () => {
   return (
     <div className="space-y-6">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-        <h1 className="text-2xl font-bold text-gray-900">
+        <h1 className="text-2xl font-bold text-indigo-700">
           {t("dashboard.title")}
         </h1>
         <DateRangePicker onDateRangeChange={handleDateRangeChange} />

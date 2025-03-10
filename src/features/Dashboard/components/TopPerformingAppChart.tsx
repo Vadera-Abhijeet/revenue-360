@@ -1,7 +1,6 @@
-import { Button, Card } from "flowbite-react";
+import { Card } from "flowbite-react";
 import { useTranslation } from "react-i18next";
 import { useCurrency } from "../../../contexts/CurrencyContext";
-import { ArrowRight } from "lucide-react";
 import {
   Bar,
   BarChart,
@@ -23,9 +22,9 @@ function TopPerformingAppChart({ data = [] }: { data?: ITopAppsEntity[] }) {
         <h5 className="text-xl font-bold text-gray-900">
           {t("dashboard.topApps.title")}
         </h5>
-        <Button color="light" size="sm" className="flex items-center gap-1">
+        {/* <Button color="light" size="sm" className="flex items-center gap-1">
           View All <ArrowRight size={16} />
-        </Button>
+        </Button> */}
       </div>
       <div className="h-80">
         <ResponsiveContainer width="100%" height="100%">
@@ -49,8 +48,8 @@ function TopPerformingAppChart({ data = [] }: { data?: ITopAppsEntity[] }) {
               fill="#0ea5e9"
             />
             <Bar
-              dataKey="installs"
-              name={t("dashboard.topApps.installs")}
+              dataKey="cost"
+              name={t("dashboard.topApps.cost")}
               fill="#8b5cf6"
             />
           </BarChart>

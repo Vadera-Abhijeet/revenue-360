@@ -1,18 +1,18 @@
-import { useEffect, useState } from "react";
-import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 import { Flowbite } from "flowbite-react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 
 // Pages
-import Landing from "./features/Landing";
-import Auth from "./features/Auth";
-import Dashboard from "./features/Dashboard/container";
-import AppList from "./features/AppList";
 import AppDetail from "./features/AppDetail";
-import Campaigns from "./features/Campaigns";
+import AppList from "./features/AppList";
+import Auth from "./features/Auth";
+import Campaigns from "./features/Campaigns/container";
+import Dashboard from "./features/Dashboard/container";
+import Landing from "./features/Landing";
+import NotFound from "./features/NotFound";
 import Notifications from "./features/Notifications";
 import Settings from "./features/Settings";
-import NotFound from "./features/NotFound";
 
 // Components
 import Layout from "./components/Layout";
@@ -24,8 +24,8 @@ import { CurrencyProvider } from "./contexts/CurrencyContext";
 import { NotificationProvider } from "./contexts/NotificationContext";
 
 // Theme
-import { flowbiteTheme } from "./theme";
 import Configurations from "./features/Configurations/Integration/container";
+import { flowbiteTheme } from "./theme";
 
 function App() {
   const { i18n } = useTranslation();

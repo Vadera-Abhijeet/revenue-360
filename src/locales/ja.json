@@ -132,7 +132,8 @@
     "pause": "一時停止",
     "activate": "活性化",
     "configurations": "構成",
-    "confirmation": "確認"
+    "confirmation": "確認",
+    "country": "国"
   },
   "landing": {
     "hero": {
@@ -199,7 +200,8 @@
       "app": "アプリ",
       "revenue": "収益",
       "installs": "インストール数",
-      "roi": "ROI"
+      "roi": "ROI",
+      "cost": "料金"
     },
     "recentCampaigns": {
       "title": "最近のキャンペーン",
@@ -229,7 +231,8 @@
       "estimateRevenue": "収益の見積もり",
       "totalCost": "総費用",
       "netUSD": "純米ドル",
-      "percentage": "割合"
+      "percentage": "割合",
+      "lastBidCurrentBid": "最終入札 | 現在の入札額(₹)"
     },
     "connect": {
       "title": "アプリを接続",

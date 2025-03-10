@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Table, TextInput, Dropdown } from "flowbite-react";
-import { Search, Filter, MoreVertical } from "lucide-react";
+import { Table, TextInput, Button } from "flowbite-react";
+import { Search, Eye, Edit, Trash } from "lucide-react";
 import { useCurrency } from "../contexts/CurrencyContext";
 import ConnectAppModal, { AppFormData } from "../components/ConnectAppModal";
 import { fetchApps } from "../services/api";
@@ -28,7 +28,6 @@ const AppList: React.FC = () => {
   const [apps, setApps] = useState<App[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [platformFilter, setPlatformFilter] = useState<string | null>(null);
 
   useEffect(() => {
     const loadApps = async () => {
@@ -73,11 +72,7 @@ const AppList: React.FC = () => {
     const matchesSearch = app.name
       .toLowerCase()
       .includes(searchTerm.toLowerCase());
-    const matchesPlatform = platformFilter
-      ? app.platform === platformFilter
-      : true;
-
-    return matchesSearch && matchesPlatform;
+    return matchesSearch;
   });
 
   return (
@@ -135,7 +130,7 @@ const AppList: React.FC = () => {
       ) : (
         <div className="overflow-x-auto border border-gray-200 dark:border-gray-700 rounded-md">
           <Table>
-            <Table.Head>
+            <Table.Head className="border-b h-[50px] border-gray-200 dark:border-gray-700">
               <Table.HeadCell>{t("apps.columns.name")}</Table.HeadCell>
               <Table.HeadCell>
                 {t("apps.columns.estimateRevenue")}
@@ -192,23 +187,26 @@ const AppList: React.FC = () => {
                   >
                     {app.percentage.toFixed(2)}%
                   </Table.Cell>
-                  <Table.Cell>
-                    <Dropdown
-                      label={<MoreVertical className="h-5 w-5" />}
-                      arrowIcon={false}
-                      inline
+                  <Table.Cell className="flex gap-2">
+                    <Button
+                      size="xs"
+                      color="light"
+                      onClick={() => navigate(`/apps/${app.id}`)}
                     >
-                      <Dropdown.Item
-                        onClick={() => navigate(`/apps/${app.id}`)}
-                      >
-                        {t("common.view")}
-                      </Dropdown.Item>
-                      <Dropdown.Item>{t("common.edit")}</Dropdown.Item>
-                      <Dropdown.Divider />
-                      <Dropdown.Item color="failure">
-                        {t("common.delete")}
-                      </Dropdown.Item>
-                    </Dropdown>
+                      <Eye className="h-4 w-4" />
+                    </Button>
+
+                    <Button size="xs" color="yellow">
+                      <Edit className="h-4 w-4" />
+                    </Button>
+
+                    <Button
+                      size="xs"
+                      color="red"
+                      // onClick={() => handleDelete(app.id)}
+                    >
+                      <Trash className="h-4 w-4" />
+                    </Button>
                   </Table.Cell>
                 </Table.Row>
               ))}

@@ -73,10 +73,14 @@ const AppDetail: React.FC = () => {
         <div>
           <h1 className="text-2xl font-bold text-gray-900">{appData?.name}</h1>
           <div className="flex items-center mt-2">
-            <Badge color="info" className="mr-2">
-              {appData?.platform}
-            </Badge>
-            <Badge color="light">{appData?.category}</Badge>
+            {appData?.platform && (
+              <Badge color="info" className="mr-2">
+                {appData?.platform}
+              </Badge>
+            )}
+            {appData?.category && (
+              <Badge color="light">{appData?.category}</Badge>
+            )}
           </div>
         </div>
         <DateRangePicker onDateRangeChange={handleDateRangeChange} />

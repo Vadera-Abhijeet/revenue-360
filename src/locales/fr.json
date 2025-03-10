@@ -132,7 +132,8 @@
     "pause": "Pause",
     "activate": "Activer",
     "configurations": "Configurations",
-    "confirmation": "Confirmation"
+    "confirmation": "Confirmation",
+    "country": "Pays"
   },
   "landing": {
     "hero": {
@@ -199,7 +200,8 @@
       "app": "Application",
       "revenue": "Revenu",
       "installs": "Installations",
-      "roi": "ROI"
+      "roi": "ROI",
+      "cost": "Coût"
     },
     "recentCampaigns": {
       "title": "Campagnes récentes",
@@ -229,7 +231,8 @@
       "estimateRevenue": "Estimation des revenus",
       "totalCost": "Coût total",
       "netUSD": "USD net",
-      "percentage": "Pourcentage"
+      "percentage": "Pourcentage",
+      "lastBidCurrentBid": "Dernière enchère | Enchère actuelle (₹)"
     },
     "connect": {
       "title": "Connecter une application",

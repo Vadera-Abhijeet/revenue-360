@@ -65,46 +65,56 @@ const Configurations: React.FC = () => {
     }
   };
 
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary-600"></div>
-      </div>
-    );
-  }
+  // if (isLoading) {
+  //   return (
+  //     <div className="flex items-center justify-center h-64">
+  //       <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary-600"></div>
+  //     </div>
+  //   );
+  // }
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold text-indigo-700">
-        {t("configurations.title")}
-      </h1>
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <h1 className="text-2xl font-bold text-indigo-700">
+          {t("configurations.title")}
+        </h1>
+      </div>
+      {isLoading ? (
+        <div className="flex items-center justify-center h-64">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary-600"></div>
+        </div>
+      ) : (
+        <Tabs aria-label="Settings tabs" style="pills">
+          <Tabs.Item
+            active
+            title={t("configurations.integrations.title")}
+            icon={RefreshCw}
+          >
+            <Integration
+              integrations={settings?.integrations}
+              onUpdateIntegration={handleUpdateIntegration}
+              onToggleConnection={handleToggleIntegrationConnection}
+              onAddNewIntegrations={(payload) => {
+                setSettings(
+                  (prevState) =>
+                    ({
+                      ...prevState,
+                      integrations: [
+                        payload,
+                        ...(prevState?.integrations || []),
+                      ],
+                    } as ISettings)
+                );
+              }}
+            />
+          </Tabs.Item>
 
-      <Tabs aria-label="Settings tabs" style="pills">
-        <Tabs.Item
-          active
-          title={t("configurations.integrations.title")}
-          icon={RefreshCw}
-        >
-          <Integration
-            integrations={settings?.integrations}
-            onUpdateIntegration={handleUpdateIntegration}
-            onToggleConnection={handleToggleIntegrationConnection}
-            onAddNewIntegrations={(payload) => {
-              setSettings(
-                (prevState) =>
-                  ({
-                    ...prevState,
-                    integrations: [payload, ...(prevState?.integrations || [])],
-                  } as ISettings)
-              );
-            }}
-          />
-        </Tabs.Item>
-
-        <Tabs.Item title={t("configurations.team.title")} icon={User}>
-          <TeamManagement team={settings?.team} />
-        </Tabs.Item>
-      </Tabs>
+          <Tabs.Item title={t("configurations.team.title")} icon={User}>
+            <TeamManagement team={settings?.team} />
+          </Tabs.Item>
+        </Tabs>
+      )}
     </div>
   );
 };

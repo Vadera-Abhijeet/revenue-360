@@ -27,7 +27,7 @@ export interface IRevenueVsSpendEntity {
 export interface ITopAppsEntity {
   name: string;
   revenue: number;
-  installs: number;
+  cost: number;
   roi: number;
 }
 
