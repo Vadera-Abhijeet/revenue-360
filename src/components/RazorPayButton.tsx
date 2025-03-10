@@ -1,5 +1,6 @@
 import axios from "axios";
 import { Button } from "flowbite-react";
+import { useState } from "react";
 
 const loadRazorpayScript = (): Promise<boolean> => {
   return new Promise((resolve) => {
@@ -18,9 +19,12 @@ const loadRazorpayScript = (): Promise<boolean> => {
 };
 
 const RazorpayButton = ({ amount }: { amount: number }) => {
+  const [loading, setLoading] = useState(false);
   const handlePayment = async () => {
+    setLoading(true);
     const isLoaded = await loadRazorpayScript();
     if (!isLoaded) {
+      setLoading(false);
       alert("Failed to load Razorpay. Please check your internet connection.");
       return;
     }
@@ -50,19 +54,37 @@ const RazorpayButton = ({ amount }: { amount: number }) => {
           contact: "9999999999",
         },
         theme: { color: "#990eff" },
+        handler: function (response: any) {
+          console.log("Payment successful!", response);
+        },
+        modal: {
+          ondismiss: function () {
+            console.log("User cancelled the payment.");
+            setLoading(false);
+          },
+        },
       };
 
       const razorpayInstance = new (window as any).Razorpay(options);
       razorpayInstance.open();
     } catch (error) {
       console.error("Error creating Razorpay order:", error);
+      setLoading(false);
       alert("Payment failed. Try again later.");
     }
   };
 
   return (
-    <Button color={"indigo"} onClick={handlePayment} disabled={amount === 0}>
-      Pay Now
+    <Button
+      color={loading ? "light" : "indigo"}
+      onClick={handlePayment}
+      disabled={amount === 0 || loading}
+    >
+      {loading ? (
+        <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-primary-600"></div>
+      ) : (
+        "Pay Now"
+      )}
     </Button>
   );
 };
