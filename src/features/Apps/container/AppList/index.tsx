@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Button, Table, TextInput } from "flowbite-react";
+import { Eye, Search } from "lucide-react";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Table, TextInput, Button } from "flowbite-react";
-import { Search, Eye, Edit, Trash } from "lucide-react";
-import { useCurrency } from "../../../../contexts/CurrencyContext";
+import { useNavigate } from "react-router-dom";
 import ConnectAppModal, {
   AppFormData,
 } from "../../../../components/ConnectAppModal";
+import { useCurrency } from "../../../../contexts/CurrencyContext";
 import { fetchApps } from "../../../../services/api";
 
 interface App {
@@ -196,18 +196,6 @@ const AppList: React.FC = () => {
                       onClick={() => navigate(`/apps/${app.id}`)}
                     >
                       <Eye className="h-4 w-4" />
-                    </Button>
-
-                    <Button size="xs" color="yellow">
-                      <Edit className="h-4 w-4" />
-                    </Button>
-
-                    <Button
-                      size="xs"
-                      color="red"
-                      // onClick={() => handleDelete(app.id)}
-                    >
-                      <Trash className="h-4 w-4" />
                     </Button>
                   </Table.Cell>
                 </Table.Row>

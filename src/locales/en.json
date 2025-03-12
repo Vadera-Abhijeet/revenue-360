@@ -206,7 +206,7 @@
       "cost": "Cost"
     },
     "recentCampaigns": {
-      "title": "Recent Campaigns",
+      "title": "Campaigns",
       "campaign": "Campaign",
       "status": "Status",
       "spend": "Spend",

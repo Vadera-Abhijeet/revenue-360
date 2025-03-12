@@ -1,14 +1,14 @@
 import { Badge, Button, Table, TextInput } from "flowbite-react";
-import { BarChart2, Eye, Search, Trash } from "lucide-react";
+import { BarChart2, Eye, Search } from "lucide-react";
 import React, { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
-import { useCurrency } from "../../../../contexts/CurrencyContext";
-import { ICampaignData } from "../../interface";
-import { fetchCampaigns } from "../../../../services/api";
 import DateRangePicker from "../../../../components/DateRangePicker";
+import { useCurrency } from "../../../../contexts/CurrencyContext";
+import { fetchCampaigns } from "../../../../services/api";
 import CampaignsDataTable from "../../component/CampaignListModal";
+import { ICampaignData } from "../../interface";
 
 const Campaigns: React.FC = () => {
   const { t } = useTranslation();
@@ -180,13 +180,6 @@ const Campaigns: React.FC = () => {
                       <Eye className="h-4 w-4" />
                     </Button>
 
-                    {/* <Button color="yellow" size="xs">
-                      <Edit className="h-4 w-4" />
-                    </Button> */}
-
-                    <Button color="red" size="xs">
-                      <Trash className="h-4 w-4" />
-                    </Button>
                     <Button
                       color="green"
                       size="xs"
