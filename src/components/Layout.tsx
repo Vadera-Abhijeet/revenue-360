@@ -100,9 +100,12 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   ];
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen p-2 ">
       {/* Top Navbar */}
-      <Navbar fluid className="border-b border-gray-200 bg-white shadow-sm">
+      <Navbar
+        fluid
+        className="border border-gray-200 bg-white rounded-lg shadow-sm"
+      >
         <div className="flex items-center">
           <Button
             color="light"
@@ -167,7 +170,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             onOpenChange={setOpenNotification}
             content={<Notifications />}
             theme={{
-              content: "z-10 overflow-hidden rounded-[7px] shadow-md",
+              content: "z-10 overflow-hidden rounded-[7px] shadow-sm",
             }}
           >
             <div className="relative py-2 px-1 cursor-pointer">
@@ -226,9 +229,9 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       </Navbar>
 
       {/* Main Content with Sidebar */}
-      <div className="flex flex-1 overflow-hidden">
+      <div className="flex flex-1 mt-2 gap-2">
         {/* Sidebar for larger screens */}
-        <div className="hidden lg:block w-72 border-r border-gray-200 bg-white">
+        <div className="hidden lg:block w-72 border border-gray-200 bg-white rounded-md shadow-lg overflow-hidden">
           <Sidebar className="w-full">
             <Sidebar.Items>
               <Sidebar.ItemGroup>
@@ -313,7 +316,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         )}
 
         {/* Main Content */}
-        <div className="flex-1 overflow-auto p-4 md:p-6 bg-gray-50 max-h-[calc(100vh-75px)] overflow-y-auto">
+        <div className="flex-1 overflow-auto p-4 md:p-6 bg-gray-50 max-h-[calc(100vh-85px)] overflow-y-auto border border-gray-200  rounded-lg shadow-sm">
           {children}
         </div>
       </div>
