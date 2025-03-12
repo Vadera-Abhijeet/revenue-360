@@ -8,6 +8,7 @@ import {
   Avatar,
   Badge,
   Dropdown,
+  Popover,
 } from "flowbite-react";
 import {
   LayoutDashboard,
@@ -26,6 +27,7 @@ import {
 import { useAuth } from "../contexts/AuthContext";
 import { useNotifications } from "../contexts/NotificationContext";
 import { CurrencyCode, useCurrency } from "../contexts/CurrencyContext";
+import Notifications from "../features/Notifications";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -39,6 +41,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [openNotification, setOpenNotification] = useState(false);
 
   const languages = [
     { code: "en", name: "English" },
@@ -160,21 +163,27 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               </Dropdown.Item>
             ))}
           </Dropdown>
-
-          <div
-            onClick={() => navigate("/notifications")}
-            className="relative py-2 px-1 cursor-pointer"
+          <Popover
+            aria-labelledby="area-popover"
+            open={openNotification}
+            onOpenChange={setOpenNotification}
+            content={<Notifications />}
+            theme={{
+              content: "z-10 overflow-hidden rounded-[7px] shadow-md",
+            }}
           >
-            <Bell
-              size={20}
-              className="text-indigo-600 hover:text-indigo-900 "
-            />
-            {unreadCount > 0 && (
-              <Badge color="indigo" className="absolute -top-1.5 -right-4">
-                {unreadCount}
-              </Badge>
-            )}
-          </div>
+            <div className="relative py-2 px-1 cursor-pointer">
+              <Bell
+                size={20}
+                className="text-indigo-600 hover:text-indigo-900 "
+              />
+              {unreadCount > 0 && (
+                <Badge color="indigo" className="absolute -top-1.5 -right-4">
+                  {unreadCount}
+                </Badge>
+              )}
+            </div>
+          </Popover>
 
           <Dropdown
             arrowIcon={false}

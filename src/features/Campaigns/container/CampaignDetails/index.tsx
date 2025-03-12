@@ -169,7 +169,7 @@ const AppDetail: React.FC = () => {
           <h1 className="text-2xl font-bold text-gray-900">{appData?.name}</h1>
           {appData && (
             <div className="flex items-center mt-2">
-              <Badge color="info" className="mr-2">
+              <Badge color="info" className="mr-2 capitalize">
                 {appData?.platform}
               </Badge>
               <Badge color="light">{appData?.category}</Badge>
