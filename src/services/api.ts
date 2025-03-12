@@ -342,6 +342,20 @@ export const fetchAppDetails = async (
     },
   ];
 
+  // Generate Campaign data
+  const campaignData = [
+    { date: "2024-07-01", clicks: 120, conversions: 15, impressions: 1500 },
+    { date: "2024-07-02", clicks: 180, conversions: 25, impressions: 2200 },
+    { date: "2024-07-03", clicks: 150, conversions: 18, impressions: 1900 },
+    { date: "2024-07-04", clicks: 170, conversions: 22, impressions: 2100 },
+    { date: "2024-07-05", clicks: 200, conversions: 30, impressions: 2500 },
+    { date: "2024-07-06", clicks: 140, conversions: 20, impressions: 1800 },
+    { date: "2024-07-07", clicks: 220, conversions: 35, impressions: 2800 },
+    { date: "2024-07-08", clicks: 190, conversions: 28, impressions: 2300 },
+    { date: "2024-07-09", clicks: 210, conversions: 33, impressions: 2600 },
+    { date: "2024-07-10", clicks: 175, conversions: 24, impressions: 2000 },
+  ];
+
   return {
     id: appId,
     name: "Fitness Tracker Pro",
@@ -364,6 +378,7 @@ export const fetchAppDetails = async (
     retentionData,
     countryData,
     versionData,
+    campaignData,
   };
 };
 

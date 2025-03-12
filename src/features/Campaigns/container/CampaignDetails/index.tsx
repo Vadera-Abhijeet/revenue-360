@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Badge, Button, Card, Dropdown, Tabs } from "flowbite-react";
+import { Badge, Button, Card, Dropdown, Tabs, Tooltip } from "flowbite-react";
 import {
   Users,
   TrendingUp,
@@ -16,16 +16,16 @@ import { ChartConfig, ChartGroup } from "../../../../interfaces";
 import { fetchAppDetails } from "../../../../services/api";
 import DateRangePicker from "../../../../components/DateRangePicker";
 import StatCard from "../../../../components/StatCard";
-import ConfigurableChart from "../../component/ConfigurableChart";
-import ChartConfigModal from "../../component/ChartConfigModal";
-import ChartGroupModal from "../../component/ChartGroupModal";
-import { DotsThreeVertical } from "@phosphor-icons/react";
 import { IAppData } from "../../interface";
+import { DotsThreeVertical } from "@phosphor-icons/react";
+import ConfigurableChart from "../../../../components/ChartComponents/ConfigurableChart";
+import ChartGroupModal from "../../../../components/ChartComponents/ChartGroupModal";
+import ChartConfigModal from "../../../../components/ChartComponents/ChartConfigModal";
 
 const AppDetail: React.FC = () => {
   const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
-  const { getConfigsForApp, updateAppConfigs } = useChartConfig();
+  const { getConfigsForCampaign, updateCampaignConfigs } = useChartConfig();
   const [isLoading, setIsLoading] = useState(true);
   const [appData, setAppData] = useState<IAppData>();
   const [startDate, setStartDate] = useState<Date>(
@@ -42,13 +42,13 @@ const AppDetail: React.FC = () => {
 
   useEffect(() => {
     if (id) {
-      const configs = getConfigsForApp(id);
+      const configs = getConfigsForCampaign(id);
       setGroups(configs);
       if (configs.length > 0 && currentTab === null) {
         setCurrentTab(configs[0].id);
       }
     }
-  }, [id, getConfigsForApp, currentTab]);
+  }, [id, getConfigsForCampaign, currentTab]);
 
   const availableAxes = [
     { value: "date", label: t("charts.axes.date") },
@@ -98,7 +98,7 @@ const AppDetail: React.FC = () => {
     });
 
     setGroups(updatedGroups);
-    updateAppConfigs(id, updatedGroups);
+    updateCampaignConfigs(id, updatedGroups);
     setSelectedConfig(undefined);
     setIsChartModalOpen(false);
   };
@@ -118,7 +118,7 @@ const AppDetail: React.FC = () => {
     });
     setGroups(updatedGroups);
     setSelectedConfig(undefined);
-    updateAppConfigs(id, updatedGroups);
+    updateCampaignConfigs(id, updatedGroups);
     setIsChartModalOpen(false);
   };
 
@@ -136,7 +136,7 @@ const AppDetail: React.FC = () => {
     });
 
     setGroups(updatedGroups);
-    updateAppConfigs(id, updatedGroups);
+    updateCampaignConfigs(id, updatedGroups);
   };
 
   const handleDeleteGroup = (groupId: string) => {
@@ -148,7 +148,18 @@ const AppDetail: React.FC = () => {
       setCurrentTab(groups[0].id);
     }, 100);
     setGroups(updatedGroups);
-    updateAppConfigs(id, updatedGroups);
+    updateCampaignConfigs(id, updatedGroups);
+  };
+
+  const resetTabState = () => {
+    const lastCurrentTab = localStorage.getItem("lastCurrentTab");
+    const lastActiveTab = Number(localStorage.getItem("lastActiveTab") || "0");
+
+    setCurrentTab(lastCurrentTab);
+    setActiveTab(lastActiveTab);
+
+    localStorage.removeItem("lastActiveTab");
+    localStorage.removeItem("lastCurrentTab");
   };
 
   return (
@@ -156,16 +167,17 @@ const AppDetail: React.FC = () => {
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">{appData?.name}</h1>
-          <div className="flex items-center mt-2">
-            <Badge color="info" className="mr-2">
-              {appData?.platform}
-            </Badge>
-            <Badge color="light">{appData?.category}</Badge>
-          </div>
+          {appData && (
+            <div className="flex items-center mt-2">
+              <Badge color="info" className="mr-2">
+                {appData?.platform}
+              </Badge>
+              <Badge color="light">{appData?.category}</Badge>
+            </div>
+          )}
         </div>
         <DateRangePicker onDateRangeChange={handleDateRangeChange} />
       </div>
-
       {isLoading || !appData ? (
         <div className="flex items-center justify-center h-64">
           <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary-600"></div>
@@ -206,181 +218,213 @@ const AppDetail: React.FC = () => {
           </div>
 
           {/* Chart Tabs */}
-          <div className="relative ">
-            <Tabs
-              aria-label="Chart tabs"
-              className="w-full"
-              style="pills"
-              onActiveTabChange={(tab) => {
-                setActiveTab(tab);
-                const selectedGroup = groups[tab];
-                if (selectedGroup.id) {
-                  setCurrentTab(selectedGroup.id);
-                }
-              }}
-            >
-              {groups.map((group, index) => (
-                <Tabs.Item
-                  active={index === activeTab}
-                  key={group.id}
-                  title={
-                    <div className="flex items-center gap-2">
-                      {group.name}
-                      <Dropdown
-                        placement="bottom"
-                        arrowIcon={false}
-                        onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                        }}
-                        inline
-                        label={
-                          <DotsThreeVertical
-                            size={20}
-                            color={index === activeTab ? "white" : "gray"}
-                          />
-                        }
-                        theme={{
-                          inlineWrapper:
-                            "flex items-center text-indigo-600 hover:text-indigo-900",
-                        }}
-                      >
-                        {[
-                          {
-                            icon: <Pen size={16} />,
-                            label: (
-                              <p className="capitalize">{t("common:edit")}</p>
-                            ),
-                            onClick: () => {
-                              setIsAddTabModalOpen(true);
-                              setSelectedGroup(group);
-                            },
-                          },
-                          {
-                            icon: <Trash color="red" size={16} />,
-                            label: (
-                              <p className="capitalize text-red-700">
-                                {t("common:delete")}
-                              </p>
-                            ),
-                            onClick: () => handleDeleteGroup(group.id),
-                          },
-                        ].map(({ icon, label, onClick }, index) => (
-                          <Dropdown.Item key={index} onClick={() => onClick()}>
-                            <div className="flex gap-2 items-center">
-                              {icon}
-                              {label}
-                            </div>
-                          </Dropdown.Item>
-                        ))}
-                      </Dropdown>
-                    </div>
-                  }
+          {groups.length === 0 ? (
+            <Card className="items-center min-h-80 justify-center">
+              <div>
+                <p className="mb-4 text-gray-600 dark:text-white">
+                  {t("charts.noChartAvailable")}
+                </p>
+                <Button
+                  color="indigo"
+                  onClick={() => setIsAddTabModalOpen(true)}
                 >
-                  {group.charts.length === 0 ? (
-                    <div className="flex flex-col items-center justify-center  min-h-80 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300">
-                      <p className="text-gray-500 dark:text-white">
-                        {t("charts.noChartAvailable")}
-                      </p>
-                    </div>
-                  ) : (
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                      {group.charts.map((chart) => (
-                        <Card
-                          key={chart.id}
-                          className="relative overflow-hidden"
+                  <div className="flex items-center gap-2">
+                    <Plus size={16} className="mr-2" />
+                    {t("charts.addGroup")}
+                  </div>
+                </Button>
+              </div>
+            </Card>
+          ) : (
+            <div className="relative">
+              <Tabs
+                className="w-full"
+                style="pills"
+                onActiveTabChange={(tab) => {
+                  setActiveTab(tab);
+                  const selectedGroup = groups[tab];
+                  setCurrentTab(selectedGroup.id);
+                }}
+              >
+                {groups.map((group, index) => (
+                  <Tabs.Item
+                    active={index === activeTab}
+                    key={group.id}
+                    title={
+                      <div className="flex items-center gap-2">
+                        {group.name}
+                        <Dropdown
+                          placement="bottom"
+                          arrowIcon={false}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                          }}
+                          inline
+                          label={
+                            <DotsThreeVertical
+                              size={20}
+                              color={index === activeTab ? "white" : "gray"}
+                            />
+                          }
                           theme={{
-                            root: {
-                              children:
-                                "flex h-full flex-col justify-between gap-4 p-0 pb-4",
-                            },
+                            inlineWrapper:
+                              "flex items-center text-indigo-600 hover:text-indigo-900",
                           }}
                         >
-                          <div className="mb-4 flex items-center justify-between border-b border-gray-200 bg-white px-6 py-4">
-                            <h5 className="text-xl font-bold leading-none text-gray-900 dark:text-white ">
-                              {chart.name}
-                            </h5>
-                            <div className="flex gap-2">
-                              <Button
-                                size="xs"
-                                color="light"
-                                onClick={() => {
-                                  setIsChartModalOpen(true);
-                                  setSelectedConfig(chart);
-                                }}
-                              >
-                                <Pen size={16} />
-                              </Button>
-                              <Button
-                                size="xs"
-                                color="failure"
-                                onClick={() => handleDeleteChart(chart.id)}
-                              >
-                                <Trash size={16} />
-                              </Button>
-                            </div>
-                          </div>
-                          <ConfigurableChart
-                            config={chart}
-                            data={appData[chart.dataKey] || []}
-                          />
-                        </Card>
-                      ))}
-                      {/* <div className="flex items-center justify-center p-8 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300">
-                          <Button
-                            color="light"
-                            onClick={() => setIsChartModalOpen(true)}
+                          {[
+                            {
+                              icon: <Pen size={16} />,
+                              label: (
+                                <p className="capitalize">{t("common:edit")}</p>
+                              ),
+                              onClick: () => {
+                                setIsAddTabModalOpen(true);
+                                setSelectedGroup(group);
+                              },
+                            },
+                            {
+                              icon: <Trash color="red" size={16} />,
+                              label: (
+                                <p className="capitalize text-red-700">
+                                  {t("common:delete")}
+                                </p>
+                              ),
+                              onClick: () => handleDeleteGroup(group.id),
+                            },
+                          ].map(({ icon, label, onClick }, index) => (
+                            <Dropdown.Item
+                              key={index}
+                              onClick={() => onClick()}
+                            >
+                              <div className="flex gap-2 items-center">
+                                {icon}
+                                {label}
+                              </div>
+                            </Dropdown.Item>
+                          ))}
+                        </Dropdown>
+                      </div>
+                    }
+                  >
+                    {group.charts.length === 0 ? (
+                      <div className="flex flex-col items-center justify-center  min-h-80 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300">
+                        <p className="text-gray-500 dark:text-white">
+                          {t("charts.noChartAvailable")}
+                        </p>
+                      </div>
+                    ) : (
+                      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        {group.charts.map((chart) => (
+                          <Card
+                            key={chart.id}
+                            className="relative overflow-hidden"
+                            theme={{
+                              root: {
+                                children:
+                                  "flex h-full flex-col justify-between gap-4 p-0 pb-4",
+                              },
+                            }}
                           >
-                            <Plus size={16} className="mr-2" />
-                            {t("charts.addChart")}
-                          </Button>
-                        </div> */}
-                    </div>
-                  )}
-                </Tabs.Item>
-              ))}
-              <Tabs.Item
-                title={
-                  <Plus size={16} onClick={() => setIsAddTabModalOpen(true)} />
-                }
-              >
-                <ChartGroupModal
-                  isOpen={isAddTabModalOpen}
-                  onClose={() => setIsAddTabModalOpen(false)}
-                  onSave={(chartGroup) => {
-                    setGroups((prevState) => [...prevState, chartGroup]);
-                    if (id) {
-                      updateAppConfigs(id, [...groups, chartGroup]);
-                    }
-                    setIsAddTabModalOpen(false);
-                    setSelectedGroup(undefined);
-                  }}
-                  onEdit={(chartGroup) => {
-                    const updatedGroups = groups.map((grp) =>
-                      grp.id === chartGroup.id ? chartGroup : grp
-                    );
-                    setGroups(updatedGroups);
-                    if (id) {
-                      updateAppConfigs(id, updatedGroups);
-                    }
-                    setIsAddTabModalOpen(false);
-                    setSelectedGroup(undefined);
-                  }}
-                  initialGroup={selectedGroup}
-                />
-              </Tabs.Item>
-            </Tabs>
-            <Button
-              color="light"
-              className="absolute top-0 right-0"
-              onClick={() => setIsChartModalOpen(true)}
-            >
-              <Plus size={16} className="mr-2" />
-              {t("charts.addChart")}
-            </Button>
-          </div>
+                            <div className="mb-4 flex items-center justify-between border-b border-gray-200 bg-white px-6 py-4">
+                              <h5 className="text-xl font-bold leading-none text-gray-900 dark:text-white ">
+                                {chart.name}
+                              </h5>
+                              <div className="flex gap-2">
+                                <Tooltip content={t("common.edit")}>
+                                  <Button
+                                    size="xs"
+                                    color="light"
+                                    onClick={() => {
+                                      setIsChartModalOpen(true);
+                                      setSelectedConfig(chart);
+                                    }}
+                                  >
+                                    <Pen size={16} />
+                                  </Button>
+                                </Tooltip>
+                                <Tooltip content={t("common.delete")}>
+                                  <Button
+                                    size="xs"
+                                    color="failure"
+                                    onClick={() => handleDeleteChart(chart.id)}
+                                  >
+                                    <Trash size={16} />
+                                  </Button>
+                                </Tooltip>
+                              </div>
+                            </div>
+                            <div className="pr-6">
+                              <ConfigurableChart
+                                config={chart}
+                                data={appData[chart.dataKey] || []}
+                              />
+                            </div>
+                          </Card>
+                        ))}
+                      </div>
+                    )}
+                  </Tabs.Item>
+                ))}
+              </Tabs>
+              <div className="absolute top-0 right-0 flex items-center gap-2">
+                <Button
+                  color="indigo"
+                  onClick={() => setIsAddTabModalOpen(true)}
+                >
+                  <div className="flex items-center gap-2">
+                    <Plus size={16} className="mr-2" />
+                    {t("charts.addGroup")}
+                  </div>
+                </Button>
+                <Button color="light" onClick={() => setIsChartModalOpen(true)}>
+                  <div className="flex items-center gap-2">
+                    <Plus size={16} className="mr-2" />
+                    {t("charts.addChart")}
+                  </div>
+                </Button>
+              </div>
+            </div>
+          )}
         </div>
       )}
+      <ChartGroupModal
+        key={isAddTabModalOpen.toString()}
+        isOpen={isAddTabModalOpen}
+        onClose={() => {
+          setIsAddTabModalOpen(false);
+          resetTabState();
+        }}
+        onSave={(chartGroup) => {
+          setGroups((prevGroups) => {
+            const updatedGroups = [...prevGroups, chartGroup];
+            if (id) updateCampaignConfigs(id, updatedGroups);
+            return updatedGroups;
+          });
+
+          setIsAddTabModalOpen(false);
+          setSelectedGroup(undefined);
+          resetTabState();
+
+          if (groups.length === 0) {
+            setIsChartModalOpen(true);
+          }
+        }}
+        onEdit={(chartGroup) => {
+          setGroups((prevGroups) => {
+            const updatedGroups = prevGroups.map((grp) =>
+              grp.id === chartGroup.id ? chartGroup : grp
+            );
+            if (id) updateCampaignConfigs(id, updatedGroups);
+            return updatedGroups;
+          });
+
+          setIsAddTabModalOpen(false);
+          setSelectedGroup(undefined);
+          resetTabState();
+        }}
+        initialGroup={selectedGroup}
+      />
 
       {/* Chart Configuration Modal */}
       <ChartConfigModal

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Modal, Button, Label, TextInput } from "flowbite-react";
 import { useTranslation } from "react-i18next";
-import { ChartGroup } from "../../../interfaces";
+import { ChartGroup } from "../../interfaces";
 
 interface ChartGroupModalProps {
   isOpen: boolean;

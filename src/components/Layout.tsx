@@ -230,7 +230,10 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                     key={item.path}
                     href={item.path}
                     icon={() => item.icon}
-                    active={location.pathname === item.path}
+                    active={
+                      location.pathname === item.path ||
+                      location.pathname.startsWith(item.path)
+                    }
                     onClick={(e: { preventDefault: () => void }) => {
                       e.preventDefault();
                       navigate(item.path);

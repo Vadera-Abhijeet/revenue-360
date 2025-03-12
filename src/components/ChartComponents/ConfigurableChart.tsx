@@ -16,12 +16,27 @@ import {
   ResponsiveContainer,
   Cell,
 } from "recharts";
-import { ChartConfig } from "../../../interfaces";
-import { useCurrency } from "../../../contexts/CurrencyContext";
+import { ChartConfig } from "../../interfaces";
+import { useCurrency } from "../../contexts/CurrencyContext";
+import { ValueType } from "recharts/types/component/DefaultTooltipContent";
+import {
+  ICampaignsDataEntity,
+  ICountryDataEntity,
+  IRetentionDataEntity,
+  IRevenueDataEntity,
+  IUserDataEntity,
+  IVersionDataEntity,
+} from "../../features/Campaigns/interface";
 
 interface ConfigurableChartProps {
   config: ChartConfig;
-  data: any[];
+  data:
+    | IRevenueDataEntity[]
+    | IUserDataEntity[]
+    | IRetentionDataEntity[]
+    | ICountryDataEntity[]
+    | IVersionDataEntity[]
+    | ICampaignsDataEntity[];
 }
 
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#8884D8"];
@@ -38,10 +53,14 @@ const ConfigurableChart: React.FC<ConfigurableChartProps> = ({
       margin: { top: 5, right: 30, left: 20, bottom: 5 },
     };
 
-    const formatValue = (value: any) => {
+    const formatValue = (value: ValueType) => {
       if (typeof value === "number") {
         // Check if the value represents currency
-        if (config.yAxis.some((axis) => axis.includes("revenue") || axis.includes("spend"))) {
+        if (
+          config.yAxis.some(
+            (axis) => axis.includes("revenue") || axis.includes("spend")
+          )
+        ) {
           return formatCurrency(value);
         }
         return value.toLocaleString();
@@ -107,20 +126,19 @@ const ConfigurableChart: React.FC<ConfigurableChartProps> = ({
             ))}
           </AreaChart>
         );
-
-      case "pie":
-        const pieData = data.reduce((acc: any[], curr: any) => {
-          config.yAxis.forEach((axis) => {
-            acc.push({
-              name: `${curr[config.xAxis]} - ${axis}`,
-              value: curr[axis],
-            });
-          });
-          return acc;
-        }, []);
+      case "pie": {
+        // Generate pie data by summing up each yAxis category
+        const pieData = config.yAxis.map((axis) => ({
+          name: axis,
+          value: data.reduce(
+            (sum, curr) =>
+              sum + ((curr[axis as keyof typeof curr] as number) || 0),
+            0
+          ),
+        }));
 
         return (
-          <PieChart {...commonProps}>
+          <PieChart width={400} height={400}>
             <Pie
               data={pieData}
               cx="50%"
@@ -130,23 +148,26 @@ const ConfigurableChart: React.FC<ConfigurableChartProps> = ({
               fill="#8884d8"
               dataKey="value"
               label={({ name, percent }) =>
-                `${name}: ${(percent * 100).toFixed(0)}%`
+                `${name}: ${(percent * 100).toFixed(1)}%`
               }
             >
-              {pieData.map((entry: any, index: number) => (
+              {pieData.map((entry, index) => (
                 <Cell
                   key={`cell-${index}`}
-                  fill={COLORS[index % COLORS.length]}
+                  fill={COLORS[index % COLORS.length]} // Ensure colors cycle properly
                 />
               ))}
             </Pie>
-            <Tooltip formatter={formatValue} />
+            <Tooltip
+              formatter={(value) => `${formatValue(value)}`} // Ensure formatted values
+            />
             <Legend />
           </PieChart>
         );
+      }
 
       default:
-        return null;
+        return <></>;
     }
   };
 

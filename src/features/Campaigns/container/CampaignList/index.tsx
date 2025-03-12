@@ -199,14 +199,6 @@ const Campaigns: React.FC = () => {
               ))}
             </Table.Body>
           </Table>
-          {/* <CampaignChartData
-            isModalOpen={isModalOpen}
-            selectedCampaign={selectedCampaign}
-            closeModal={() => {
-              setIsModalOpen(false);
-              setSelectedCampaign(undefined);
-            }}
-          /> */}
           <CampaignsDataTable
             actionType={actionType}
             isModalOpen={isModalOpen}

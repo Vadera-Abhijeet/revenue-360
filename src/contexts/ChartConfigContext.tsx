@@ -9,18 +9,19 @@ import React, {
 import { ChartGroup } from "../interfaces";
 
 interface ChartConfigContextType {
-  globalConfigs: ChartGroup[];
   appConfigs: Record<string, ChartGroup[]>;
-  updateGlobalConfigs: (configs: ChartGroup[]) => void;
+  campaignConfigs: Record<string, ChartGroup[]>;
   updateAppConfigs: (appId: string, configs: ChartGroup[]) => void;
+  updateCampaignConfigs: (campaignId: string, configs: ChartGroup[]) => void;
   getConfigsForApp: (appId: string) => ChartGroup[];
+  getConfigsForCampaign: (campaignId: string) => ChartGroup[];
 }
 
 const ChartConfigContext = createContext<ChartConfigContextType | undefined>(
   undefined
 );
 
-const DEFAULT_CHART_GROUPS: ChartGroup[] = [
+const DEFAULT_COMMON_CHART_GROUPS: ChartGroup[] = [
   {
     id: "revenue",
     name: "Revenue",
@@ -35,23 +36,6 @@ const DEFAULT_CHART_GROUPS: ChartGroup[] = [
         groupId: "revenue",
         order: 1,
         dataKey: "revenueData", // New flag for dataset selection
-      },
-    ],
-  },
-  {
-    id: "users",
-    name: "Users",
-    order: 2,
-    charts: [
-      {
-        id: "users_chart",
-        name: "User Growth",
-        type: "bar",
-        xAxis: "date",
-        yAxis: ["newUsers", "activeUsers", "totalUsers"],
-        groupId: "users",
-        order: 1,
-        dataKey: "userData", // New flag for dataset selection
       },
     ],
   },
@@ -108,6 +92,47 @@ const DEFAULT_CHART_GROUPS: ChartGroup[] = [
   },
 ];
 
+const DEFAULT_APP_GROUPS: ChartGroup[] = [
+  ...DEFAULT_COMMON_CHART_GROUPS,
+  {
+    id: "users",
+    name: "Users",
+    order: 2,
+    charts: [
+      {
+        id: "users_chart",
+        name: "User Growth",
+        type: "bar",
+        xAxis: "date",
+        yAxis: ["newUsers", "activeUsers", "totalUsers"],
+        groupId: "users",
+        order: 1,
+        dataKey: "userData", // New flag for dataset selection
+      },
+    ],
+  },
+];
+const DEFAULT_CAMPAIGN_GROUPS: ChartGroup[] = [
+  ...DEFAULT_COMMON_CHART_GROUPS,
+  {
+    id: "campaign",
+    name: "Campaign",
+    order: 1,
+    charts: [
+      {
+        id: "campaign_chart",
+        name: "Campaign Performance",
+        type: "line",
+        xAxis: "date",
+        yAxis: ["clicks", "conversions", "impressions"],
+        groupId: "campaign",
+        order: 1,
+        dataKey: "campaignData",
+      },
+    ],
+  },
+];
+
 export const useChartConfig = () => {
   const context = useContext(ChartConfigContext);
   if (context === undefined) {
@@ -123,15 +148,6 @@ interface ChartConfigProviderProps {
 export const ChartConfigProvider: React.FC<ChartConfigProviderProps> = ({
   children,
 }) => {
-  const [globalConfigs, setGlobalConfigs] = useState<ChartGroup[]>(() => {
-    const stored = localStorage.getItem("global-chart-configs");
-    if (stored) {
-      const storedGroups: ChartGroup[] = JSON.parse(stored);
-      return storedGroups.length ? storedGroups : DEFAULT_CHART_GROUPS;
-    }
-    return DEFAULT_CHART_GROUPS;
-  });
-
   const [appConfigs, setAppConfigs] = useState<Record<string, ChartGroup[]>>(
     () => {
       const stored = localStorage.getItem("app-chart-configs");
@@ -139,17 +155,23 @@ export const ChartConfigProvider: React.FC<ChartConfigProviderProps> = ({
     }
   );
 
-  useEffect(() => {
-    localStorage.setItem("global-chart-configs", JSON.stringify(globalConfigs));
-  }, [globalConfigs]);
+  const [campaignConfigs, setCampaignConfigs] = useState<
+    Record<string, ChartGroup[]>
+  >(() => {
+    const stored = localStorage.getItem("campaign-chart-configs");
+    return stored ? JSON.parse(stored) : {};
+  });
 
   useEffect(() => {
     localStorage.setItem("app-chart-configs", JSON.stringify(appConfigs));
   }, [appConfigs]);
 
-  const updateGlobalConfigs = useCallback((configs: ChartGroup[]) => {
-    setGlobalConfigs(configs);
-  }, []);
+  useEffect(() => {
+    localStorage.setItem(
+      "campaign-chart-configs",
+      JSON.stringify(campaignConfigs)
+    );
+  }, [campaignConfigs]);
 
   const updateAppConfigs = useCallback(
     (appId: string, configs: ChartGroup[]) => {
@@ -161,32 +183,37 @@ export const ChartConfigProvider: React.FC<ChartConfigProviderProps> = ({
     []
   );
 
-  const getConfigsForApp = useCallback(
-    (appId: string): ChartGroup[] => {
-      // If app has specific configs, return those
-      if (appConfigs[appId]) {
-        return appConfigs[appId];
-      }
-
-      // Return a copy of global configs with new IDs
-      return globalConfigs.map((group) => ({
-        ...group,
-        id: crypto.randomUUID(),
-        charts: group.charts.map((chart) => ({
-          ...chart,
-          id: crypto.randomUUID(),
-        })),
+  const updateCampaignConfigs = useCallback(
+    (campaignId: string, configs: ChartGroup[]) => {
+      setCampaignConfigs((prev) => ({
+        ...prev,
+        [campaignId]: configs,
       }));
     },
-    [appConfigs, globalConfigs]
+    []
+  );
+
+  const getConfigsForApp = useCallback(
+    (appId: string): ChartGroup[] => {
+      return appConfigs[appId] || DEFAULT_APP_GROUPS;
+    },
+    [appConfigs]
+  );
+
+  const getConfigsForCampaign = useCallback(
+    (campaignId: string): ChartGroup[] => {
+      return campaignConfigs[campaignId] || DEFAULT_CAMPAIGN_GROUPS;
+    },
+    [campaignConfigs]
   );
 
   const value = {
-    globalConfigs,
     appConfigs,
-    updateGlobalConfigs,
+    campaignConfigs,
     updateAppConfigs,
+    updateCampaignConfigs,
     getConfigsForApp,
+    getConfigsForCampaign,
   };
 
   return (

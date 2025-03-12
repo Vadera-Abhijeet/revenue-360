@@ -1,46 +1,65 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Tabs, Card, Table, Badge } from "flowbite-react";
+import { Badge, Button, Card, Dropdown, Tabs, Tooltip } from "flowbite-react";
 import {
-  BarChart2,
   Users,
   TrendingUp,
-  Globe,
-  Tag,
   DollarSign,
   Download,
+  Plus,
+  Trash,
+  Pen,
 } from "lucide-react";
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-  BarChart,
-  Bar,
-  PieChart,
-  Pie,
-  Cell,
-} from "recharts";
-import { useCurrency } from "../../../../contexts/CurrencyContext";
+import { useChartConfig } from "../../../../contexts/ChartConfigContext";
+import { ChartConfig, ChartGroup } from "../../../../interfaces";
 import { fetchAppDetails } from "../../../../services/api";
 import DateRangePicker from "../../../../components/DateRangePicker";
 import StatCard from "../../../../components/StatCard";
+import { IAppData } from "../../interface";
+import { DotsThreeVertical } from "@phosphor-icons/react";
+import ConfigurableChart from "../../../../components/ChartComponents/ConfigurableChart";
+import ChartGroupModal from "../../../../components/ChartComponents/ChartGroupModal";
+import ChartConfigModal from "../../../../components/ChartComponents/ChartConfigModal";
 
 const AppDetail: React.FC = () => {
   const { t } = useTranslation();
-  const { formatCurrency } = useCurrency();
   const { id } = useParams<{ id: string }>();
+  const { getConfigsForApp, updateAppConfigs } = useChartConfig();
   const [isLoading, setIsLoading] = useState(true);
-  const [appData, setAppData] = useState<any>(null);
+  const [appData, setAppData] = useState<IAppData>();
   const [startDate, setStartDate] = useState<Date>(
     new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
   );
   const [endDate, setEndDate] = useState<Date>(new Date());
+  const [isChartModalOpen, setIsChartModalOpen] = useState(false);
+  const [isAddTabModalOpen, setIsAddTabModalOpen] = useState(false);
+  const [currentTab, setCurrentTab] = useState<string | null>(null);
+  const [groups, setGroups] = useState<ChartGroup[]>([]);
+  const [activeTab, setActiveTab] = useState(0);
+  const [selectedConfig, setSelectedConfig] = useState<ChartConfig>();
+  const [selectedGroup, setSelectedGroup] = useState<ChartGroup>();
+
+  useEffect(() => {
+    if (id) {
+      const configs = getConfigsForApp(id);
+      setGroups(configs);
+      if (configs.length > 0 && currentTab === null) {
+        setCurrentTab(configs[0].id);
+      }
+    }
+  }, [id, getConfigsForApp, currentTab]);
+
+  const availableAxes = [
+    { value: "date", label: t("charts.axes.date") },
+    { value: "revenue", label: t("charts.axes.revenue") },
+    { value: "adSpend", label: t("charts.axes.adSpend") },
+    { value: "adRevenue", label: t("charts.axes.adRevenue") },
+    { value: "iapRevenue", label: t("charts.axes.iapRevenue") },
+    { value: "newUsers", label: t("charts.axes.newUsers") },
+    { value: "activeUsers", label: t("charts.axes.activeUsers") },
+    { value: "totalUsers", label: t("charts.axes.totalUsers") },
+  ];
 
   useEffect(() => {
     const loadAppDetails = async () => {
@@ -60,59 +79,102 @@ const AppDetail: React.FC = () => {
     loadAppDetails();
   }, [id, startDate, endDate]);
 
-  const handleDateRangeChange = (start: Date, end: Date) => {
+  const handleDateRangeChange = useCallback((start: Date, end: Date) => {
     setStartDate(start);
     setEndDate(end);
+  }, []);
+
+  const handleSaveChart = (config: ChartConfig) => {
+    if (!id || !currentTab) return;
+
+    const updatedGroups = groups.map((group) => {
+      if (group.id === currentTab) {
+        return {
+          ...group,
+          charts: [...group.charts, { ...config, groupId: currentTab }],
+        };
+      }
+      return group;
+    });
+
+    setGroups(updatedGroups);
+    updateAppConfigs(id, updatedGroups);
+    setSelectedConfig(undefined);
+    setIsChartModalOpen(false);
   };
 
-  const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#8884D8"];
-  // Define which data sets to plot dynamically
-  const chartConfigs = [
-    {
-      label: "Revenue",
-      key: "revenueData",
-      charts: [
-        { title: "Total Revenue", lines: ["revenue"] },
-        { title: "Ad vs IAP Revenue", lines: ["adRevenue", "iapRevenue"] },
-      ],
-    },
-    {
-      label: "Users",
-      key: "userData",
-      charts: [
-        { title: "New vs Active Users", lines: ["newUsers", "activeUsers"] },
-        { title: "Total Users Growth", lines: ["totalUsers"] },
-      ],
-    },
-    {
-      label: "Retention",
-      key: "retentionData",
-      charts: [{ title: "Retention Rate", lines: ["retention"], xKey: "day" }],
-    },
-    {
-      label: "Versions",
-      key: "versionData",
-      charts: [
-        { title: "Crashes per Version", lines: ["crashes"], xKey: "version" },
-      ],
-    },
-  ];
+  const handleEditChart = (config: ChartConfig) => {
+    if (!id || !currentTab) return;
+
+    const updatedGroups = groups.map((group) => {
+      return group.id === currentTab
+        ? {
+            ...group,
+            charts: group.charts.map((chart) => {
+              return chart.id === config.id ? { ...chart, ...config } : chart;
+            }),
+          }
+        : group;
+    });
+    setGroups(updatedGroups);
+    setSelectedConfig(undefined);
+    updateAppConfigs(id, updatedGroups);
+    setIsChartModalOpen(false);
+  };
+
+  const handleDeleteChart = (chartId: string) => {
+    if (!id || !currentTab) return;
+
+    const updatedGroups = groups.map((group) => {
+      if (group.id === currentTab) {
+        return {
+          ...group,
+          charts: group.charts.filter((chart) => chart.id !== chartId),
+        };
+      }
+      return group;
+    });
+
+    setGroups(updatedGroups);
+    updateAppConfigs(id, updatedGroups);
+  };
+
+  const handleDeleteGroup = (groupId: string) => {
+    if (!id || !currentTab) return;
+
+    const updatedGroups = groups.filter((group) => group.id !== groupId);
+    setTimeout(() => {
+      setActiveTab(0);
+      setCurrentTab(groups[0].id);
+    }, 100);
+    setGroups(updatedGroups);
+    updateAppConfigs(id, updatedGroups);
+  };
+
+  const resetTabState = () => {
+    const lastCurrentTab = localStorage.getItem("lastCurrentTab");
+    const lastActiveTab = Number(localStorage.getItem("lastActiveTab") || "0");
+
+    setCurrentTab(lastCurrentTab);
+    setActiveTab(lastActiveTab);
+
+    localStorage.removeItem("lastActiveTab");
+    localStorage.removeItem("lastCurrentTab");
+  };
 
   return (
     <div className="space-y-6">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">{appData?.name}</h1>
-          <div className="flex items-center mt-2">
-            {appData?.platform && (
+          {appData && (
+            <div className="flex items-center mt-2">
               <Badge color="info" className="mr-2">
                 {appData?.platform}
               </Badge>
-            )}
-            {appData?.category && (
               <Badge color="light">{appData?.category}</Badge>
-            )}
-          </div>
+            </div>
+          )}
         </div>
         <DateRangePicker onDateRangeChange={handleDateRangeChange} />
       </div>
@@ -155,408 +217,227 @@ const AppDetail: React.FC = () => {
             />
           </div>
 
-          {/* Tabs for different metrics */}
-          <Tabs aria-label="App metrics tabs">
-            <Tabs.Item
-              active
-              title={t("apps.detail.overview")}
-              icon={BarChart2}
-            >
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <Card>
-                  <h5 className="text-xl font-bold mb-2 text-gray-900">
-                    Revenue Trend
-                  </h5>
-                  <div className="h-80">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <LineChart
-                        data={appData.revenueData}
-                        margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-                      >
-                        <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis dataKey="date" />
-                        <YAxis />
-                        <Tooltip
-                          formatter={(value) => formatCurrency(Number(value))}
-                        />
-                        <Legend />
-                        <Line
-                          type="monotone"
-                          dataKey="revenue"
-                          name="Total Revenue"
-                          stroke="#0ea5e9"
-                          activeDot={{ r: 8 }}
-                        />
-                        <Line
-                          type="monotone"
-                          dataKey="adRevenue"
-                          name="Ad Revenue"
-                          stroke="#8b5cf6"
-                        />
-                        <Line
-                          type="monotone"
-                          dataKey="iapRevenue"
-                          name="IAP Revenue"
-                          stroke="#10b981"
-                        />
-                      </LineChart>
-                    </ResponsiveContainer>
+          {/* Chart Tabs */}
+          {groups.length === 0 ? (
+            <Card className="items-center min-h-80 justify-center">
+              <div>
+                <p className="mb-4 text-gray-600 dark:text-white">
+                  {t("charts.noChartAvailable")}
+                </p>
+                <Button
+                  color="indigo"
+                  onClick={() => setIsAddTabModalOpen(true)}
+                >
+                  <div className="flex items-center gap-2">
+                    <Plus size={16} className="mr-2" />
+                    {t("charts.addGroup")}
                   </div>
-                </Card>
-
-                <Card>
-                  <h5 className="text-xl font-bold mb-2 text-gray-900">
-                    User Metrics
-                  </h5>
-                  <div className="h-80">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <LineChart
-                        data={appData.userData}
-                        margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-                      >
-                        <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis dataKey="date" />
-                        <YAxis />
-                        <Tooltip />
-                        <Legend />
-                        <Line
-                          type="monotone"
-                          dataKey="newUsers"
-                          name="New Users"
-                          stroke="#0ea5e9"
-                        />
-                        <Line
-                          type="monotone"
-                          dataKey="activeUsers"
-                          name="Active Users"
-                          stroke="#10b981"
-                        />
-                      </LineChart>
-                    </ResponsiveContainer>
-                  </div>
-                </Card>
+                </Button>
               </div>
-            </Tabs.Item>
-
-            <Tabs.Item title={t("apps.detail.revenue")} icon={DollarSign}>
-              <Card>
-                <h5 className="text-xl font-bold mb-2 text-gray-900">
-                  Revenue Breakdown
-                </h5>
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                  <div className="h-80">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <PieChart>
-                        <Pie
-                          data={[
-                            {
-                              name: "Ad Revenue",
-                              value: appData.revenueData.reduce(
-                                (sum: number, item: any) =>
-                                  sum + item.adRevenue,
-                                0
-                              ),
-                            },
-                            {
-                              name: "IAP Revenue",
-                              value: appData.revenueData.reduce(
-                                (sum: number, item: any) =>
-                                  sum + item.iapRevenue,
-                                0
-                              ),
-                            },
-                          ]}
-                          cx="50%"
-                          cy="50%"
-                          labelLine={false}
-                          outerRadius={80}
-                          fill="#8884d8"
-                          dataKey="value"
-                          label={({ name, percent }) =>
-                            `${name}: ${(percent * 100).toFixed(0)}%`
+            </Card>
+          ) : (
+            <div className="relative">
+              <Tabs
+                className="w-full"
+                style="pills"
+                onActiveTabChange={(tab) => {
+                  setActiveTab(tab);
+                  const selectedGroup = groups[tab];
+                  setCurrentTab(selectedGroup.id);
+                }}
+              >
+                {groups.map((group, index) => (
+                  <Tabs.Item
+                    active={index === activeTab}
+                    key={group.id}
+                    title={
+                      <div className="flex items-center gap-2">
+                        {group.name}
+                        <Dropdown
+                          placement="bottom"
+                          arrowIcon={false}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                          }}
+                          inline
+                          label={
+                            <DotsThreeVertical
+                              size={20}
+                              color={index === activeTab ? "white" : "gray"}
+                            />
                           }
+                          theme={{
+                            inlineWrapper:
+                              "flex items-center text-indigo-600 hover:text-indigo-900",
+                          }}
                         >
                           {[
                             {
-                              name: "Ad Revenue",
-                              value: appData.revenueData.reduce(
-                                (sum: number, item: any) =>
-                                  sum + item.adRevenue,
-                                0
+                              icon: <Pen size={16} />,
+                              label: (
+                                <p className="capitalize">{t("common:edit")}</p>
                               ),
+                              onClick: () => {
+                                setIsAddTabModalOpen(true);
+                                setSelectedGroup(group);
+                              },
                             },
                             {
-                              name: "IAP Revenue",
-                              value: appData.revenueData.reduce(
-                                (sum: number, item: any) =>
-                                  sum + item.iapRevenue,
-                                0
+                              icon: <Trash color="red" size={16} />,
+                              label: (
+                                <p className="capitalize text-red-700">
+                                  {t("common:delete")}
+                                </p>
                               ),
+                              onClick: () => handleDeleteGroup(group.id),
                             },
-                          ].map((entry, index) => (
-                            <Cell
-                              key={`cell-${index}`}
-                              fill={COLORS[index % COLORS.length]}
-                            />
+                          ].map(({ icon, label, onClick }, index) => (
+                            <Dropdown.Item
+                              key={index}
+                              onClick={() => onClick()}
+                            >
+                              <div className="flex gap-2 items-center">
+                                {icon}
+                                {label}
+                              </div>
+                            </Dropdown.Item>
                           ))}
-                        </Pie>
-                        <Tooltip
-                          formatter={(value) => formatCurrency(Number(value))}
-                        />
-                        <Legend />
-                      </PieChart>
-                    </ResponsiveContainer>
-                  </div>
-                  <div>
-                    <h6 className="text-lg font-semibold mb-4">
-                      Revenue Sources
-                    </h6>
-                    <div className="space-y-4">
-                      <div>
-                        <div className="flex justify-between mb-1">
-                          <span className="text-base font-medium">
-                            Ad Revenue
-                          </span>
-                          <span className="text-sm font-medium">
-                            {formatCurrency(
-                              appData.revenueData.reduce(
-                                (sum: number, item: any) =>
-                                  sum + item.adRevenue,
-                                0
-                              )
-                            )}
-                          </span>
-                        </div>
-                        <div className="w-full bg-gray-200 rounded-full h-2.5">
-                          <div
-                            className="bg-blue-600 h-2.5 rounded-full"
-                            style={{ width: "65%" }}
-                          ></div>
-                        </div>
+                        </Dropdown>
                       </div>
-                      <div>
-                        <div className="flex justify-between mb-1">
-                          <span className="text-base font-medium">
-                            IAP Revenue
-                          </span>
-                          <span className="text-sm font-medium">
-                            {formatCurrency(
-                              appData.revenueData.reduce(
-                                (sum: number, item: any) =>
-                                  sum + item.iapRevenue,
-                                0
-                              )
-                            )}
-                          </span>
-                        </div>
-                        <div className="w-full bg-gray-200 rounded-full h-2.5">
-                          <div
-                            className="bg-green-600 h-2.5 rounded-full"
-                            style={{ width: "35%" }}
-                          ></div>
-                        </div>
+                    }
+                  >
+                    {group.charts.length === 0 ? (
+                      <div className="flex flex-col items-center justify-center  min-h-80 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300">
+                        <p className="text-gray-500 dark:text-white">
+                          {t("charts.noChartAvailable")}
+                        </p>
                       </div>
-                    </div>
+                    ) : (
+                      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        {group.charts.map((chart) => (
+                          <Card
+                            key={chart.id}
+                            className="relative overflow-hidden"
+                            theme={{
+                              root: {
+                                children:
+                                  "flex h-full flex-col justify-between gap-4 p-0 pb-4",
+                              },
+                            }}
+                          >
+                            <div className="mb-4 flex items-center justify-between border-b border-gray-200 bg-white px-6 py-4">
+                              <h5 className="text-xl font-bold leading-none text-gray-900 dark:text-white ">
+                                {chart.name}
+                              </h5>
+                              <div className="flex gap-2">
+                                <Tooltip content={t("common.edit")}>
+                                  <Button
+                                    size="xs"
+                                    color="light"
+                                    onClick={() => {
+                                      setIsChartModalOpen(true);
+                                      setSelectedConfig(chart);
+                                    }}
+                                  >
+                                    <Pen size={16} />
+                                  </Button>
+                                </Tooltip>
+                                <Tooltip content={t("common.delete")}>
+                                  <Button
+                                    size="xs"
+                                    color="failure"
+                                    onClick={() => handleDeleteChart(chart.id)}
+                                  >
+                                    <Trash size={16} />
+                                  </Button>
+                                </Tooltip>
+                              </div>
+                            </div>
+                            <div className="pr-6">
+                              <ConfigurableChart
+                                config={chart}
+                                data={appData[chart.dataKey] || []}
+                              />
+                            </div>
+                          </Card>
+                        ))}
+                      </div>
+                    )}
+                  </Tabs.Item>
+                ))}
+              </Tabs>
+              <div className="absolute top-0 right-0 flex items-center gap-2">
+                <Button
+                  color="indigo"
+                  onClick={() => setIsAddTabModalOpen(true)}
+                >
+                  <div className="flex items-center gap-2">
+                    <Plus size={16} className="mr-2" />
+                    {t("charts.addGroup")}
                   </div>
-                </div>
-              </Card>
-            </Tabs.Item>
-
-            <Tabs.Item title={t("apps.detail.users")} icon={Users}>
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <Card>
-                  <h5 className="text-xl font-bold mb-2 text-gray-900">
-                    User Growth
-                  </h5>
-                  <div className="h-80">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <BarChart
-                        data={appData.userData}
-                        margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-                      >
-                        <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis dataKey="date" />
-                        <YAxis />
-                        <Tooltip />
-                        <Legend />
-                        <Bar
-                          dataKey="newUsers"
-                          name="New Users"
-                          fill="#0ea5e9"
-                        />
-                      </BarChart>
-                    </ResponsiveContainer>
+                </Button>
+                <Button color="light" onClick={() => setIsChartModalOpen(true)}>
+                  <div className="flex items-center gap-2">
+                    <Plus size={16} className="mr-2" />
+                    {t("charts.addChart")}
                   </div>
-                </Card>
-
-                <Card>
-                  <h5 className="text-xl font-bold mb-2 text-gray-900">
-                    Active Users
-                  </h5>
-                  <div className="h-80">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <LineChart
-                        data={appData.userData}
-                        margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-                      >
-                        <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis dataKey="date" />
-                        <YAxis />
-                        <Tooltip />
-                        <Legend />
-                        <Line
-                          type="monotone"
-                          dataKey="activeUsers"
-                          name="Daily Active Users"
-                          stroke="#10b981"
-                        />
-                        <Line
-                          type="monotone"
-                          dataKey="totalUsers"
-                          name="Total Users"
-                          stroke="#8b5cf6"
-                        />
-                      </LineChart>
-                    </ResponsiveContainer>
-                  </div>
-                </Card>
+                </Button>
               </div>
-            </Tabs.Item>
-
-            <Tabs.Item title={t("apps.detail.retention")} icon={TrendingUp}>
-              <Card>
-                <h5 className="text-xl font-bold mb-2 text-gray-900">
-                  Retention Curve
-                </h5>
-                <div className="h-80">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <LineChart
-                      data={appData.retentionData}
-                      margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-                    >
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="day" />
-                      <YAxis />
-                      <Tooltip formatter={(value) => `${value}%`} />
-                      <Line
-                        type="monotone"
-                        dataKey="retention"
-                        name="Retention Rate"
-                        stroke="#0ea5e9"
-                      />
-                    </LineChart>
-                  </ResponsiveContainer>
-                </div>
-              </Card>
-            </Tabs.Item>
-
-            <Tabs.Item title={t("apps.detail.countries")} icon={Globe}>
-              <Card>
-                <h5 className="text-xl font-bold mb-2 text-gray-900">
-                  Top Countries
-                </h5>
-                <div className="overflow-x-auto">
-                  <Table>
-                    <Table.Head>
-                      <Table.HeadCell>Country</Table.HeadCell>
-                      <Table.HeadCell>Users</Table.HeadCell>
-                      <Table.HeadCell>Revenue</Table.HeadCell>
-                      <Table.HeadCell>ARPU</Table.HeadCell>
-                    </Table.Head>
-                    <Table.Body className="divide-y">
-                      {appData.countryData.map(
-                        (country: any, index: number) => (
-                          <Table.Row
-                            key={index}
-                            className="bg-white dark:border-gray-700 dark:bg-gray-800"
-                          >
-                            <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                              {country.country}
-                            </Table.Cell>
-                            <Table.Cell>
-                              {country.users.toLocaleString()}
-                            </Table.Cell>
-                            <Table.Cell>
-                              {formatCurrency(country.revenue)}
-                            </Table.Cell>
-                            <Table.Cell>
-                              {formatCurrency(country.revenue / country.users)}
-                            </Table.Cell>
-                          </Table.Row>
-                        )
-                      )}
-                    </Table.Body>
-                  </Table>
-                </div>
-              </Card>
-            </Tabs.Item>
-
-            <Tabs.Item title={t("apps.detail.versions")} icon={Tag}>
-              <Card>
-                <h5 className="text-xl font-bold mb-2 text-gray-900">
-                  App Versions
-                </h5>
-                <div className="overflow-x-auto">
-                  <Table>
-                    <Table.Head>
-                      <Table.HeadCell>Version</Table.HeadCell>
-                      <Table.HeadCell>Users</Table.HeadCell>
-                      <Table.HeadCell>% of Total</Table.HeadCell>
-                      <Table.HeadCell>Crashes</Table.HeadCell>
-                      <Table.HeadCell>Crash Rate</Table.HeadCell>
-                    </Table.Head>
-                    <Table.Body className="divide-y">
-                      {appData.versionData.map(
-                        (version: any, index: number) => (
-                          <Table.Row
-                            key={index}
-                            className="bg-white dark:border-gray-700 dark:bg-gray-800"
-                          >
-                            <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                              {version.version}
-                            </Table.Cell>
-                            <Table.Cell>
-                              {version.users.toLocaleString()}
-                            </Table.Cell>
-                            <Table.Cell>
-                              {(
-                                (version.users /
-                                  appData.versionData.reduce(
-                                    (sum: number, v: any) => sum + v.users,
-                                    0
-                                  )) *
-                                100
-                              ).toFixed(1)}
-                              %
-                            </Table.Cell>
-                            <Table.Cell>{version.crashes}</Table.Cell>
-                            <Table.Cell>
-                              <Badge
-                                color={
-                                  version.crashes / version.users < 0.01
-                                    ? "success"
-                                    : "failure"
-                                }
-                                className="w-max capitalize"
-                              >
-                                {(
-                                  (version.crashes / version.users) *
-                                  100
-                                ).toFixed(2)}
-                                %
-                              </Badge>
-                            </Table.Cell>
-                          </Table.Row>
-                        )
-                      )}
-                    </Table.Body>
-                  </Table>
-                </div>
-              </Card>
-            </Tabs.Item>
-          </Tabs>
+            </div>
+          )}
         </div>
       )}
+      <ChartGroupModal
+        key={isAddTabModalOpen.toString()}
+        isOpen={isAddTabModalOpen}
+        onClose={() => {
+          setIsAddTabModalOpen(false);
+          resetTabState();
+        }}
+        onSave={(chartGroup) => {
+          setGroups((prevGroups) => {
+            const updatedGroups = [...prevGroups, chartGroup];
+            if (id) updateAppConfigs(id, updatedGroups);
+            return updatedGroups;
+          });
+
+          setIsAddTabModalOpen(false);
+          setSelectedGroup(undefined);
+          resetTabState();
+
+          if (groups.length === 0) {
+            setIsChartModalOpen(true);
+          }
+        }}
+        onEdit={(chartGroup) => {
+          setGroups((prevGroups) => {
+            const updatedGroups = prevGroups.map((grp) =>
+              grp.id === chartGroup.id ? chartGroup : grp
+            );
+            if (id) updateAppConfigs(id, updatedGroups);
+            return updatedGroups;
+          });
+
+          setIsAddTabModalOpen(false);
+          setSelectedGroup(undefined);
+          resetTabState();
+        }}
+        initialGroup={selectedGroup}
+      />
+
+      {/* Chart Configuration Modal */}
+      <ChartConfigModal
+        isOpen={isChartModalOpen}
+        onClose={() => {
+          setIsChartModalOpen(false);
+          setSelectedConfig(undefined);
+        }}
+        onSave={handleSaveChart}
+        onEdit={handleEditChart}
+        availableAxes={availableAxes}
+        initialConfig={selectedConfig}
+      />
     </div>
   );
 };

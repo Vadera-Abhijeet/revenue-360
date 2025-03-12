@@ -8,8 +8,8 @@ import {
   Checkbox,
 } from "flowbite-react";
 import { useTranslation } from "react-i18next";
-import { ChartConfig, ChartType } from "../../../interfaces";
-import { TDataKeyTypes } from "../interface";
+import { ChartConfig, ChartType } from "../../interfaces";
+import { TDataKeyTypes } from "../../features/Campaigns/interface";
 
 const availableDataKeys = [
   { value: "revenueData", label: "Revenue Data" },
@@ -97,7 +97,7 @@ const ChartConfigModal: React.FC<ChartConfigModalProps> = ({
   return (
     <Modal show={isOpen} onClose={onClose}>
       <Modal.Header>
-        {initialConfig ? t("charts.editChart") : t("charts.createChart")}
+        {initialConfig ? t("charts.editChart") : t("charts.addChart")}
       </Modal.Header>
       <Modal.Body>
         <form onSubmit={handleSubmit} className="space-y-4">
