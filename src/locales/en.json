@@ -234,7 +234,7 @@
       "totalCost": "Total cost",
       "netUSD": "Net usd",
       "percentage": "Percentage",
-      "lastBidCurrentBid": "Last bid | Current Bid(₹)"
+      "lastBidCurrentBid": "Last bid | Current Bid (INR)"
     },
     "connect": {
       "title": "Connect App",

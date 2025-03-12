@@ -110,10 +110,10 @@ const Campaigns: React.FC = () => {
               <Table.HeadCell>{t("common.country")}</Table.HeadCell>
 
               <Table.HeadCell>
-                {`${t("apps.columns.estimateRevenue")} ( $ )`}
+                {`${t("apps.columns.estimateRevenue")} (USD)`}
               </Table.HeadCell>
               <Table.HeadCell>
-                {`${t("apps.columns.totalCost")} ( $ )`}
+                {`${t("apps.columns.totalCost")} (USD)`}
               </Table.HeadCell>
               <Table.HeadCell>{t("apps.columns.totalCost")}</Table.HeadCell>
               <Table.HeadCell>{t("apps.columns.netUSD")}</Table.HeadCell>

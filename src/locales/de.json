@@ -234,7 +234,7 @@
       "totalCost": "Gesamtkosten",
       "netUSD": "Net USD",
       "percentage": "Prozentsatz",
-      "lastBidCurrentBid": "Letztes Gebot | Aktuelles Gebot (₹)"
+      "lastBidCurrentBid": "Letztes Gebot | Aktuelles Gebot  (INR)"
     },
     "connect": {
       "title": "App verbinden",

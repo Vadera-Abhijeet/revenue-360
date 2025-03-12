@@ -1,21 +1,22 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
-import { useTranslation } from "react-i18next";
-import { Button, Navbar } from "flowbite-react";
 import {
   ChartBar,
-  TrendUp,
-  Lightning,
-  Globe,
-  CurrencyDollar,
-  Clock,
   ChartPie,
+  Clock,
+  CurrencyDollar,
+  Globe,
+  Lightning,
+  TrendUp,
 } from "@phosphor-icons/react";
+import { Button, Navbar } from "flowbite-react";
+import { LayoutDashboard } from "lucide-react";
+import React from "react";
+import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 import {
   IllustrationAnalyticsTeam,
   IllustrationDataChart,
 } from "../assets/Illustrations";
-import { LayoutDashboard } from "lucide-react";
+import brandLogo from "../assets/images/brand.png";
 
 const Landing: React.FC = () => {
   const { t } = useTranslation();
@@ -26,10 +27,7 @@ const Landing: React.FC = () => {
       {/* Navigation */}
       <Navbar fluid className="border-b border-gray-200 bg-white">
         <Navbar.Brand href="/" className="flex items-center">
-          <LayoutDashboard className="mr-2 h-6 w-6 text-primary-600" />
-          <span className="self-center whitespace-nowrap text-xl font-semibold text-primary-600">
-            Revenue-360
-          </span>
+          <img src={brandLogo} alt="brand-logo" className="h-9" />
         </Navbar.Brand>
         <div className="flex md:order-2 gap-2">
           <Button color="light" onClick={() => navigate("/auth")}>

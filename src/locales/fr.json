@@ -234,7 +234,7 @@
       "totalCost": "Coût total",
       "netUSD": "USD net",
       "percentage": "Pourcentage",
-      "lastBidCurrentBid": "Dernière enchère | Enchère actuelle (₹)"
+      "lastBidCurrentBid": "Dernière enchère | Enchère actuelle  (INR)"
     },
     "connect": {
       "title": "Connecter une application",

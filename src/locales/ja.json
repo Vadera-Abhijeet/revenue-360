@@ -234,7 +234,7 @@
       "totalCost": "総費用",
       "netUSD": "純米ドル",
       "percentage": "割合",
-      "lastBidCurrentBid": "最終入札 | 現在の入札額(₹)"
+      "lastBidCurrentBid": "最終入札 | 現在の入札額 (INR)"
     },
     "connect": {
       "title": "アプリを接続",

@@ -1,32 +1,33 @@
-import React, { useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
-import { useTranslation } from "react-i18next";
 import {
-  Navbar,
-  Sidebar,
-  Button,
   Avatar,
   Badge,
+  Button,
   Dropdown,
+  Navbar,
   Popover,
+  Sidebar,
 } from "flowbite-react";
 import {
-  LayoutDashboard,
   AppWindow,
   // Megaphone,
   Bell,
-  Settings,
-  LogOut,
-  Menu,
-  X,
-  Globe,
   DollarSign,
-  User,
+  Globe,
+  LayoutDashboard,
+  LogOut,
   Megaphone,
+  Menu,
+  Settings,
+  User,
+  X,
 } from "lucide-react";
+import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
+import { useLocation, useNavigate } from "react-router-dom";
+import brandLogo from "../assets/images/brand.png";
 import { useAuth } from "../contexts/AuthContext";
-import { useNotifications } from "../contexts/NotificationContext";
 import { CurrencyCode, useCurrency } from "../contexts/CurrencyContext";
+import { useNotifications } from "../contexts/NotificationContext";
 import Notifications from "../features/Notifications";
 
 interface LayoutProps {
@@ -111,10 +112,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             <Menu size={20} />
           </Button>
           <Navbar.Brand href="/dashboard" className="flex items-center">
-            <LayoutDashboard className="mr-2 h-6 w-6 text-primary-600" />
-            <span className="self-center whitespace-nowrap text-xl font-semibold text-primary-600">
-              Revenue-360
-            </span>
+            <img src={brandLogo} alt="brand-logo" className="h-9" />
           </Navbar.Brand>
         </div>
         <div className="flex items-center gap-2 md:gap-4">
@@ -230,8 +228,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       {/* Main Content with Sidebar */}
       <div className="flex flex-1 overflow-hidden">
         {/* Sidebar for larger screens */}
-        <div className="hidden lg:block w-64 border-r border-gray-200 bg-white">
-          <Sidebar aria-label="Sidebar with navigation">
+        <div className="hidden lg:block w-72 border-r border-gray-200 bg-white">
+          <Sidebar className="w-full">
             <Sidebar.Items>
               <Sidebar.ItemGroup>
                 {navItems.map((item) => (
