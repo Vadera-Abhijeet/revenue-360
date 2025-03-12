@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { IIntegrations } from "../../../../interfaces";
 import NewIntegrationModal from "./AddIntegrationModal";
 import IntegrationBlock from "./IntegrationBlock";
-import { PackagePlus } from "lucide-react";
+import { PackagePlus, X } from "lucide-react";
 
 export type TDirection = "inward" | "outward" | null;
 
@@ -17,6 +17,7 @@ interface IIntegrationsComponentProps {
   ) => void;
   onToggleConnection: (index: number, direction: TDirection) => void;
   onAddNewIntegrations: (payload: IIntegrations) => void;
+  onDeleteIntegration: (index: number) => void;
 }
 interface IInitialModalStateInterface {
   index: number;
@@ -47,12 +48,16 @@ const Integration = ({
   onUpdateIntegration,
   onToggleConnection,
   onAddNewIntegrations,
+  onDeleteIntegration,
 }: IIntegrationsComponentProps) => {
   const { t } = useTranslation();
   const [editModal, setEditModal] = useState(initialModalState);
   const [confirmModal, setConfirmModal] = useState(
     initialConfirmationPopUpState
   );
+
+  const [confirmDeleteIntegrationModal, setConfirmDeleteIntegrationModal] =
+    useState({ open: false, index: -1 });
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [actionType, setActionType] = useState("");
@@ -98,7 +103,18 @@ const Integration = ({
 
       <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-1 xl:grid-cols-1 2xl:grid-cols-2 gap-6">
         {integrations.map((integrationSet, index) => (
-          <Card key={index} className="shadow-md border border-gray-200">
+          <Card
+            key={index}
+            className="shadow-md border border-gray-200 relative"
+          >
+            <div
+              className="bg-red-500 hover:bg-red-600 cursor-pointer hover:rotate-180 transition delay-100 duration-300 ease-in-out  absolute top-[-8px] right-[-8px] h-8 w-8 flex items-center justify-center rounded-full"
+              onClick={() =>
+                setConfirmDeleteIntegrationModal({ open: true, index })
+              }
+            >
+              <X color="white" />
+            </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="border-r pr-4">
                 <IntegrationBlock
@@ -244,6 +260,48 @@ const Integration = ({
           </Button>
         </Modal.Footer>
       </Modal>
+
+      <Modal
+        size="md"
+        show={confirmDeleteIntegrationModal.open}
+        onClose={() =>
+          setConfirmDeleteIntegrationModal({
+            ...confirmDeleteIntegrationModal,
+            open: false,
+          })
+        }
+      >
+        <Modal.Header>{t("common.confirmation")}</Modal.Header>
+        <Modal.Body>
+          <p>{t("configurations.integrations.confirmDelete")}</p>
+        </Modal.Body>
+        <Modal.Footer className="justify-center">
+          <Button
+            color="light"
+            onClick={() =>
+              setConfirmDeleteIntegrationModal({
+                ...confirmDeleteIntegrationModal,
+                open: false,
+              })
+            }
+          >
+            {t("common.cancel")}
+          </Button>
+          <Button
+            color={"indigo"}
+            onClick={() => {
+              onDeleteIntegration(confirmDeleteIntegrationModal.index);
+              setConfirmDeleteIntegrationModal({
+                ...confirmDeleteIntegrationModal,
+                open: false,
+              });
+            }}
+          >
+            {t("common.confirm")}
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
       <NewIntegrationModal
         key={isAddNewIntegrationModalOpen.toString()}
         onAddIntegration={onAddNewIntegrations}

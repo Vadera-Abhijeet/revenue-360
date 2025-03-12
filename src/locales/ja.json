@@ -387,6 +387,7 @@
       "confirmEmailUpdate": "メールを更新してもよろしいですか？",
       "confirmConnect": "この統合を接続してもよろしいですか？",
       "confirmDisconnect": "この統合を切断してもよろしいですか？",
+      "confirmDelete": "この統合を削除したいですか？",
       "add_new_integration": "新しい統合を追加",
       "select_platform": "プラットフォームを選択",
       "email": "メール",

@@ -387,6 +387,7 @@
       "confirmEmailUpdate": "Êtes-vous sûr de vouloir mettre à jour l'e-mail ?",
       "confirmConnect": "Êtes-vous sûr de vouloir connecter cette intégration ?",
       "confirmDisconnect": "Êtes-vous sûr de vouloir déconnecter cette intégration ?",
+      "confirmDelete": "Êtes-vous sûr de vouloir supprimer cette intégration?",
       "add_new_integration": "Ajouter une nouvelle intégration",
       "select_platform": "Sélectionner une plateforme",
       "email": "E-mail",

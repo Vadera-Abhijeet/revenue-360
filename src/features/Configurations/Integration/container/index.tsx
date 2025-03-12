@@ -65,13 +65,17 @@ const Configurations: React.FC = () => {
     }
   };
 
-  // if (isLoading) {
-  //   return (
-  //     <div className="flex items-center justify-center h-64">
-  //       <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary-600"></div>
-  //     </div>
-  //   );
-  // }
+  const handleDeleteIntegration = (selectedIndex: number) => {
+    if (selectedIndex > -1 && settings?.integrations) {
+      const clonedIntegrations = [...settings.integrations];
+      setSettings({
+        ...settings,
+        integrations: clonedIntegrations.filter(
+          (dt, index) => index !== selectedIndex
+        ),
+      });
+    }
+  };
 
   return (
     <div className="space-y-6">
@@ -95,6 +99,7 @@ const Configurations: React.FC = () => {
               integrations={settings?.integrations}
               onUpdateIntegration={handleUpdateIntegration}
               onToggleConnection={handleToggleIntegrationConnection}
+              onDeleteIntegration={handleDeleteIntegration}
               onAddNewIntegrations={(payload) => {
                 setSettings(
                   (prevState) =>
