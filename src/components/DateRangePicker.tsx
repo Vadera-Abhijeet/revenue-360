@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, TextInput } from "flowbite-react";
+import { Button, Popover, TextInput } from "flowbite-react";
 import { Calendar, ChevronDown } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import {
@@ -146,73 +146,73 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
   };
 
   return (
-    <div className="relative">
-      <Button
-        color="light"
-        onClick={toggleDropdown}
-        className="flex items-center gap-2"
-      >
-        <Calendar size={16} />
-        <span>
-          {formatDateForDisplay(startDate)} - {formatDateForDisplay(endDate)}
-        </span>
-        <ChevronDown size={16} />
-      </Button>
-
-      {isOpen && (
-        <div className="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-lg z-10 border border-gray-200">
-          <div className="p-4">
-            <div className="grid grid-cols-2 gap-4 mb-4">
-              {presets.slice(0, 10).map((preset) => (
-                <Button
-                  key={preset.id}
-                  color={selectedPreset === preset.id ? "primary" : "light"}
-                  size="sm"
-                  onClick={() => handlePresetSelect(preset.id)}
-                  className="text-sm"
-                >
-                  {preset.label}
-                </Button>
-              ))}
-            </div>
-
-            <div className="space-y-3 mt-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  {t("common.startDate")}
-                </label>
-                <TextInput
-                  type="date"
-                  value={formatDateForInput(startDate)}
-                  onChange={handleStartDateChange}
-                  className="w-full"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  {t("common.endDate")}
-                </label>
-                <TextInput
-                  type="date"
-                  value={formatDateForInput(endDate)}
-                  onChange={handleEndDateChange}
-                  className="w-full"
-                />
-              </div>
-            </div>
-
-            <div className="flex justify-end gap-2 mt-4">
-              <Button color="light" size="sm" onClick={() => setIsOpen(false)}>
-                {t("common.cancel")}
+    <Popover
+      aria-labelledby="area-popover"
+      content={
+        <div className="p-4">
+          <div className="grid grid-cols-2 gap-4 mb-4">
+            {presets.slice(0, 10).map((preset) => (
+              <Button
+                key={preset.id}
+                color={selectedPreset === preset.id ? "primary" : "light"}
+                size="sm"
+                onClick={() => handlePresetSelect(preset.id)}
+                className="text-sm"
+              >
+                {preset.label}
               </Button>
-              <Button color="indigo" size="sm" onClick={handleApply}>
-                {t("common.apply")}
-              </Button>
+            ))}
+          </div>
+
+          <div className="space-y-3 mt-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                {t("common.startDate")}
+              </label>
+              <TextInput
+                type="date"
+                value={formatDateForInput(startDate)}
+                onChange={handleStartDateChange}
+                className="w-full"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                {t("common.endDate")}
+              </label>
+              <TextInput
+                type="date"
+                value={formatDateForInput(endDate)}
+                onChange={handleEndDateChange}
+                className="w-full"
+              />
             </div>
           </div>
+
+          <div className="flex justify-end gap-2 mt-4">
+            <Button color="light" size="sm" onClick={() => setIsOpen(false)}>
+              {t("common.cancel")}
+            </Button>
+            <Button color="indigo" size="sm" onClick={handleApply}>
+              {t("common.apply")}
+            </Button>
+          </div>
         </div>
-      )}
-    </div>
+      }
+      theme={{
+        content: "z-10 overflow-hidden rounded-[7px] shadow-md",
+      }}
+    >
+      <Button color="light" onClick={toggleDropdown}>
+        <div className="flex items-center gap-2">
+          <Calendar size={16} />
+          <span>
+            {formatDateForDisplay(startDate)} - {formatDateForDisplay(endDate)}
+          </span>
+          <ChevronDown size={16} />
+        </div>
+      </Button>
+    </Popover>
   );
 };
 

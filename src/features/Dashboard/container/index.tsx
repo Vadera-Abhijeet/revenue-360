@@ -1,21 +1,27 @@
-import React, { useState, useEffect } from "react";
-import { useTranslation } from "react-i18next";
+import { Select } from "flowbite-react";
 import {
-  DollarSign,
-  TrendingUp,
   BarChart2,
-  Smartphone,
   Calculator,
+  DollarSign,
+  Smartphone,
+  TrendingUp,
 } from "lucide-react";
-import { fetchDashboardData } from "../../../services/api";
+import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 import DateRangePicker from "../../../components/DateRangePicker";
 import StatCard from "../../../components/StatCard";
-import { IDashboard } from "../interface";
-import { useNavigate } from "react-router-dom";
+import { useCurrency } from "../../../contexts/CurrencyContext";
+import { fetchDashboardData } from "../../../services/api";
+import RecentCampaigns from "../components/RecentCampaigns";
 import RevenueAndSpendChart from "../components/RevenueAndSpendChart";
 import TopPerformingAppChart from "../components/TopPerformingAppChart";
-import RecentCampaigns from "../components/RecentCampaigns";
-import { useCurrency } from "../../../contexts/CurrencyContext";
+import { IDashboard } from "../interface";
+
+const accounts = Array.from({ length: 10 }, (_, i) => ({
+  label: `Account-${i + 1}`,
+  value: `account-${i + 1}`,
+}));
 
 const Dashboard: React.FC = () => {
   const { t } = useTranslation();
@@ -23,6 +29,7 @@ const Dashboard: React.FC = () => {
   const { currency, convertCurrency } = useCurrency();
   const [isLoading, setIsLoading] = useState(true);
   const [dashboardData, setDashboardData] = useState<IDashboard | undefined>();
+  const [selectedAccount, setSelectedAccount] = useState(accounts[0].value);
   const [startDate, setStartDate] = useState<Date>(
     new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
   );
@@ -42,7 +49,7 @@ const Dashboard: React.FC = () => {
     };
 
     loadData();
-  }, [startDate, endDate]);
+  }, [startDate, endDate, selectedAccount]);
 
   const handleDateRangeChange = (start: Date, end: Date) => {
     setStartDate(start);
@@ -64,7 +71,20 @@ const Dashboard: React.FC = () => {
         <h1 className="text-2xl font-bold text-indigo-700">
           {t("dashboard.title")}
         </h1>
-        <DateRangePicker onDateRangeChange={handleDateRangeChange} />
+        <div className="flex items-center gap-4">
+          <Select
+            color={"light"}
+            defaultValue={selectedAccount}
+            onChange={(e) => setSelectedAccount(e.target.value)}
+          >
+            {accounts.map((account) => (
+              <option key={account.value} value={account.value}>
+                {account.label}
+              </option>
+            ))}
+          </Select>
+          <DateRangePicker onDateRangeChange={handleDateRangeChange} />
+        </div>
       </div>
       {isLoading || !dashboardData ? (
         <div className="flex items-center justify-center h-64">

@@ -87,6 +87,7 @@ const Campaigns: React.FC = () => {
         <div className="flex gap-2">
           <DateRangePicker onDateRangeChange={handleDateRangeChange} />
           <TextInput
+            color={"indigo"}
             id="search"
             type="text"
             icon={Search}
@@ -131,7 +132,7 @@ const Campaigns: React.FC = () => {
                   <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
                     <div
                       className="cursor-pointer flex items-center gap-2 hover:text-primary-600"
-                      // onClick={() => navigate(`/apps/${app.id}`)}
+                      onClick={() => navigate(`/campaigns/${campaign.id}`)}
                     >
                       <div className="w-10 h-10 flex justify-center items-center border border-gray-200 dark:border-gray-700 rounded-md">
                         <img
