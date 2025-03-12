@@ -133,7 +133,9 @@
     "activate": "活性化",
     "configurations": "構成",
     "confirmation": "確認",
-    "country": "国"
+    "country": "国",
+    "last7Days": "過去 7 日間",
+    "last30Days": "過去 30 日間"
   },
   "landing": {
     "hero": {
@@ -322,6 +324,40 @@
       "pushNotifications": "プッシュ通知",
       "dataRefresh": "データ更新レート"
     }
+  },
+  "charts": {
+    "title": "チャート",
+    "addChart": "チャートを追加",
+    "editChart": "チャートを編集",
+    "createChart": "チャートを作成",
+    "chartName": "チャート名",
+    "chartType": "チャートタイプ",
+    "group": "グループ",
+    "xAxis": "X軸",
+    "yAxis": "Y軸",
+    "types": {
+      "line": "折れ線グラフ",
+      "bar": "棒グラフ",
+      "pie": "円グラフ",
+      "area": "エリアチャート"
+    },
+    "axes": {
+      "date": "日付",
+      "revenue": "収益",
+      "adSpend": "広告支出",
+      "adRevenue": "広告収入",
+      "iapRevenue": "IAP収入",
+      "newUsers": "新規ユーザー",
+      "activeUsers": "アクティブユーザー",
+      "totalUsers": "総ユーザー数"
+    },
+    "addGroup": "グループを追加",
+    "editGroup": "グループを編集",
+    "createGroup": "グループを作成",
+    "groupName": "グループ名",
+    "deleteGroup": "グループを削除",
+    "deleteChart": "チャートを削除",
+    "noChartAvailable": "チャートはありません"
   },
   "configurations": {
     "title": "構成",

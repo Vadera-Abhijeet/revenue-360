@@ -4,11 +4,11 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
-import { useCurrency } from "../../../contexts/CurrencyContext";
-import { ICampaignData } from "../interface";
-import { fetchCampaigns } from "../../../services/api";
-import DateRangePicker from "../../../components/DateRangePicker";
-import CampaignsDataTable from "../component/CampaignListModal";
+import { useCurrency } from "../../../../contexts/CurrencyContext";
+import { ICampaignData } from "../../interface";
+import { fetchCampaigns } from "../../../../services/api";
+import DateRangePicker from "../../../../components/DateRangePicker";
+import CampaignsDataTable from "../../component/CampaignListModal";
 
 const Campaigns: React.FC = () => {
   const { t } = useTranslation();
@@ -175,7 +175,7 @@ const Campaigns: React.FC = () => {
                     <Button
                       color="light"
                       size="xs"
-                      onClick={() => navigate(`/apps/${campaign.id}`)}
+                      onClick={() => navigate(`/campaigns/${campaign.id}`)}
                     >
                       <Eye className="h-4 w-4" />
                     </Button>

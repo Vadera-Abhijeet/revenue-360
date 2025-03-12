@@ -3,9 +3,11 @@ import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Table, TextInput, Button } from "flowbite-react";
 import { Search, Eye, Edit, Trash } from "lucide-react";
-import { useCurrency } from "../contexts/CurrencyContext";
-import ConnectAppModal, { AppFormData } from "../components/ConnectAppModal";
-import { fetchApps } from "../services/api";
+import { useCurrency } from "../../../../contexts/CurrencyContext";
+import ConnectAppModal, {
+  AppFormData,
+} from "../../../../components/ConnectAppModal";
+import { fetchApps } from "../../../../services/api";
 
 interface App {
   id: string;

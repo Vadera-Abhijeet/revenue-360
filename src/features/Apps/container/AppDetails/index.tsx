@@ -26,10 +26,10 @@ import {
   Pie,
   Cell,
 } from "recharts";
-import { useCurrency } from "../contexts/CurrencyContext";
-import DateRangePicker from "../components/DateRangePicker";
-import { fetchAppDetails } from "../services/api";
-import StatCard from "../components/StatCard";
+import { useCurrency } from "../../../../contexts/CurrencyContext";
+import { fetchAppDetails } from "../../../../services/api";
+import DateRangePicker from "../../../../components/DateRangePicker";
+import StatCard from "../../../../components/StatCard";
 
 const AppDetail: React.FC = () => {
   const { t } = useTranslation();
@@ -66,6 +66,37 @@ const AppDetail: React.FC = () => {
   };
 
   const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#8884D8"];
+  // Define which data sets to plot dynamically
+  const chartConfigs = [
+    {
+      label: "Revenue",
+      key: "revenueData",
+      charts: [
+        { title: "Total Revenue", lines: ["revenue"] },
+        { title: "Ad vs IAP Revenue", lines: ["adRevenue", "iapRevenue"] },
+      ],
+    },
+    {
+      label: "Users",
+      key: "userData",
+      charts: [
+        { title: "New vs Active Users", lines: ["newUsers", "activeUsers"] },
+        { title: "Total Users Growth", lines: ["totalUsers"] },
+      ],
+    },
+    {
+      label: "Retention",
+      key: "retentionData",
+      charts: [{ title: "Retention Rate", lines: ["retention"], xKey: "day" }],
+    },
+    {
+      label: "Versions",
+      key: "versionData",
+      charts: [
+        { title: "Crashes per Version", lines: ["crashes"], xKey: "version" },
+      ],
+    },
+  ];
 
   return (
     <div className="space-y-6">

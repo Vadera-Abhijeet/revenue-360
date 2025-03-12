@@ -20,7 +20,11 @@ const NotFound: React.FC = () => {
           changed, or is temporarily unavailable.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Button onClick={() => navigate("/")} className="flex items-center">
+          <Button
+            color="primary"
+            onClick={() => navigate("/")}
+            className="flex items-center"
+          >
             <Home className="mr-2 h-5 w-5" />
             Go to Home
           </Button>

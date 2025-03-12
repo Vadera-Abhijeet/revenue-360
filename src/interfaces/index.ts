@@ -1,4 +1,5 @@
 import { CurrencyCode } from "../contexts/CurrencyContext";
+import { TDataKeyTypes } from "../features/Campaigns/interface";
 
 export interface ISettings {
   account: IAccount;
@@ -41,3 +42,23 @@ export interface ITeamEntity {
 }
 
 export type TPlatformsType = "googleAds" | "adMob" | "facebook";
+
+export type ChartType = "line" | "bar" | "pie" | "area";
+
+export interface ChartConfig {
+  id: string;
+  name: string;
+  type: ChartType;
+  xAxis: string;
+  yAxis: string[];
+  groupId: string;
+  order: number;
+  dataKey: TDataKeyTypes;
+}
+
+export interface ChartGroup {
+  id: string;
+  name: string;
+  order: number;
+  charts: ChartConfig[];
+}

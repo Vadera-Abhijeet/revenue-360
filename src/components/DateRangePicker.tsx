@@ -6,6 +6,7 @@ import {
   format,
   subDays,
   subMonths,
+  subYears,
   startOfWeek,
   endOfWeek,
   startOfMonth,
@@ -41,12 +42,12 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
     },
     {
       id: "last7Days",
-      label: t("common.thisWeek"),
+      label: t("common.last7Days"), // Corrected label
       getRange: () => [subDays(today, 6), today],
     },
     {
       id: "last30Days",
-      label: t("common.thisMonth"),
+      label: t("common.last30Days"), // Corrected label
       getRange: () => [subDays(today, 29), today],
     },
     {
@@ -85,7 +86,7 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
       id: "lastYear",
       label: t("common.lastYear"),
       getRange: () => {
-        const lastYear = subMonths(today, 12);
+        const lastYear = subYears(today, 1); // Fixed calculation
         return [startOfYear(lastYear), endOfYear(lastYear)];
       },
     },

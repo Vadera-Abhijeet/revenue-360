@@ -133,7 +133,9 @@
     "activate": "Activar",
     "configurations": "Configuración",
     "confirmation": "Confirmación",
-    "country": "País"
+    "country": "País",
+    "last7Days": "Últimos 7 días",
+    "last30Days": "Últimos 30 días"
   },
   "landing": {
     "hero": {
@@ -322,6 +324,40 @@
       "pushNotifications": "Notificaciones push",
       "dataRefresh": "Tasa de actualización de datos"
     }
+  },
+  "charts": {
+    "title": "Gráficos",
+    "addChart": "Añadir Gráfico",
+    "editChart": "Editar Gráfico",
+    "createChart": "Crear Gráfico",
+    "chartName": "Nombre del Gráfico",
+    "chartType": "Tipo de Gráfico",
+    "group": "Grupo",
+    "xAxis": "Eje X",
+    "yAxis": "Eje Y",
+    "types": {
+      "line": "Gráfico de Líneas",
+      "bar": "Gráfico de Barras",
+      "pie": "Gráfico Circular",
+      "area": "Gráfico de Área"
+    },
+    "axes": {
+      "date": "Fecha",
+      "revenue": "Ingresos",
+      "adSpend": "Gasto en Anuncios",
+      "adRevenue": "Ingresos por Anuncios",
+      "iapRevenue": "Ingresos por IAP",
+      "newUsers": "Nuevos Usuarios",
+      "activeUsers": "Usuarios Activos",
+      "totalUsers": "Total de Usuarios"
+    },
+    "addGroup": "Añadir Grupo",
+    "editGroup": "Editar Grupo",
+    "createGroup": "Crear Grupo",
+    "groupName": "Nombre del Grupo",
+    "deleteGroup": "Eliminar Grupo",
+    "deleteChart": "Eliminar Gráfico",
+    "noChartAvailable": "No hay gráfico disponible"
   },
   "configurations": {
     "title": "Configuración",

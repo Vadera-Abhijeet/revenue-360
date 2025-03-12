@@ -133,7 +133,9 @@
     "activate": "Aktivieren",
     "configurations": "Konfigurationen",
     "confirmation": "Bestätigung",
-    "country": "Land"
+    "country": "Land",
+    "last7Days": "Letzte 7 Tage",
+    "last30Days": "Letzte 30 Tage"
   },
   "landing": {
     "hero": {
@@ -322,6 +324,40 @@
       "pushNotifications": "Push-Benachrichtigungen",
       "dataRefresh": "Datenaktualisierungsrate"
     }
+  },
+  "charts": {
+    "title": "Diagramme",
+    "addChart": "Diagramm Hinzufügen",
+    "editChart": "Diagramm Bearbeiten",
+    "createChart": "Diagramm Erstellen",
+    "chartName": "Diagrammname",
+    "chartType": "Diagrammtyp",
+    "group": "Gruppe",
+    "xAxis": "X-Achse",
+    "yAxis": "Y-Achse",
+    "types": {
+      "line": "Liniendiagramm",
+      "bar": "Balkendiagramm",
+      "pie": "Kreisdiagramm",
+      "area": "Flächendiagramm"
+    },
+    "axes": {
+      "date": "Datum",
+      "revenue": "Umsatz",
+      "adSpend": "Werbeausgaben",
+      "adRevenue": "Werbeeinnahmen",
+      "iapRevenue": "IAP-Einnahmen",
+      "newUsers": "Neue Benutzer",
+      "activeUsers": "Aktive Benutzer",
+      "totalUsers": "Gesamtbenutzer"
+    },
+    "addGroup": "Gruppe Hinzufügen",
+    "editGroup": "Gruppe Bearbeiten",
+    "createGroup": "Gruppe Erstellen",
+    "groupName": "Gruppenname",
+    "deleteGroup": "Gruppe Löschen",
+    "deleteChart": "Diagramm Löschen",
+    "noChartAvailable": "Keine Tabelle verfügbar"
   },
   "configurations": {
     "title": "Konfigurationen",

@@ -133,7 +133,9 @@
     "activate": "Activate",
     "configurations": "Configuration",
     "confirmation": "Confirmation",
-    "country": "Country"
+    "country": "Country",
+    "last7Days": "Last 7 Days",
+    "last30Days": "Last 30 Days"
   },
   "landing": {
     "hero": {
@@ -322,6 +324,40 @@
       "pushNotifications": "Push Notifications",
       "dataRefresh": "Data Refresh Rate"
     }
+  },
+  "charts": {
+    "title": "Charts",
+    "addChart": "Add Chart",
+    "editChart": "Edit Chart",
+    "createChart": "Create Chart",
+    "chartName": "Chart Name",
+    "chartType": "Chart Type",
+    "group": "Group",
+    "xAxis": "X Axis",
+    "yAxis": "Y Axis",
+    "types": {
+      "line": "Line Chart",
+      "bar": "Bar Chart",
+      "pie": "Pie Chart",
+      "area": "Area Chart"
+    },
+    "axes": {
+      "date": "Date",
+      "revenue": "Revenue",
+      "adSpend": "Ad Spend",
+      "adRevenue": "Ad Revenue",
+      "iapRevenue": "IAP Revenue",
+      "newUsers": "New Users",
+      "activeUsers": "Active Users",
+      "totalUsers": "Total Users"
+    },
+    "addGroup": "Add Group",
+    "editGroup": "Edit Group",
+    "createGroup": "Create Group",
+    "groupName": "Group Name",
+    "deleteGroup": "Delete Group",
+    "deleteChart": "Delete Chart",
+    "noChartAvailable": "No chart available"
   },
   "configurations": {
     "title": "Configurations",
