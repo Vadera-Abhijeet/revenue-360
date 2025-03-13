@@ -18,10 +18,13 @@ import RevenueAndSpendChart from "../components/RevenueAndSpendChart";
 import TopPerformingAppChart from "../components/TopPerformingAppChart";
 import { IDashboard } from "../interface";
 
-const accounts = Array.from({ length: 10 }, (_, i) => ({
-  label: `Account-${i + 1}`,
-  value: `account-${i + 1}`,
-}));
+const accounts = [
+  { label: "All", value: "" },
+  ...Array.from({ length: 10 }, (_, i) => ({
+    label: `Account-${i + 1}`,
+    value: `account-${i + 1}`,
+  })),
+];
 
 const Dashboard: React.FC = () => {
   const { t } = useTranslation();
@@ -68,10 +71,10 @@ const Dashboard: React.FC = () => {
   return (
     <div className="space-y-6">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-        <h1 className="text-2xl font-bold text-indigo-700">
-          {t("dashboard.title")}
-        </h1>
         <div className="flex items-center gap-4">
+          <h1 className="text-2xl font-bold text-indigo-700">
+            {t("dashboard.title")}
+          </h1>
           <Select
             color={"light"}
             defaultValue={selectedAccount}
@@ -83,8 +86,8 @@ const Dashboard: React.FC = () => {
               </option>
             ))}
           </Select>
-          <DateRangePicker onDateRangeChange={handleDateRangeChange} />
         </div>
+        <DateRangePicker onDateRangeChange={handleDateRangeChange} />
       </div>
       {isLoading || !dashboardData ? (
         <div className="flex items-center justify-center h-64">
