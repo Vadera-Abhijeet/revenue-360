@@ -1,5 +1,11 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+} from "react";
+import { useNavigate } from "react-router-dom";
 
 interface User {
   id: string;
@@ -21,7 +27,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
 };
@@ -37,7 +43,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   useEffect(() => {
     // Check if user is already logged in
-    const storedUser = localStorage.getItem('user');
+    const storedUser = localStorage.getItem("user");
     if (storedUser) {
       setUser(JSON.parse(storedUser));
     }
@@ -46,14 +52,14 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const login = (userData: User) => {
     setUser(userData);
-    localStorage.setItem('user', JSON.stringify(userData));
-    navigate('/dashboard');
+    localStorage.setItem("user", JSON.stringify(userData));
+    navigate("/dashboard");
   };
 
   const logout = () => {
     setUser(null);
-    localStorage.removeItem('user');
-    navigate('/');
+    localStorage.removeItem("user");
+    navigate("/auth");
   };
 
   const value = {
