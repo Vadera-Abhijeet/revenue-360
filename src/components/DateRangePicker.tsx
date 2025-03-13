@@ -90,11 +90,11 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
         return [startOfYear(lastYear), endOfYear(lastYear)];
       },
     },
-    {
-      id: "custom",
-      label: t("common.custom"),
-      getRange: () => [startDate, endDate],
-    },
+    // {
+    //   id: "custom",
+    //   label: t("common.custom"),
+    //   getRange: () => [startDate, endDate],
+    // },
   ];
 
   const handlePresetSelect = (presetId: string) => {
@@ -105,10 +105,10 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
       setEndDate(newEndDate);
       setSelectedPreset(presetId);
 
-      if (presetId !== "custom") {
-        onDateRangeChange(newStartDate, newEndDate);
-        setIsOpen(false);
-      }
+      // if (presetId !== "custom") {
+      //   onDateRangeChange(newStartDate, newEndDate);
+      //   setIsOpen(false);
+      // }
     }
   };
 
@@ -148,10 +148,12 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
   return (
     <Popover
       aria-labelledby="area-popover"
+      open={isOpen}
+      onOpenChange={setIsOpen}
       content={
         <div className="p-4">
           <div className="grid grid-cols-2 gap-4 mb-4">
-            {presets.slice(0, 10).map((preset) => (
+            {presets.map((preset) => (
               <Button
                 key={preset.id}
                 color={selectedPreset === preset.id ? "primary" : "light"}
