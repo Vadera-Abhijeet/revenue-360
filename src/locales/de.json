@@ -167,19 +167,33 @@
   },
   "auth": {
     "login": {
-      "title": "Willkommen",
-      "subtitle": "Melden Sie sich bei Ihrem Konto an, um fortzufahren",
-      "googleButton": "Mit Google fortfahren",
-      "forgotPassword": "Passwort vergessen?",
-      "noAccount": "Haben Sie kein Konto?",
-      "signup": "Registrieren"
+      "title": "Melden Sie sich in Ihrem Konto an",
+      "subtitle": "Greifen Sie auf Ihr Dashboard zu, indem Sie sich unten anmelden.",
+      "username": "Benutzername",
+      "usernamePlaceholder": "Geben Sie Ihren Benutzernamen ein",
+      "password": "Passwort",
+      "passwordPlaceholder": "Geben Sie Ihr Passwort ein",
+      "error": "Ungültiger Benutzername oder Passwort",
+      "loginButton": "Anmelden",
+      "loggingIn": "Anmeldung läuft...",
+      "terms": "Durch die Anmeldung akzeptieren Sie unsere",
+      "termsOfService": "Nutzungsbedingungen",
+      "and": "und",
+      "privacyPolicy": "Datenschutzrichtlinie"
     },
-    "signup": {
-      "title": "Konto erstellen",
-      "subtitle": "Treten Sie Revenue-360 bei, um die Leistung Ihrer App zu verfolgen",
-      "googleButton": "Mit Google registrieren",
-      "hasAccount": "Haben Sie bereits ein Konto?",
-      "login": "Anmelden"
+    "features": {
+      "trackPerformance": {
+        "title": "Überwachung der App-Leistung",
+        "description": "Überwachen Sie Installationen, Einnahmen und Benutzerinteraktionen in Echtzeit."
+      },
+      "optimizeAds": {
+        "title": "Optimieren Sie Werbekampagnen",
+        "description": "Maximieren Sie den ROI mit datengesteuerten Einblicken und Empfehlungen."
+      },
+      "growRevenue": {
+        "title": "Steigern Sie Ihre Einnahmen",
+        "description": "Identifizieren Sie Möglichkeiten und erhöhen Sie die Monetarisierung Ihrer App."
+      }
     }
   },
   "dashboard": {

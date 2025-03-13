@@ -167,19 +167,33 @@
   },
   "auth": {
     "login": {
-      "title": "Welcome",
-      "subtitle": "Sign in to your account to continue",
-      "googleButton": "Continue with Google",
-      "forgotPassword": "Forgot Password?",
-      "noAccount": "Don't have an account?",
-      "signup": "Sign Up"
+      "title": "Sign In to Your Account",
+      "subtitle": "Access your dashboard by signing in below.",
+      "username": "Username",
+      "usernamePlaceholder": "Enter your username",
+      "password": "Password",
+      "passwordPlaceholder": "Enter your password",
+      "error": "Invalid username or password",
+      "loginButton": "Login",
+      "loggingIn": "Logging in...",
+      "terms": "By signing in, you agree to our",
+      "termsOfService": "Terms of Service",
+      "and": "and",
+      "privacyPolicy": "Privacy Policy"
     },
-    "signup": {
-      "title": "Create an Account",
-      "subtitle": "Join Revenue-360 to start tracking your app performance",
-      "googleButton": "Sign up with Google",
-      "hasAccount": "Already have an account?",
-      "login": "Login"
+    "features": {
+      "trackPerformance": {
+        "title": "Track Your App Performance",
+        "description": "Monitor installs, revenue, and user engagement in real-time."
+      },
+      "optimizeAds": {
+        "title": "Optimize Ad Campaigns",
+        "description": "Maximize ROI with data-driven insights and recommendations."
+      },
+      "growRevenue": {
+        "title": "Grow Your Revenue",
+        "description": "Identify opportunities and increase your app monetization."
+      }
     }
   },
   "dashboard": {

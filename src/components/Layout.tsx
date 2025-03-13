@@ -25,10 +25,10 @@ import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate } from "react-router-dom";
 import brandLogo from "../assets/images/brand.png";
-import { useAuth } from "../contexts/AuthContext";
 import { CurrencyCode, useCurrency } from "../contexts/CurrencyContext";
 import { useNotifications } from "../contexts/NotificationContext";
 import Notifications from "../features/Notifications";
+import { useAuth } from "../hooks/useAuth";
 
 interface LayoutProps {
   children: React.ReactNode;

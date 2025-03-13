@@ -167,19 +167,33 @@
   },
   "auth": {
     "login": {
-      "title": "いらっしゃいませ",
-      "subtitle": "続行するにはアカウントにサインインしてください",
-      "googleButton": "Googleで続行",
-      "forgotPassword": "パスワードをお忘れですか？",
-      "noAccount": "アカウントをお持ちでないですか？",
-      "signup": "サインアップ"
+      "title": "アカウントにサインイン",
+      "subtitle": "サインインしてダッシュボードにアクセスしてください。",
+      "username": "ユーザー名",
+      "usernamePlaceholder": "ユーザー名を入力してください",
+      "password": "パスワード",
+      "passwordPlaceholder": "パスワードを入力してください",
+      "error": "無効なユーザー名またはパスワード",
+      "loginButton": "ログイン",
+      "loggingIn": "ログイン中...",
+      "terms": "サインインすることで、以下に同意したものとみなされます。",
+      "termsOfService": "利用規約",
+      "and": "および",
+      "privacyPolicy": "プライバシーポリシー"
     },
-    "signup": {
-      "title": "アカウントを作成",
-      "subtitle": "Revenue-360に参加してアプリのパフォーマンス追跡を開始",
-      "googleButton": "Googleでサインアップ",
-      "hasAccount": "すでにアカウントをお持ちですか？",
-      "login": "ログイン"
+    "features": {
+      "trackPerformance": {
+        "title": "アプリのパフォーマンスを追跡",
+        "description": "インストール数、収益、ユーザーエンゲージメントをリアルタイムで監視できます。"
+      },
+      "optimizeAds": {
+        "title": "広告キャンペーンを最適化",
+        "description": "データ分析と推奨事項を活用してROIを最大化しましょう。"
+      },
+      "growRevenue": {
+        "title": "収益を増やす",
+        "description": "機会を特定し、アプリの収益化を強化できます。"
+      }
     }
   },
   "dashboard": {

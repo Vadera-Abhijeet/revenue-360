@@ -167,19 +167,33 @@
   },
   "auth": {
     "login": {
-      "title": "Bienvenida",
-      "subtitle": "Inicia sesión en tu cuenta para continuar",
-      "googleButton": "Continuar con Google",
-      "forgotPassword": "¿Olvidaste tu contraseña?",
-      "noAccount": "¿No tienes una cuenta?",
-      "signup": "Regístrate"
+      "title": "Iniciar sesión en tu cuenta",
+      "subtitle": "Accede a tu panel de control iniciando sesión abajo.",
+      "username": "Nombre de usuario",
+      "usernamePlaceholder": "Ingresa tu nombre de usuario",
+      "password": "Contraseña",
+      "passwordPlaceholder": "Ingresa tu contraseña",
+      "error": "Nombre de usuario o contraseña inválidos",
+      "loginButton": "Iniciar sesión",
+      "loggingIn": "Iniciando sesión...",
+      "terms": "Al iniciar sesión, aceptas nuestros",
+      "termsOfService": "Términos de servicio",
+      "and": "y",
+      "privacyPolicy": "Política de privacidad"
     },
-    "signup": {
-      "title": "Crear una cuenta",
-      "subtitle": "Únete a Revenue-360 para comenzar a rastrear el rendimiento de tu aplicación",
-      "googleButton": "Registrarse con Google",
-      "hasAccount": "¿Ya tienes una cuenta?",
-      "login": "Iniciar sesión"
+    "features": {
+      "trackPerformance": {
+        "title": "Seguimiento del rendimiento de la aplicación",
+        "description": "Monitorea instalaciones, ingresos y participación de usuarios en tiempo real."
+      },
+      "optimizeAds": {
+        "title": "Optimiza campañas publicitarias",
+        "description": "Maximiza el ROI con información y recomendaciones basadas en datos."
+      },
+      "growRevenue": {
+        "title": "Aumenta tus ingresos",
+        "description": "Identifica oportunidades y mejora la monetización de tu aplicación."
+      }
     }
   },
   "dashboard": {
