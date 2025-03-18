@@ -1,39 +1,28 @@
 import React, { createContext, useState, useEffect, ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
+import { IUser } from "../interfaces";
 
-interface User {
-  id: string;
-  name: string;
-  email: string;
-  photoURL: string;
-}
 
 interface AuthContextType {
-  user: User | null;
+  user: IUser | null;
   isAuthenticated: boolean;
   isLoading: boolean;
-  login: (user: User) => void;
+  login: (user: IUser) => void;
   logout: () => void;
+  signup: (user: IUser) => void;
+  setUser: (user: IUser) => void;
 }
 
 export const AuthContext = createContext<AuthContextType | undefined>(
   undefined
 );
 
-// export const useAuth = () => {
-//   const context = useContext(AuthContext);
-//   if (context === undefined) {
-//     throw new Error("useAuth must be used within an AuthProvider");
-//   }
-//   return context;
-// };
-
 interface AuthProviderProps {
   children: ReactNode;
 }
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<IUser | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const navigate = useNavigate();
 
@@ -46,7 +35,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     setIsLoading(false);
   }, []);
 
-  const login = (userData: User) => {
+  const login = (userData: IUser) => {
     setUser(userData);
     localStorage.setItem("user", JSON.stringify(userData));
     navigate("/dashboard");
@@ -55,8 +44,21 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const logout = () => {
     setUser(null);
     localStorage.removeItem("user");
-    navigate("/auth");
+    navigate("/sign-in");
   };
+
+  const signup = (userData: IUser) => {
+    // Store user in localStorage
+    const users = JSON.parse(localStorage.getItem("users") || "[]");
+    users.push(userData);
+    localStorage.setItem("users", JSON.stringify(users));
+
+    // Log the user in after signup
+    setUser(userData);
+    localStorage.setItem("user", JSON.stringify(userData));
+    navigate("/dashboard");
+  };
+
 
   const value = {
     user,
@@ -64,6 +66,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     isLoading,
     login,
     logout,
+    signup,
+    setUser
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

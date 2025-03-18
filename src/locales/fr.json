@@ -179,7 +179,13 @@
       "terms": "En vous connectant, vous acceptez nos",
       "termsOfService": "Conditions d'utilisation",
       "and": "et",
-      "privacyPolicy": "Politique de confidentialité"
+      "privacyPolicy": "Politique de confidentialité",
+      "invalidEmail": "Veuillez entrer une adresse e-mail valide",
+      "emailRequired": "L'e-mail est requis",
+      "passwordRequired": "Le mot de passe est requis",
+      "passwordMinLength": "Le mot de passe doit contenir au moins 6 caractères",
+      "userNotFound": "Aucun compte trouvé avec cet e-mail",
+      "wrongPassword": "Mot de passe incorrect"
     },
     "features": {
       "trackPerformance": {
@@ -194,6 +200,33 @@
         "title": "Augmentez vos revenus",
         "description": "Identifiez des opportunités et améliorez la monétisation de votre application."
       }
+    },
+    "signup": {
+      "title": "Créer un nouveau compte",
+      "subtitle": "Commencez en vous inscrivant ci-dessous.",
+      "username": "Nom d'utilisateur",
+      "usernamePlaceholder": "Choisissez un nom d'utilisateur",
+      "email": "Adresse e-mail",
+      "emailPlaceholder": "Entrez votre e-mail",
+      "company": "Entreprise",
+      "companyPlaceholder": "Entrez le nom de votre entreprise",
+      "password": "Mot de passe",
+      "passwordPlaceholder": "Créez un mot de passe",
+      "confirmPassword": "Confirmer le mot de passe",
+      "confirmPasswordPlaceholder": "Ré-entrez votre mot de passe",
+      "profilePicture": "Photo de profil",
+      "profilePicturePlaceholder": "Téléchargez votre photo de profil",
+      "errorFields": "Tous les champs sont obligatoires.",
+      "errorPasswordMatch": "Les mots de passe ne correspondent pas.",
+      "errorProfilePicture": "Veuillez télécharger une image valide.",
+      "signupButton": "S'inscrire",
+      "signingUp": "Création du compte...",
+      "terms": "En vous inscrivant, vous acceptez nos",
+      "termsOfService": "Conditions d'utilisation",
+      "and": "et",
+      "privacyPolicy": "Politique de confidentialité",
+      "alreadyHaveAccountTitle": "Vous avez déjà un compte ?",
+      "alreadyHaveAccountSubtitle": "Connectez-vous ici."
     }
   },
   "dashboard": {

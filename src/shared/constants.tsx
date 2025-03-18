@@ -10,3 +10,6 @@ export const PLATFORM_OPTIONS = [
   { label: "AdMob", value: "adMob" },
   { label: "FaceBook", value: "facebook" },
 ];
+
+export const DEFAULT_AVATAR =
+  "https://ui-avatars.com/api/?name=un&background=CCCCCC&color=FFFFFF&size=150&rounded=true";

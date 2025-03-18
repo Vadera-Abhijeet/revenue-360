@@ -179,7 +179,13 @@
       "terms": "Durch die Anmeldung akzeptieren Sie unsere",
       "termsOfService": "Nutzungsbedingungen",
       "and": "und",
-      "privacyPolicy": "Datenschutzrichtlinie"
+      "privacyPolicy": "Datenschutzrichtlinie",
+      "invalidEmail": "Bitte geben Sie eine gültige E-Mail-Adresse ein",
+      "emailRequired": "E-Mail ist erforderlich",
+      "passwordRequired": "Passwort ist erforderlich",
+      "passwordMinLength": "Das Passwort muss mindestens 6 Zeichen lang sein",
+      "userNotFound": "Kein Konto mit dieser E-Mail gefunden",
+      "wrongPassword": "Falsches Passwort"
     },
     "features": {
       "trackPerformance": {
@@ -194,6 +200,33 @@
         "title": "Steigern Sie Ihre Einnahmen",
         "description": "Identifizieren Sie Möglichkeiten und erhöhen Sie die Monetarisierung Ihrer App."
       }
+    },
+    "signup": {
+      "title": "Neues Konto erstellen",
+      "subtitle": "Beginnen Sie mit der Registrierung unten.",
+      "username": "Benutzername",
+      "usernamePlaceholder": "Wählen Sie einen Benutzernamen",
+      "email": "E-Mail-Adresse",
+      "emailPlaceholder": "Geben Sie Ihre E-Mail ein",
+      "company": "Unternehmen",
+      "companyPlaceholder": "Geben Sie Ihren Unternehmensnamen ein",
+      "password": "Passwort",
+      "passwordPlaceholder": "Erstellen Sie ein Passwort",
+      "confirmPassword": "Passwort bestätigen",
+      "confirmPasswordPlaceholder": "Geben Sie Ihr Passwort erneut ein",
+      "profilePicture": "Profilbild",
+      "profilePicturePlaceholder": "Laden Sie Ihr Profilbild hoch",
+      "errorFields": "Alle Felder sind erforderlich.",
+      "errorPasswordMatch": "Passwörter stimmen nicht überein.",
+      "errorProfilePicture": "Bitte laden Sie eine gültige Bilddatei hoch.",
+      "signupButton": "Registrieren",
+      "signingUp": "Konto wird erstellt...",
+      "terms": "Mit der Registrierung akzeptieren Sie unsere",
+      "termsOfService": "Nutzungsbedingungen",
+      "and": "und",
+      "privacyPolicy": "Datenschutzrichtlinie",
+      "alreadyHaveAccountTitle": "Haben Sie bereits ein Konto?",
+      "alreadyHaveAccountSubtitle": "Hier anmelden."
     }
   },
   "dashboard": {

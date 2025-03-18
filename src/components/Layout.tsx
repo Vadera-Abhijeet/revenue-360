@@ -1,3 +1,4 @@
+import { PuzzlePiece } from "@phosphor-icons/react";
 import {
   Avatar,
   Badge,
@@ -6,13 +7,12 @@ import {
   Navbar,
   Popover,
   Sidebar,
+  Tooltip,
 } from "flowbite-react";
 import {
-  AppWindow,
-  // Megaphone,
   Bell,
   DollarSign,
-  Globe,
+  Languages,
   LayoutDashboard,
   LogOut,
   Megaphone,
@@ -81,17 +81,12 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       path: "/dashboard",
       icon: <LayoutDashboard size={20} />,
     },
-    { name: t("common.apps"), path: "/apps", icon: <AppWindow size={20} /> },
+    { name: t("common.apps"), path: "/apps", icon: <PuzzlePiece size={20} /> },
     {
       name: t("common.campaigns"),
       path: "/campaigns",
       icon: <Megaphone size={20} />,
     },
-    // {
-    //   name: t("common.notifications"),
-    //   path: "/notifications",
-    //   icon: <Bell size={20} />,
-    // },
     {
       name: t("common.configurations"),
       path: "/configurations",
@@ -114,80 +109,89 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           >
             <Menu size={20} />
           </Button>
-          <Navbar.Brand href="/dashboard" className="flex items-center">
+          <Navbar.Brand
+            href="/dashboard"
+            className="items-center hidden lg:flex"
+          >
             <img src={brandLogo} alt="brand-logo" className="h-9" />
           </Navbar.Brand>
         </div>
         <div className="flex items-center gap-2 md:gap-4">
-          <Dropdown
-            arrowIcon={false}
-            inline
-            label={<Globe size={20} />}
-            theme={{
-              inlineWrapper:
-                "flex items-center py-2 px-1 text-indigo-600 hover:text-indigo-900",
-            }}
-          >
-            <Dropdown.Header>
-              <span className="block text-sm">{t("common.language")}</span>
-            </Dropdown.Header>
-            {languages.map((lang) => (
-              <Dropdown.Item
-                key={lang.code}
-                onClick={() => changeLanguage(lang.code)}
-                className={i18n.language === lang.code ? "bg-gray-100" : ""}
-              >
-                {lang.name}
-              </Dropdown.Item>
-            ))}
-          </Dropdown>
+          <Tooltip content={t("common.language")}>
+            <Dropdown
+              arrowIcon={false}
+              inline
+              label={<Languages size={20} />}
+              theme={{
+                inlineWrapper:
+                  "flex items-center py-2 px-1 text-indigo-600 hover:text-indigo-900",
+              }}
+            >
+              <Dropdown.Header>
+                <span className="block text-sm">{t("common.language")}</span>
+              </Dropdown.Header>
+              {languages.map((lang) => (
+                <Dropdown.Item
+                  key={lang.code}
+                  onClick={() => changeLanguage(lang.code)}
+                  className={i18n.language === lang.code ? "bg-gray-100" : ""}
+                >
+                  {lang.name}
+                </Dropdown.Item>
+              ))}
+            </Dropdown>
+          </Tooltip>
+          <Tooltip content={t("common.currency")}>
+            <Dropdown
+              arrowIcon={false}
+              inline
+              label={<DollarSign size={20} />}
+              theme={{
+                inlineWrapper:
+                  "flex items-center py-2 px-1 text-indigo-600 hover:text-indigo-900",
+              }}
+            >
+              <Dropdown.Header>
+                <span className="block text-sm">{t("common.currency")}</span>
+              </Dropdown.Header>
+              {currencies.map((curr) => (
+                <Dropdown.Item
+                  key={curr.code}
+                  onClick={() => setCurrency(curr.code as CurrencyCode)}
+                  className={currency === curr.code ? "bg-gray-100" : ""}
+                >
+                  {curr.symbol} - {curr.name}
+                </Dropdown.Item>
+              ))}
+            </Dropdown>
+          </Tooltip>
+          <Tooltip content={t("common.notifications")}>
+            <Popover
+              aria-labelledby="area-popover"
+              open={openNotification}
+              onOpenChange={setOpenNotification}
+              content={<Notifications />}
+              theme={{
+                content: "z-10 overflow-hidden rounded-[7px] shadow-sm",
+              }}
+            >
+              <div className="relative py-2 px-1 cursor-pointer">
+                <Bell
+                  size={20}
+                  className="text-indigo-600 hover:text-indigo-900 "
+                />
+                {unreadCount > 0 && (
+                  <Badge color="indigo" className="absolute -top-1.5 -right-4">
+                    {unreadCount}
+                  </Badge>
+                )}
+              </div>
+            </Popover>
+          </Tooltip>
 
           <Dropdown
             arrowIcon={false}
-            inline
-            label={<DollarSign size={20} />}
-            theme={{
-              inlineWrapper:
-                "flex items-center py-2 px-1 text-indigo-600 hover:text-indigo-900",
-            }}
-          >
-            <Dropdown.Header>
-              <span className="block text-sm">{t("common.currency")}</span>
-            </Dropdown.Header>
-            {currencies.map((curr) => (
-              <Dropdown.Item
-                key={curr.code}
-                onClick={() => setCurrency(curr.code as CurrencyCode)}
-                className={currency === curr.code ? "bg-gray-100" : ""}
-              >
-                {curr.symbol} - {curr.name}
-              </Dropdown.Item>
-            ))}
-          </Dropdown>
-          <Popover
-            aria-labelledby="area-popover"
-            open={openNotification}
-            onOpenChange={setOpenNotification}
-            content={<Notifications />}
-            theme={{
-              content: "z-10 overflow-hidden rounded-[7px] shadow-sm",
-            }}
-          >
-            <div className="relative py-2 px-1 cursor-pointer">
-              <Bell
-                size={20}
-                className="text-indigo-600 hover:text-indigo-900 "
-              />
-              {unreadCount > 0 && (
-                <Badge color="indigo" className="absolute -top-1.5 -right-4">
-                  {unreadCount}
-                </Badge>
-              )}
-            </div>
-          </Popover>
-
-          <Dropdown
-            arrowIcon={false}
+            trigger="hover"
             inline
             label={
               <Avatar
@@ -214,12 +218,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             <Dropdown.Item icon={User} onClick={() => navigate("/settings")}>
               {t("common.profile")}
             </Dropdown.Item>
-            {/* <Dropdown.Item
-              icon={Settings}
-              onClick={() => navigate("/settings")}
-            >
-              {t("common.settings")}
-            </Dropdown.Item> */}
             <Dropdown.Divider />
             <Dropdown.Item icon={LogOut} onClick={logout}>
               {t("common.logout")}
@@ -273,15 +271,16 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             ></div>
             <div className="relative flex flex-col w-80 max-w-sm h-full bg-white">
               <div className="flex items-center justify-between p-4 border-b border-gray-200">
-                <h2 className="text-xl font-semibold text-gray-800">
-                  Revenue-360
-                </h2>
+                <img src={brandLogo} alt="brand-logo" className="h-9" />
                 <Button color="light" onClick={closeSidebar}>
                   <X size={20} />
                 </Button>
               </div>
-              <div className="flex-1 overflow-y-auto">
-                <Sidebar aria-label="Mobile sidebar with navigation">
+              <div className="flex-1 overflow-y-auto w-full">
+                <Sidebar
+                  aria-label="Mobile sidebar with navigation"
+                  className="w-full"
+                >
                   <Sidebar.Items>
                     <Sidebar.ItemGroup>
                       {navItems.map((item) => (

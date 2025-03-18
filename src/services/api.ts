@@ -546,14 +546,16 @@ export const fetchNotifications = async () => {
 export const fetchUserSettings = async () => {
   // Simulate API call delay
   await new Promise((resolve) => setTimeout(resolve, 600));
-
+  // Get current user from localStorage
+  const currentUser = JSON.parse(localStorage.getItem("user") || "{}");
   return {
     account: {
-      name: "Demo User",
-      email: "demo@example.com",
-      company: "Demo Company",
-      role: "Administrator",
-      timezone: "America/New_York",
+      name: currentUser.name || "Demo User",
+      email: currentUser.email || "demo@example.com",
+      company: currentUser.company || "Demo Company",
+      role: currentUser.role || "Administrator",
+      timezone: currentUser.timezone || "America/New_York",
+      photoURL: currentUser.photoURL || "https://via.placeholder.com/150",
     },
     integrations: [
       {
@@ -638,11 +640,25 @@ export const updateUserSettings = async (settings: {
   account: IAccount;
   preferences: IPreferences;
 }) => {
-  // Simulate API call delay
   await new Promise((resolve) => setTimeout(resolve, 800));
 
-  // In a real app, this would send the updated settings to the server
-  console.log("Settings updated:", settings);
+  const currentUser = JSON.parse(localStorage.getItem("user") || "{}");
+
+  // Save settings to localStorage with user-specific key
+  localStorage.setItem(`settings_${currentUser.id}`, JSON.stringify(settings));
+
+  // Update user info in localStorage if relevant fields changed
+  if (settings.account.name !== currentUser.name ||
+    settings.account.email !== currentUser.email ||
+    settings.account.photoURL !== currentUser.photoURL) {
+    const updatedUser = {
+      ...currentUser,
+      name: settings.account.name,
+      email: settings.account.email,
+      photoURL: settings.account.photoURL,
+    };
+    localStorage.setItem("user", JSON.stringify(updatedUser));
+  }
 
   return { success: true };
 };

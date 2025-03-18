@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import {
   Tabs,
@@ -22,11 +22,14 @@ import {
   Box,
   CheckCircle,
   XCircle,
+  Camera,
 } from "lucide-react";
 import { fetchUserSettings, updateUserSettings } from "../services/api";
 import { IAccount, IPreferences } from "../interfaces";
 import { CurrencyCode, useCurrency } from "../contexts/CurrencyContext";
 import RazorpayButton from "../components/RazorPayButton";
+import { useAuth } from "../hooks/useAuth";
+import { DEFAULT_AVATAR } from "../shared/constants";
 
 const plans = [
   {
@@ -58,6 +61,7 @@ const plans = [
   },
 ];
 const Settings: React.FC = () => {
+  const { user, setUser } = useAuth();
   const { setCurrency, currency } = useCurrency();
   const { t, i18n } = useTranslation();
   const [isLoading, setIsLoading] = useState(true);
@@ -72,6 +76,7 @@ const Settings: React.FC = () => {
       company: "",
       role: "",
       timezone: "",
+      photoURL: "",
     },
     preferences: {
       language: "",
@@ -82,6 +87,7 @@ const Settings: React.FC = () => {
       dataRefreshRate: "",
     },
   });
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const loadSettings = async () => {
@@ -167,10 +173,40 @@ const Settings: React.FC = () => {
         preferences: formData.preferences,
       });
       setCurrency(formData.preferences.currency);
+
+      if (user && (
+        formData.account.name !== user.name ||
+        formData.account.email !== user.email ||
+        formData.account.photoURL !== user.photoURL
+      )) {
+        setUser({
+          ...user,
+          name: formData.account.name,
+          email: formData.account.email,
+          photoURL: formData.account.photoURL || DEFAULT_AVATAR,
+        });
+      }
     } catch (error) {
       console.error("Error saving settings:", error);
     } finally {
       setIsSaving(false);
+    }
+  };
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setFormData(prev => ({
+          ...prev,
+          account: {
+            ...prev.account,
+            photoURL: reader.result as string
+          }
+        }));
+      };
+      reader.readAsDataURL(file);
     }
   };
 
@@ -191,10 +227,32 @@ const Settings: React.FC = () => {
       <Tabs aria-label="Settings tabs" style="pills">
         <Tabs.Item active title={t("settings.account.title")} icon={User}>
           <Card>
-            <h2 className="text-xl font-semibold mb-4">
+            <h2 className="text-xl font-semibold ">
               {t("settings.account.title")}
             </h2>
-            <div className="space-y-4">
+            <div className="space-y-2">
+              <div className="flex mb-6">
+                <label
+                  htmlFor="profilePicInput"
+                  className="relative cursor-pointer group"
+                >
+                  <img
+                    src={formData.account.photoURL || DEFAULT_AVATAR}
+                    className="w-32 h-32 rounded-full border-4 border-gray-300 object-cover"
+                  />
+                  <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+                    <Camera className="w-8 h-8 text-white" />
+                  </div>
+                  <input
+                    id="profilePicInput"
+                    type="file"
+                    ref={fileInputRef}
+                    accept="image/*"
+                    className="hidden"
+                    onChange={handleFileChange}
+                  />
+                </label>
+              </div>
               <div>
                 <div className="mb-2 block">
                   <Label htmlFor="name" value={t("settings.account.name")} />
@@ -242,6 +300,7 @@ const Settings: React.FC = () => {
                 <Select
                   id="role"
                   name="role"
+                  icon={User}
                   value={formData.account.role}
                   onChange={handleAccountChange}
                 >
@@ -285,7 +344,7 @@ const Settings: React.FC = () => {
                 {isSaving ? (
                   <>
                     <div className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
-                    {t("common.saving")}
+                    {t("settings.account.saving")}
                   </>
                 ) : (
                   t("settings.account.save")
@@ -446,11 +505,10 @@ const Settings: React.FC = () => {
                 {plans.map((plan) => (
                   <Card
                     key={plan.name}
-                    className={`p-6 w-80 shadow-lg ${
-                      plan.buttonVariant === "active"
-                        ? "border-2 border-blue-600"
-                        : ""
-                    }`}
+                    className={`p-6 w-80 shadow-lg ${plan.buttonVariant === "active"
+                      ? "border-2 border-blue-600"
+                      : ""
+                      }`}
                     theme={{
                       root: {
                         children:

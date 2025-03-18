@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 import {
   Button,
   Card,
@@ -14,6 +17,7 @@ import {
   IllustrationDataChart,
 } from "../assets/Illustrations";
 import { useAuth } from "../hooks/useAuth";
+import { IUser } from "../interfaces";
 
 interface ILanguageOption {
   code: string;
@@ -29,18 +33,39 @@ const LANGUAGES: ILanguageOption[] = [
   { code: "ja", name: "日本語", flag: "🇯🇵" },
 ];
 
-const Auth: React.FC = () => {
+interface SignInFormInputs {
+  username: string;
+  password: string;
+}
+
+const SignIn: React.FC = () => {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const { isAuthenticated, login } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [currentFrame, setCurrentFrame] = useState(0);
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [selectedLanguage, setSelectedLanguage] = useState<ILanguageOption>(
-    LANGUAGES[0]
-  );
+  const [selectedLanguage, setSelectedLanguage] = useState<ILanguageOption>(LANGUAGES[0]);
+
+  // Add Yup Schema
+  const schema = yup.object({
+    username: yup
+      .string()
+      .email(t("auth.login.invalidEmail"))
+      .required(t("auth.login.emailRequired")),
+    password: yup
+      .string()
+      .min(6, t("auth.login.passwordMinLength"))
+      .required(t("auth.login.passwordRequired")),
+  }).required();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors }
+  } = useForm<SignInFormInputs>({
+    resolver: yupResolver(schema)
+  });
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -55,23 +80,28 @@ const Auth: React.FC = () => {
     return () => clearInterval(interval);
   }, []);
 
-  const handleLogin = () => {
+  const onSubmit = async (data: SignInFormInputs) => {
     setError("");
-    // if (username === "admin" && password === "admin") {}
-    if (!!username && !!password) {
-      const mockUser = {
-        id: "user123",
-        name: "Demo User",
-        email: "demo@example.com",
-        photoURL: "https://randomuser.me/api/portraits/men/32.jpg",
-      };
-      setIsLoading(true);
-      setTimeout(() => {
-        login(mockUser);
-        navigate("/dashboard");
-      }, 1500);
+    setIsLoading(true);
+
+    // Get users from localStorage
+    const users = JSON.parse(localStorage.getItem("users") || "[]");
+    const foundUser = users.find((user: IUser) => user.email === data.username);
+
+    if (foundUser) {
+      // Check if password matches
+      if (foundUser.password === data.password) {
+        setTimeout(() => {
+          login(foundUser);
+          navigate("/dashboard");
+        }, 1500);
+      } else {
+        setIsLoading(false);
+        setError(t("auth.login.wrongPassword"));
+      }
     } else {
-      setError(t("auth.login.error"));
+      setIsLoading(false);
+      setError(t("auth.login.userNotFound"));
     }
   };
 
@@ -105,9 +135,8 @@ const Auth: React.FC = () => {
           ].map((frame, index) => (
             <div
               key={index}
-              className={`absolute inset-0 transition-opacity duration-1000 flex flex-col justify-center items-center text-white p-12 ${
-                currentFrame === index ? "opacity-100" : "opacity-0"
-              }`}
+              className={`absolute inset-0 transition-opacity duration-1000 flex flex-col justify-center items-center text-white p-12 ${currentFrame === index ? "opacity-100" : "opacity-0"
+                }`}
             >
               {frame.image}
               <h2 className="text-4xl font-bold mt-8 mb-4 text-center text-gray-900 dark:text-white">
@@ -147,45 +176,54 @@ const Auth: React.FC = () => {
             </Dropdown>
           </div>
 
-          {/* Login Card */}
-          <Card className="w-full max-w-xl min-h-[500px] flex flex-col items-center justify-center">
-            <div className="text-center mb-6">
+          {/* Signin Card */}
+          <Card
+            className="w-full max-w-xl min-h-[500px] flex flex-col items-center justify-center"
+            theme={{
+              root: {
+                children: "flex h-full flex-col justify-between gap-4 p-12",
+              },
+            }}
+          >
+            <div className="text-center mb-4 max-w-1000">
               <h2 className="text-2xl font-bold text-gray-900">
                 {t("auth.login.title")}
               </h2>
               <p className="text-gray-600 mt-2">{t("auth.login.subtitle")}</p>
             </div>
 
-            <div className="w-full space-y-4">
+            <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-4">
               <div>
                 <Label htmlFor="username" value={t("auth.login.username")} />
                 <TextInput
-                  color="indigo"
+                  color={errors.username ? "failure" : "indigo"}
                   id="username"
-                  type="text"
+                  type="email"
                   placeholder={t("auth.login.usernamePlaceholder")}
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  required
+                  {...register("username")}
                 />
+                {errors.username && (
+                  <p className="text-red-500 text-sm mt-1">{errors.username.message}</p>
+                )}
               </div>
               <div>
                 <Label htmlFor="password" value={t("auth.login.password")} />
                 <TextInput
                   id="password"
-                  color="indigo"
+                  color={errors.password ? "failure" : "indigo"}
                   type="password"
                   placeholder={t("auth.login.passwordPlaceholder")}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
+                  {...register("password")}
                 />
+                {errors.password && (
+                  <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>
+                )}
               </div>
               {error && <p className="text-red-500 text-sm">{error}</p>}
               <Button
+                type="submit"
                 color="indigo"
                 className="w-full"
-                onClick={handleLogin}
                 disabled={isLoading}
               >
                 <div className="flex items-center gap-2">
@@ -197,9 +235,9 @@ const Auth: React.FC = () => {
                   </p>
                 </div>
               </Button>
-            </div>
+            </form>
 
-            <div className="mt-6 text-center text-sm text-gray-600">
+            <div className="mt-4 text-center text-sm text-gray-600">
               <p>
                 {t("auth.login.terms")}{" "}
                 <a href="#" className="text-primary-600 hover:underline">
@@ -211,6 +249,17 @@ const Auth: React.FC = () => {
                 </a>
               </p>
             </div>
+            <div className="text-center text-sm text-gray-600">
+              <p>
+                {t("auth.login.createNewAccountTitle")}{" "}
+                <span
+                  onClick={() => navigate("/sign-up")}
+                  className="text-primary-600 hover:underline cursor-pointer"
+                >
+                  {t("auth.login.createNewAccountSubtitle")}
+                </span>
+              </p>
+            </div>
           </Card>
         </div>
       </div>
@@ -218,4 +267,4 @@ const Auth: React.FC = () => {
   );
 };
 
-export default Auth;
+export default SignIn;

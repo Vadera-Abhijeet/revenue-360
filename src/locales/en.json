@@ -179,7 +179,42 @@
       "terms": "By signing in, you agree to our",
       "termsOfService": "Terms of Service",
       "and": "and",
-      "privacyPolicy": "Privacy Policy"
+      "privacyPolicy": "Privacy Policy",
+      "createNewAccountTitle": "Don't have an account?",
+      "createNewAccountSubtitle": "Sign up here.",
+      "userNotFound": "No account found with this email",
+      "wrongPassword": "Incorrect password",
+      "invalidEmail": "Please enter a valid email address",
+      "emailRequired": "Email is required",
+      "passwordRequired": "Password is required",
+      "passwordMinLength": "Password must be at least 6 characters"
+    },
+    "signup": {
+      "title": "Create a New Account",
+      "subtitle": "Get started by signing up below.",
+      "username": "Username",
+      "usernamePlaceholder": "Choose a username",
+      "email": "Email Address",
+      "emailPlaceholder": "Enter your email",
+      "company": "Company",
+      "companyPlaceholder": "Enter your company name",
+      "password": "Password",
+      "passwordPlaceholder": "Create a password",
+      "confirmPassword": "Confirm Password",
+      "confirmPasswordPlaceholder": "Re-enter your password",
+      "profilePicture": "Profile Picture",
+      "profilePicturePlaceholder": "Upload your profile picture",
+      "errorFields": "All fields are required.",
+      "errorPasswordMatch": "Passwords do not match.",
+      "errorProfilePicture": "Please upload a valid image file.",
+      "signupButton": "Sign Up",
+      "signingUp": "Creating account...",
+      "terms": "By signing up, you agree to our",
+      "termsOfService": "Terms of Service",
+      "and": "and",
+      "privacyPolicy": "Privacy Policy",
+      "alreadyHaveAccountTitle": "Already have an account?",
+      "alreadyHaveAccountSubtitle": "Sign in here."
     },
     "features": {
       "trackPerformance": {
@@ -326,7 +361,8 @@
       "company": "Company",
       "role": "Role",
       "timezone": "Timezone",
-      "save": "Save Changes"
+      "save": "Save Changes",
+      "saving": "Saving..."
     },
     "preferences": {
       "title": "Preferences",

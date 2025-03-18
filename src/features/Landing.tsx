@@ -30,10 +30,10 @@ const Landing: React.FC = () => {
           <img src={brandLogo} alt="brand-logo" className="h-9" />
         </Navbar.Brand>
         <div className="flex md:order-2 gap-2">
-          <Button color="light" onClick={() => navigate("/auth")}>
+          <Button color="light" onClick={() => navigate("/sign-up")}>
             {t("landing.hero.login")}
           </Button>
-          <Button color="indigo" onClick={() => navigate("/auth")}>
+          <Button color="indigo" onClick={() => navigate("/sign-up")}>
             {t("landing.hero.cta")}
           </Button>
           <Navbar.Toggle />
@@ -68,11 +68,15 @@ const Landing: React.FC = () => {
               <Button
                 size="lg"
                 color="indigo"
-                onClick={() => navigate("/auth")}
+                onClick={() => navigate("/sign-up")}
               >
                 {t("landing.hero.cta")}
               </Button>
-              <Button size="lg" color="light" onClick={() => navigate("/auth")}>
+              <Button
+                size="lg"
+                color="light"
+                onClick={() => navigate("/sign-up")}
+              >
                 {t("landing.hero.login")}
               </Button>
             </div>
@@ -177,7 +181,11 @@ const Landing: React.FC = () => {
             <p className="text-xl text-primary-100 mb-8">
               {t("landing.cta.description")}
             </p>
-            <Button size="lg" color="light" onClick={() => navigate("/auth")}>
+            <Button
+              size="lg"
+              color="light"
+              onClick={() => navigate("/sign-up")}
+            >
               {t("landing.cta.button")}
             </Button>
           </div>

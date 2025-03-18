@@ -5,7 +5,6 @@ import { Navigate, Route, Routes } from "react-router-dom";
 // Pages
 import AppDetail from "./features/Apps/container/AppDetails";
 import AppList from "./features/Apps/container/AppList";
-import Auth from "./features/Auth";
 import CampaignDetail from "./features/Campaigns/container/CampaignDetails";
 import Campaigns from "./features/Campaigns/container/CampaignList";
 import Dashboard from "./features/Dashboard/container";
@@ -13,6 +12,9 @@ import Landing from "./features/Landing";
 import NotFound from "./features/NotFound";
 import Notifications from "./features/Notifications";
 import Settings from "./features/Settings";
+import Configurations from "./features/Configurations/Integration/container";
+import SignIn from "./features/SignIn";
+import SignUp from "./features/SignUp";
 
 // Components
 import Layout from "./components/Layout";
@@ -20,11 +22,10 @@ import ProtectedRoute from "./components/ProtectedRoute";
 
 // Context
 import { AuthProvider } from "./contexts/AuthContext";
+import { ChartConfigProvider } from "./contexts/ChartConfigContext";
 import { CurrencyProvider } from "./contexts/CurrencyContext";
 import { NotificationProvider } from "./contexts/NotificationContext";
-import { ChartConfigProvider } from "./contexts/ChartConfigContext";
 // Theme
-import Configurations from "./features/Configurations/Integration/container";
 import { flowbiteTheme } from "./theme";
 
 function App() {
@@ -39,7 +40,8 @@ function App() {
               <div dir={i18n.dir()} className="min-h-screen bg-gray-50">
                 <Routes>
                   <Route path="/" element={<Landing />} />
-                  <Route path="/auth" element={<Auth />} />
+                  <Route path="/sign-in" element={<SignIn />} />
+                  <Route path="/sign-up" element={<SignUp />} />
                   <Route
                     path="/dashboard"
                     element={

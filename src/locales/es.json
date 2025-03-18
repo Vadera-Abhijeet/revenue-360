@@ -179,7 +179,13 @@
       "terms": "Al iniciar sesión, aceptas nuestros",
       "termsOfService": "Términos de servicio",
       "and": "y",
-      "privacyPolicy": "Política de privacidad"
+      "privacyPolicy": "Política de privacidad",
+      "invalidEmail": "Por favor, introduzca una dirección de correo electrónico válida",
+      "emailRequired": "El correo electrónico es obligatorio",
+      "passwordRequired": "La contraseña es obligatoria",
+      "passwordMinLength": "La contraseña debe tener al menos 6 caracteres",
+      "userNotFound": "No se encontró ninguna cuenta con este correo electrónico",
+      "wrongPassword": "Contraseña incorrecta"
     },
     "features": {
       "trackPerformance": {
@@ -194,6 +200,33 @@
         "title": "Aumenta tus ingresos",
         "description": "Identifica oportunidades y mejora la monetización de tu aplicación."
       }
+    },
+    "signup": {
+      "title": "Crear una nueva cuenta",
+      "subtitle": "Comience registrándose a continuación.",
+      "username": "Nombre de usuario",
+      "usernamePlaceholder": "Elija un nombre de usuario",
+      "email": "Correo electrónico",
+      "emailPlaceholder": "Ingrese su correo electrónico",
+      "company": "Empresa",
+      "companyPlaceholder": "Ingrese el nombre de su empresa",
+      "password": "Contraseña",
+      "passwordPlaceholder": "Cree una contraseña",
+      "confirmPassword": "Confirmar contraseña",
+      "confirmPasswordPlaceholder": "Vuelva a ingresar su contraseña",
+      "profilePicture": "Foto de perfil",
+      "profilePicturePlaceholder": "Suba su foto de perfil",
+      "errorFields": "Todos los campos son obligatorios.",
+      "errorPasswordMatch": "Las contraseñas no coinciden.",
+      "errorProfilePicture": "Por favor, suba un archivo de imagen válido.",
+      "signupButton": "Registrarse",
+      "signingUp": "Creando cuenta...",
+      "terms": "Al registrarse, acepta nuestros",
+      "termsOfService": "Términos de servicio",
+      "and": "y",
+      "privacyPolicy": "Política de privacidad",
+      "alreadyHaveAccountTitle": "¿Ya tiene una cuenta?",
+      "alreadyHaveAccountSubtitle": "Inicie sesión aquí."
     }
   },
   "dashboard": {

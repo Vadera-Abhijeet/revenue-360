@@ -13,6 +13,7 @@ export interface IAccount {
   company: string;
   role: string;
   timezone: string;
+  photoURL?: string;
 }
 
 export interface IIntegrations {
@@ -61,4 +62,13 @@ export interface ChartGroup {
   name: string;
   order: number;
   charts: ChartConfig[];
+}
+
+
+export interface IUser {
+  id: string;
+  name: string;
+  email: string;
+  password: string;
+  photoURL: string;
 }

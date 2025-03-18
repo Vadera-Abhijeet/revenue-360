@@ -179,7 +179,13 @@
       "terms": "サインインすることで、以下に同意したものとみなされます。",
       "termsOfService": "利用規約",
       "and": "および",
-      "privacyPolicy": "プライバシーポリシー"
+      "privacyPolicy": "プライバシーポリシー",
+      "invalidEmail": "有効なメールアドレスを入力してください",
+      "emailRequired": "メールアドレスは必須です",
+      "passwordRequired": "パスワードは必須です",
+      "passwordMinLength": "パスワードは6文字以上である必要があります",
+      "userNotFound": "このメールアドレスのアカウントが見つかりません",
+      "wrongPassword": "パスワードが正しくありません"
     },
     "features": {
       "trackPerformance": {
@@ -194,6 +200,33 @@
         "title": "収益を増やす",
         "description": "機会を特定し、アプリの収益化を強化できます。"
       }
+    },
+    "signup": {
+      "title": "新規アカウント作成",
+      "subtitle": "以下で登録を開始してください。",
+      "username": "ユーザー名",
+      "usernamePlaceholder": "ユーザー名を選択",
+      "email": "メールアドレス",
+      "emailPlaceholder": "メールアドレスを入力",
+      "company": "会社",
+      "companyPlaceholder": "会社名を入力してください",
+      "password": "パスワード",
+      "passwordPlaceholder": "パスワードを作成",
+      "confirmPassword": "パスワード確認",
+      "confirmPasswordPlaceholder": "パスワードを再入力",
+      "profilePicture": "プロフィール画像",
+      "profilePicturePlaceholder": "プロフィール画像をアップロード",
+      "errorFields": "すべての項目が必須です。",
+      "errorPasswordMatch": "パスワードが一致しません。",
+      "errorProfilePicture": "有効な画像ファイルをアップロードしてください。",
+      "signupButton": "登録",
+      "signingUp": "アカウント作成中...",
+      "terms": "登録することで、以下に同意したことになります：",
+      "termsOfService": "利用規約",
+      "and": "および",
+      "privacyPolicy": "プライバシーポリシー",
+      "alreadyHaveAccountTitle": "すでにアカウントをお持ちですか？",
+      "alreadyHaveAccountSubtitle": "こちらからログイン"
     }
   },
   "dashboard": {
