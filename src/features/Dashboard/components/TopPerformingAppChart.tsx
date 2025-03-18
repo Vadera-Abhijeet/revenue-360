@@ -17,7 +17,11 @@ function TopPerformingAppChart({ data = [] }: { data?: ITopAppsEntity[] }) {
   const { t } = useTranslation();
   const { formatCurrency } = useCurrency();
   return (
-    <Card>
+    <Card theme={{
+      root: {
+        base: "flex rounded-lg border border-gray-200 bg-white  dark:border-gray-700 dark:bg-gray-800"
+      }
+    }}>
       <div className="flex justify-between items-center mb-4">
         <h5 className="text-xl font-bold text-gray-900">
           {t("dashboard.topApps.title")}
@@ -45,7 +49,7 @@ function TopPerformingAppChart({ data = [] }: { data?: ITopAppsEntity[] }) {
             <Bar
               dataKey="revenue"
               name={t("dashboard.topApps.revenue")}
-              fill="#0ea5e9"
+              fill="#b3b1ff"
             />
             <Bar
               dataKey="cost"

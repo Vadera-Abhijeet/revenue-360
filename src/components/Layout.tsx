@@ -230,7 +230,11 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       <div className="flex flex-1 mt-2 gap-2">
         {/* Sidebar for larger screens */}
         <div className="hidden lg:block w-72 border border-gray-200 bg-white rounded-md shadow-lg overflow-hidden">
-          <Sidebar className="w-full">
+          <Sidebar className="w-full" theme={{
+            "root": {
+              "inner": "h-full overflow-y-auto overflow-x-hidden rounded bg-gray-50 px-3 py-4 dark:bg-gray-800"
+            },
+          }}>
             <Sidebar.Items>
               <Sidebar.ItemGroup>
                 {navItems.map((item) => (
@@ -279,7 +283,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               <div className="flex-1 overflow-y-auto w-full">
                 <Sidebar
                   aria-label="Mobile sidebar with navigation"
-                  className="w-full"
+                  className="w-full bg-white"
                 >
                   <Sidebar.Items>
                     <Sidebar.ItemGroup>
@@ -315,7 +319,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         )}
 
         {/* Main Content */}
-        <div className="flex-1 overflow-auto p-4 md:p-6 bg-gray-50 max-h-[calc(100vh-85px)] overflow-y-auto border border-gray-200  rounded-lg shadow-sm">
+        <div className="flex-1 overflow-auto p-4 md:p-6 bg-white max-h-[calc(100vh-85px)] overflow-y-auto border border-gray-200  rounded-lg shadow-sm">
           {children}
         </div>
       </div>

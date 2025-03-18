@@ -185,7 +185,9 @@
       "passwordRequired": "La contraseña es obligatoria",
       "passwordMinLength": "La contraseña debe tener al menos 6 caracteres",
       "userNotFound": "No se encontró ninguna cuenta con este correo electrónico",
-      "wrongPassword": "Contraseña incorrecta"
+      "wrongPassword": "Contraseña incorrecta",
+      "createNewAccountTitle": "¿No tienes una cuenta?",
+      "createNewAccountSubtitle": "Regístrate aquí."
     },
     "features": {
       "trackPerformance": {
@@ -226,7 +228,22 @@
       "and": "y",
       "privacyPolicy": "Política de privacidad",
       "alreadyHaveAccountTitle": "¿Ya tiene una cuenta?",
-      "alreadyHaveAccountSubtitle": "Inicie sesión aquí."
+      "alreadyHaveAccountSubtitle": "Inicie sesión aquí.",
+      "saving": "Guardando...",
+      "errors": {
+        "usernameRequired": "El nombre de usuario es obligatorio",
+        "usernameMin": "El nombre de usuario debe tener al menos 3 caracteres",
+        "emailRequired": "El correo electrónico es obligatorio",
+        "emailInvalid": "Por favor, introduce un correo electrónico válido",
+        "passwordRequired": "La contraseña es obligatoria",
+        "passwordMin": "La contraseña debe tener al menos 8 caracteres",
+        "passwordUppercase": "La contraseña debe contener al menos una letra mayúscula",
+        "passwordLowercase": "La contraseña debe contener al menos una letra minúscula",
+        "passwordNumber": "La contraseña debe contener al menos un número",
+        "passwordSpecial": "La contraseña debe contener al menos un carácter especial",
+        "confirmPasswordRequired": "Por favor, confirma tu contraseña",
+        "passwordMatch": "Las contraseñas deben coincidir"
+      }
     }
   },
   "dashboard": {
@@ -359,7 +376,8 @@
       "company": "Empresa",
       "role": "Rol",
       "timezone": "Zona horaria",
-      "save": "Guardar cambios"
+      "save": "Guardar cambios",
+      "saving": "Guardando..."
     },
     "preferences": {
       "title": "Preferencias",

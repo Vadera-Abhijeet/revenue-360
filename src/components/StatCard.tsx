@@ -2,6 +2,7 @@ import React from "react";
 import { Card } from "flowbite-react";
 import { ArrowUp, ArrowDown } from "lucide-react";
 import { useCurrency } from "../contexts/CurrencyContext";
+import CountUp from "react-countup";
 
 interface StatCardProps {
   title: string;
@@ -22,8 +23,8 @@ const StatCard: React.FC<StatCardProps> = ({
   isCurrency = false,
   isPercentage = false,
   valueInINR,
-  icon,
   color = "primary",
+  icon,
   onClick,
 }) => {
   const { formatCurrency } = useCurrency();
@@ -34,14 +35,14 @@ const StatCard: React.FC<StatCardProps> = ({
 
   const isPositive = percentChange >= 0;
 
-  const formatValue = () => {
+  const formatValue = (val: number) => {
     if (isCurrency) {
-      return formatCurrency(value);
+      return formatCurrency(val);
     }
     if (isPercentage) {
-      return `${value.toFixed(2)}%`;
+      return `${val.toFixed(2)}%`;
     }
-    return value.toLocaleString();
+    return val.toLocaleString();
   };
 
   const colorClasses = {
@@ -57,16 +58,33 @@ const StatCard: React.FC<StatCardProps> = ({
 
   const iconColorClass =
     colorClasses[color as keyof typeof colorClasses] || colorClasses.primary;
+  // const iconColorClass = colorClasses.primary;
 
   return (
     <Card
       className={`overflow-hidden ${onClick ? "cursor-pointer" : ""}`}
       onClick={onClick}
+      theme={{
+        root: {
+          base: "flex rounded-lg border border-gray-200 bg-white  dark:border-gray-700 dark:bg-gray-800"
+        }
+      }}
     >
       <div className="flex items-center justify-between">
         <div>
           <p className="text-sm font-medium text-gray-500">{title}</p>
-          <h3 className="text-2xl font-bold mt-1">{formatValue()}</h3>
+          <h3 className="text-2xl font-bold mt-1">
+            <CountUp
+              end={value}
+              separator={isCurrency ? formatCurrency(1000).charAt(1) : ","}
+              decimal={isCurrency ? formatCurrency(1.1).charAt(4) : "."}
+              decimals={isCurrency || isPercentage ? 2 : 0}
+              duration={2}
+              preserveValue={true}
+              formattingFn={formatValue}
+            />
+            {isPercentage && "%"}
+          </h3>
           {valueInINR !== undefined && (
             <p className="text-sm text-gray-500 mt-1">
               ₹
@@ -75,11 +93,10 @@ const StatCard: React.FC<StatCardProps> = ({
           )}
 
           {previousValue !== undefined && (
-            <div className="flex items-center mt-2">
+            <div className="flex items-center mt-6">
               <span
-                className={`text-sm font-medium ${
-                  isPositive ? "text-green-600" : "text-red-600"
-                }`}
+                className={`text-sm font-medium ${isPositive ? "text-green-600" : "text-red-600"
+                  }`}
               >
                 {isPositive ? (
                   <ArrowUp size={16} className="inline" />

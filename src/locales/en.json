@@ -214,7 +214,21 @@
       "and": "and",
       "privacyPolicy": "Privacy Policy",
       "alreadyHaveAccountTitle": "Already have an account?",
-      "alreadyHaveAccountSubtitle": "Sign in here."
+      "alreadyHaveAccountSubtitle": "Sign in here.",
+      "errors": {
+        "usernameRequired": "Username is required",
+        "usernameMin": "Username must be at least 3 characters",
+        "emailRequired": "Email is required",
+        "emailInvalid": "Please enter a valid email address",
+        "passwordRequired": "Password is required",
+        "passwordMin": "Password must be at least 8 characters",
+        "passwordUppercase": "Password must contain at least one uppercase letter",
+        "passwordLowercase": "Password must contain at least one lowercase letter",
+        "passwordNumber": "Password must contain at least one number",
+        "passwordSpecial": "Password must contain at least one special character",
+        "confirmPasswordRequired": "Please confirm your password",
+        "passwordMatch": "Passwords must match"
+      }
     },
     "features": {
       "trackPerformance": {

@@ -72,11 +72,11 @@ const Dashboard: React.FC = () => {
     <div className="space-y-6">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div className="flex items-center gap-4">
-          <h1 className="text-2xl font-bold text-indigo-700">
+          <h1 className="text-2xl font-bold text-gray-700">
             {t("dashboard.title")}
           </h1>
           <Select
-            color={"light"}
+            color={"gray"}
             defaultValue={selectedAccount}
             onChange={(e) => setSelectedAccount(e.target.value)}
           >
@@ -96,7 +96,7 @@ const Dashboard: React.FC = () => {
       ) : (
         <div className="space-y-6">
           {/* Summary Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 3xl:grid-cols-5 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-5 3xl:grid-cols-5 gap-4">
             <StatCard
               title={t("dashboard.summary.estimatedRevenue")}
               value={dashboardData.summary.estimatedRevenue}
@@ -122,7 +122,7 @@ const Dashboard: React.FC = () => {
               isCurrency={true}
               valueInINR={convertToINR(dashboardData.summary.adSpend)}
               icon={<TrendingUp size={24} />}
-              color="danger"
+              color="primary"
             />
             <StatCard
               title={t("dashboard.summary.totalNet")}
@@ -138,7 +138,7 @@ const Dashboard: React.FC = () => {
                 dashboardData.summary.revenue - dashboardData.summary.adSpend
               )}
               icon={<BarChart2 size={24} />}
-              color="primary"
+              color="warning"
             />
             <StatCard
               title={t("dashboard.summary.apps")}

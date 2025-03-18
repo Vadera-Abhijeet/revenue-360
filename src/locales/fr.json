@@ -185,7 +185,9 @@
       "passwordRequired": "Le mot de passe est requis",
       "passwordMinLength": "Le mot de passe doit contenir au moins 6 caractères",
       "userNotFound": "Aucun compte trouvé avec cet e-mail",
-      "wrongPassword": "Mot de passe incorrect"
+      "wrongPassword": "Mot de passe incorrect",
+      "createNewAccountTitle": "Vous n'avez pas de compte ?",
+      "createNewAccountSubtitle": "Inscrivez-vous ici."
     },
     "features": {
       "trackPerformance": {
@@ -226,7 +228,22 @@
       "and": "et",
       "privacyPolicy": "Politique de confidentialité",
       "alreadyHaveAccountTitle": "Vous avez déjà un compte ?",
-      "alreadyHaveAccountSubtitle": "Connectez-vous ici."
+      "alreadyHaveAccountSubtitle": "Connectez-vous ici.",
+      "saving": "Enregistrement en cours...",
+      "errors": {
+        "usernameRequired": "Le nom d'utilisateur est requis",
+        "usernameMin": "Le nom d'utilisateur doit contenir au moins 3 caractères",
+        "emailRequired": "L'adresse e-mail est requise",
+        "emailInvalid": "Veuillez entrer une adresse e-mail valide",
+        "passwordRequired": "Le mot de passe est requis",
+        "passwordMin": "Le mot de passe doit contenir au moins 8 caractères",
+        "passwordUppercase": "Le mot de passe doit contenir au moins une lettre majuscule",
+        "passwordLowercase": "Le mot de passe doit contenir au moins une lettre minuscule",
+        "passwordNumber": "Le mot de passe doit contenir au moins un chiffre",
+        "passwordSpecial": "Le mot de passe doit contenir au moins un caractère spécial",
+        "confirmPasswordRequired": "Veuillez confirmer votre mot de passe",
+        "passwordMatch": "Les mots de passe doivent correspondre"
+      }
     }
   },
   "dashboard": {
@@ -359,7 +376,8 @@
       "company": "Entreprise",
       "role": "Rôle",
       "timezone": "Fuseau horaire",
-      "save": "Enregistrer les modifications"
+      "save": "Enregistrer les modifications",
+      "saving": "Enregistrement en cours..."
     },
     "preferences": {
       "title": "Préférences",
@@ -404,7 +422,7 @@
     "groupName": "Nom du Groupe",
     "deleteGroup": "Supprimer le Groupe",
     "deleteChart": "Supprimer le Graphique",
-    " ": "Aucun tableau disponible"
+    "noChartAvailable": "Aucun graphique disponible"
   },
   "configurations": {
     "title": "Configurations",

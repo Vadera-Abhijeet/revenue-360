@@ -35,8 +35,8 @@ const RecentCampaigns = ({
       <button
         onClick={() => setActiveFilter(value)}
         className={`px-4 py-2 text-sm font-medium rounded-md mr-2 ${isActive
-            ? "bg-purple-100 text-gray-900"
-            : "text-gray-500 hover:text-gray-700 hover:bg-gray-50"
+          ? "bg-purple-100 text-gray-900"
+          : "text-gray-500 hover:text-gray-700 hover:bg-gray-50"
           }`}
       >
         {color && (
@@ -50,7 +50,11 @@ const RecentCampaigns = ({
   };
 
   return (
-    <Card>
+    <Card theme={{
+      root: {
+        base: "flex rounded-lg border border-gray-200 bg-white  dark:border-gray-700 dark:bg-gray-800"
+      }
+    }}>
       <div className="h-full">
         <div className="mb-4 flex justify-between items-center">
           <h5 className="text-xl font-bold text-gray-900 mb-3">

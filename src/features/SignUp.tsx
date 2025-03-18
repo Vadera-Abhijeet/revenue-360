@@ -17,11 +17,22 @@ import { useAuth } from "../hooks/useAuth";
 import { Check, Camera } from "lucide-react";
 import { v4 as uuidv4 } from 'uuid';
 import { DEFAULT_AVATAR } from "../shared/constants";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 
 interface ILanguageOption {
   code: string;
   name: string;
   flag: string;
+}
+
+interface SignUpFormData {
+  username: string;
+  email: string;
+  company?: string;
+  password: string;
+  confirmPassword: string;
 }
 
 const LANGUAGES: ILanguageOption[] = [
@@ -38,17 +49,44 @@ const SignUp: React.FC = () => {
   const { isAuthenticated, signup } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [currentFrame, setCurrentFrame] = useState(0);
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [email, setEmail] = useState("");
-  const [error, setError] = useState("");
   const [selectedLanguage, setSelectedLanguage] = useState<ILanguageOption>(
     LANGUAGES[0]
   );
   const [profilePic, setProfilePic] = useState<string>(DEFAULT_AVATAR);
-  const [passwordMatch, setPasswordMatch] = useState(true);
-  const [company, setCompany] = useState("");
+
+  const validationSchema = yup.object().shape({
+    username: yup
+      .string()
+      .required(t("auth.signup.errors.usernameRequired"))
+      .min(3, t("auth.signup.errors.usernameMin")),
+    email: yup
+      .string()
+      .required(t("auth.signup.errors.emailRequired"))
+      .email(t("auth.signup.errors.emailInvalid")),
+    company: yup.string(),
+    password: yup
+      .string()
+      .required(t("auth.signup.errors.passwordRequired"))
+      .min(8, t("auth.signup.errors.passwordMin"))
+      .matches(/[A-Z]/, t("auth.signup.errors.passwordUppercase"))
+      .matches(/[a-z]/, t("auth.signup.errors.passwordLowercase"))
+      .matches(/[0-9]/, t("auth.signup.errors.passwordNumber"))
+      .matches(/[^A-Za-z0-9]/, t("auth.signup.errors.passwordSpecial")),
+    confirmPassword: yup
+      .string()
+      .required(t("auth.signup.errors.confirmPasswordRequired"))
+      .oneOf([yup.ref("password")], t("auth.signup.errors.passwordMatch")),
+  });
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    watch,
+  } = useForm<SignUpFormData>({
+    resolver: yupResolver(validationSchema),
+    mode: "onChange",
+  });
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -63,24 +101,23 @@ const SignUp: React.FC = () => {
     return () => clearInterval(interval);
   }, []);
 
-  const handleLogin = () => {
-    setError("");
-    if (!!username && !!password && passwordMatch) {
+  const onSubmit = async (data: SignUpFormData) => {
+    setIsLoading(true);
+    try {
       const mockUser = {
         id: uuidv4(),
-        name: username,
-        email: email,
-        password,
+        name: data.username,
+        email: data.email,
+        password: data.password,
         photoURL: profilePic,
-        company: company,
+        company: data.company,
       };
-      setIsLoading(true);
-      setTimeout(() => {
-        signup(mockUser);
-        navigate("/dashboard");
-      }, 1500);
-    } else {
-      setError(t("auth.login.error"));
+      await signup(mockUser);
+      navigate("/dashboard");
+    } catch (error) {
+      console.error("Signup error:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -100,6 +137,7 @@ const SignUp: React.FC = () => {
       setProfilePic(imageUrl);
     }
   };
+
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -156,7 +194,7 @@ const SignUp: React.FC = () => {
               size={"xs"}
             >
               {LANGUAGES.map((lang) => (
-                <Dropdown.Item onClick={() => changeLanguage(lang)}>
+                <Dropdown.Item key={lang.code} onClick={() => changeLanguage(lang)}>
                   <div className="flex items-center gap-2 justify-center w-full">
                     <p>{lang.flag}</p>
                     <p>{lang.name}</p>
@@ -175,16 +213,16 @@ const SignUp: React.FC = () => {
               },
             }}
           >
-            <div className="text-center mb-4 max-w-1000">
+            <div className="text-center max-w-1000">
               <h2 className="text-2xl font-bold text-gray-900">
                 {t("auth.signup.title")}
               </h2>
-              <p className="text-gray-600 mt-2">{t("auth.signup.subtitle")}</p>
+              <p className="text-gray-600 ">{t("auth.signup.subtitle")}</p>
             </div>
 
-            <div className="w-full space-y-4">
+            <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-2">
               {/* Profile Picture Upload */}
-              <div className="flex justify-center mb-6">
+              <div className="flex justify-center">
                 <label
                   htmlFor="profilePicInput"
                   className="relative cursor-pointer group"
@@ -206,73 +244,72 @@ const SignUp: React.FC = () => {
                   />
                 </label>
               </div>
+
               <div>
                 <Label htmlFor="username" value={t("auth.signup.username")} />
                 <TextInput
-                  color="indigo"
                   id="username"
                   type="text"
+                  color={errors.username ? "failure" : "indigo"}
                   placeholder={t("auth.signup.usernamePlaceholder")}
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  required
+                  {...register("username")}
                 />
+                {errors.username && (
+                  <p className="text-red-500 text-sm mt-1">{errors.username.message}</p>
+                )}
               </div>
+
               <div>
                 <Label htmlFor="email" value={t("auth.signup.email")} />
                 <TextInput
                   id="email"
-                  color="indigo"
                   type="email"
+                  color={errors.email ? "failure" : "indigo"}
                   placeholder={t("auth.signup.emailPlaceholder")}
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
+                  {...register("email")}
                 />
+                {errors.email && (
+                  <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
+                )}
               </div>
+
               <div>
                 <Label htmlFor="company" value={t("auth.signup.company")} />
                 <TextInput
                   id="company"
-                  color="indigo"
                   type="text"
+                  color={errors.company ? "failure" : "indigo"}
                   placeholder={t("auth.signup.companyPlaceholder")}
-                  value={company}
-                  onChange={(e) => setCompany(e.target.value)}
+                  {...register("company")}
                 />
+                {errors.company && (
+                  <p className="text-red-500 text-sm mt-1">{errors.company.message}</p>
+                )}
               </div>
+
               <div>
                 <Label htmlFor="password" value={t("auth.signup.password")} />
                 <TextInput
                   id="password"
-                  color="indigo"
                   type="password"
+                  color={errors.password ? "failure" : "indigo"}
                   placeholder={t("auth.signup.passwordPlaceholder")}
-                  value={password}
-                  onChange={(e) => {
-                    setPassword(e.target.value);
-                    setPasswordMatch(e.target.value === confirmPassword);
-                  }}
-                  required
+                  {...register("password")}
                 />
+                {errors.password && (
+                  <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>
+                )}
               </div>
-              <div className="relative">
-                <Label
-                  htmlFor="confirmPassword"
-                  value={t("auth.signup.confirmPassword")}
-                />
+
+              <div>
+                <Label htmlFor="confirmPassword" value={t("auth.signup.confirmPassword")} />
                 <TextInput
                   id="confirmPassword"
-                  color={passwordMatch ? "indigo" : "failure"}
                   type="password"
+                  color={errors.confirmPassword ? "failure" : "indigo"}
                   placeholder={t("auth.signup.confirmPasswordPlaceholder")}
-                  value={confirmPassword}
-                  rightIcon={!!password && passwordMatch ? Check : undefined}
-                  onChange={(e) => {
-                    setConfirmPassword(e.target.value);
-                    setPasswordMatch(e.target.value === password);
-                  }}
-                  required
+                  rightIcon={(watch("password") && watch("password") === watch("confirmPassword")) ? Check : undefined}
+                  {...register("confirmPassword")}
                   theme={{
                     field: {
                       rightIcon: {
@@ -281,17 +318,17 @@ const SignUp: React.FC = () => {
                     },
                   }}
                 />
-                {!passwordMatch && (
+                {errors.confirmPassword && (
                   <p className="text-red-500 text-sm mt-1">
-                    {t("auth.signup.errorPasswordMatch")}
+                    {errors.confirmPassword.message}
                   </p>
                 )}
               </div>
-              {error && <p className="text-red-500 text-sm">{error}</p>}
+
               <Button
+                type="submit"
                 color="indigo"
                 className="w-full"
-                onClick={handleLogin}
                 disabled={isLoading}
               >
                 <div className="flex items-center gap-2">
@@ -303,9 +340,9 @@ const SignUp: React.FC = () => {
                   </p>
                 </div>
               </Button>
-            </div>
+            </form>
 
-            <div className="mt-4 text-center text-sm text-gray-600">
+            <div className=" text-center text-sm text-gray-600">
               <p>
                 {t("auth.signup.terms")}{" "}
                 <a href="#" className="text-primary-600 hover:underline">
