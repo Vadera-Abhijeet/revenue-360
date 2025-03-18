@@ -635,14 +635,78 @@ export const fetchUserSettings = async () => {
   } as ISettings;
 };
 
+// Helper function to convert file to Base64
+const convertToBase64 = (file: File): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = (error) => reject(error);
+  });
+};
+
+// Helper function to validate image dimensions and size
+const validateImage = (file: File): Promise<boolean> => {
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.src = URL.createObjectURL(file);
+    img.onload = () => {
+      URL.revokeObjectURL(img.src);
+      const maxDimension = 1000; // Max width/height in pixels
+      const maxSize = 5 * 1024 * 1024; // 5MB in bytes
+
+      if (file.size > maxSize) {
+        alert("Image size should be less than 5MB");
+        resolve(false);
+      } else if (img.width > maxDimension || img.height > maxDimension) {
+        alert("Image dimensions should be less than 1000x1000 pixels");
+        resolve(false);
+      } else {
+        resolve(true);
+      }
+    };
+    img.onerror = () => {
+      URL.revokeObjectURL(img.src);
+      resolve(false);
+    };
+  });
+};
+
 // Update user settings
 export const updateUserSettings = async (settings: {
   account: IAccount;
   preferences: IPreferences;
+  profilePic?: File;
 }) => {
   await new Promise((resolve) => setTimeout(resolve, 800));
 
   const currentUser = JSON.parse(localStorage.getItem("user") || "{}");
+
+  // Handle profile picture if provided
+  if (settings.profilePic) {
+    try {
+      // Validate file type
+      if (!settings.profilePic.type.startsWith('image/')) {
+        throw new Error("Please upload a valid image file");
+      }
+
+      // Validate image dimensions and size
+      const isValid = await validateImage(settings.profilePic);
+      if (!isValid) {
+        throw new Error("Invalid image dimensions or size");
+      }
+
+      // Convert to Base64
+      const base64String = await convertToBase64(settings.profilePic);
+      settings.account.photoURL = base64String;
+
+      // Store in localStorage as a backup
+      localStorage.setItem('tempProfilePic', base64String);
+    } catch (error) {
+      console.error('Error processing image:', error);
+      throw new Error("Error processing image. Please try again.");
+    }
+  }
 
   // Save settings to localStorage with user-specific key
   localStorage.setItem(`settings_${currentUser.id}`, JSON.stringify(settings));

@@ -12,4 +12,4 @@ export const PLATFORM_OPTIONS = [
 ];
 
 export const DEFAULT_AVATAR =
-  "https://ui-avatars.com/api/?name=un&background=CCCCCC&color=FFFFFF&size=150&rounded=true";
+  "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541";

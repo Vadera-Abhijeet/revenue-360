@@ -230,6 +230,8 @@
       "alreadyHaveAccountTitle": "すでにアカウントをお持ちですか？",
       "alreadyHaveAccountSubtitle": "こちらからログイン",
       "saving": "保存中...",
+      "success": "アカウントが正常に作成されました！",
+      "error": "アカウントを作成できませんでした。",
       "errors": {
         "usernameRequired": "ユーザー名は必須です",
         "usernameMin": "ユーザー名は3文字以上である必要があります",
@@ -242,7 +244,12 @@
         "passwordNumber": "パスワードには数字を1文字以上含める必要があります",
         "passwordSpecial": "パスワードには特殊文字を1文字以上含める必要があります",
         "confirmPasswordRequired": "パスワードの確認を入力してください",
-        "passwordMatch": "パスワードが一致しません"
+        "passwordMatch": "パスワードが一致しません",
+        "invalidImageType": "有効な画像ファイルをアップロードしてください",
+        "imageTooLarge": "画像サイズは5MB未満である必要があります",
+        "imageDimensionsTooLarge": "画像サイズは1000x1000ピクセル未満である必要があります",
+        "imageProcessingError": "画像の処理中にエラーが発生しました。もう一度お試しください。",
+        "emailExists": "このメールアドレスのアカウントは既に存在します"
       }
     }
   },

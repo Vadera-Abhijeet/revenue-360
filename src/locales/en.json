@@ -169,11 +169,11 @@
     "login": {
       "title": "Sign In to Your Account",
       "subtitle": "Access your dashboard by signing in below.",
-      "username": "Username",
-      "usernamePlaceholder": "Enter your username",
+      "email": "Email",
+      "emailPlaceholder": "Enter your email",
       "password": "Password",
       "passwordPlaceholder": "Enter your password",
-      "error": "Invalid username or password",
+      "error": "Invalid email or password",
       "loginButton": "Login",
       "loggingIn": "Logging in...",
       "terms": "By signing in, you agree to our",
@@ -215,6 +215,10 @@
       "privacyPolicy": "Privacy Policy",
       "alreadyHaveAccountTitle": "Already have an account?",
       "alreadyHaveAccountSubtitle": "Sign in here.",
+      "name": "Full Name",
+      "namePlaceholder": "Enter your full name",
+      "success": "Account created successfully!",
+      "error": "Could not create account.",
       "errors": {
         "usernameRequired": "Username is required",
         "usernameMin": "Username must be at least 3 characters",
@@ -227,7 +231,14 @@
         "passwordNumber": "Password must contain at least one number",
         "passwordSpecial": "Password must contain at least one special character",
         "confirmPasswordRequired": "Please confirm your password",
-        "passwordMatch": "Passwords must match"
+        "passwordMatch": "Passwords must match",
+        "invalidImageType": "Please upload a valid image file",
+        "imageTooLarge": "Image size should be less than 5MB",
+        "imageDimensionsTooLarge": "Image dimensions should be less than 1000x1000 pixels",
+        "imageProcessingError": "Error processing image. Please try again.",
+        "nameRequired": "Full name is required",
+        "nameMin": "Full name must be at least 3 characters",
+        "emailExists": "An account with this email already exists"
       }
     },
     "features": {

@@ -230,6 +230,8 @@
       "alreadyHaveAccountTitle": "¿Ya tiene una cuenta?",
       "alreadyHaveAccountSubtitle": "Inicie sesión aquí.",
       "saving": "Guardando...",
+      "success": "¡Cuenta creada exitosamente!",
+      "error": "No se pudo crear la cuenta.",
       "errors": {
         "usernameRequired": "El nombre de usuario es obligatorio",
         "usernameMin": "El nombre de usuario debe tener al menos 3 caracteres",
@@ -242,7 +244,12 @@
         "passwordNumber": "La contraseña debe contener al menos un número",
         "passwordSpecial": "La contraseña debe contener al menos un carácter especial",
         "confirmPasswordRequired": "Por favor, confirma tu contraseña",
-        "passwordMatch": "Las contraseñas deben coincidir"
+        "passwordMatch": "Las contraseñas deben coincidir",
+        "invalidImageType": "Por favor, sube un archivo de imagen válido",
+        "imageTooLarge": "El tamaño de la imagen debe ser menor a 5MB",
+        "imageDimensionsTooLarge": "Las dimensiones de la imagen deben ser menores a 1000x1000 píxeles",
+        "imageProcessingError": "Error al procesar la imagen. Por favor, inténtalo de nuevo.",
+        "emailExists": "Ya existe una cuenta con este correo electrónico"
       }
     }
   },

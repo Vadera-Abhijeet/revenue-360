@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import toast from 'react-hot-toast';
 import {
   Button,
   Card,
@@ -20,6 +21,7 @@ import { DEFAULT_AVATAR } from "../shared/constants";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { IUser } from "../interfaces";
 
 interface ILanguageOption {
   code: string;
@@ -101,10 +103,95 @@ const SignUp: React.FC = () => {
     return () => clearInterval(interval);
   }, []);
 
+  // Function to convert file to Base64
+  const convertToBase64 = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = (error) => reject(error);
+    });
+  };
+
+  // Function to validate image dimensions and size
+  const validateImage = (file: File): Promise<boolean> => {
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.src = URL.createObjectURL(file);
+      img.onload = () => {
+        URL.revokeObjectURL(img.src);
+        const maxDimension = 1000; // Max width/height in pixels
+        const maxSize = 5 * 1024 * 1024; // 5MB in bytes
+
+        if (file.size > maxSize) {
+          alert(t("auth.signup.errors.imageTooLarge", "Image size should be less than 5MB"));
+          resolve(false);
+        } else if (img.width > maxDimension || img.height > maxDimension) {
+          alert(t("auth.signup.errors.imageDimensionsTooLarge", "Image dimensions should be less than 1000x1000 pixels"));
+          resolve(false);
+        } else {
+          resolve(true);
+        }
+      };
+      img.onerror = () => {
+        URL.revokeObjectURL(img.src);
+        resolve(false);
+      };
+    });
+  };
+
+  // Modified profile picture handling
+  const handleProfilePicChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      try {
+        // Validate file type
+        if (!file.type.startsWith('image/')) {
+          alert(t("auth.signup.errors.invalidImageType", "Please upload a valid image file"));
+          return;
+        }
+
+        // Validate image dimensions and size
+        const isValid = await validateImage(file);
+        if (!isValid) return;
+
+        // Convert to Base64
+        const base64String = await convertToBase64(file);
+
+        // Compress if needed (you might want to add a compression step here)
+        setProfilePic(base64String);
+
+        // Store in localStorage as a backup
+        localStorage.setItem('tempProfilePic', base64String);
+      } catch (error) {
+        console.error('Error processing image:', error);
+        alert(t("auth.signup.errors.imageProcessingError", "Error processing image. Please try again."));
+      }
+    }
+  };
+
+  // Load profile pic from localStorage on component mount
+  useEffect(() => {
+    const savedProfilePic = localStorage.getItem('tempProfilePic');
+    if (savedProfilePic) {
+      setProfilePic(savedProfilePic);
+    }
+  }, []);
+
   const onSubmit = async (data: SignUpFormData) => {
     setIsLoading(true);
     try {
-      const mockUser = {
+      // Check if user already exists
+      const users = JSON.parse(localStorage.getItem("users") || "[]");
+      const existingUser = users.find((user: IUser) => user.email === data.email);
+
+      if (existingUser) {
+        setIsLoading(false);
+        toast.error(t("auth.signup.errors.emailExists"));
+        return;
+      }
+
+      const mockUser: IUser = {
         id: uuidv4(),
         name: data.username,
         email: data.email,
@@ -112,12 +199,29 @@ const SignUp: React.FC = () => {
         photoURL: profilePic,
         company: data.company,
       };
-      await signup(mockUser);
-      navigate("/dashboard");
+
+      // Add user to localStorage
+      localStorage.setItem("users", JSON.stringify([...users, mockUser]));
+
+      toast.promise(
+        new Promise((resolve) => {
+          setTimeout(() => {
+            signup(mockUser);
+            localStorage.removeItem('tempProfilePic');
+            navigate("/dashboard");
+            resolve(true);
+          }, 1500);
+        }),
+        {
+          loading: t("auth.signup.signingUp"),
+          success: t("auth.signup.success"),
+          error: t("auth.signup.error"),
+        }
+      );
+
     } catch (error) {
       console.error("Signup error:", error);
-    } finally {
-      setIsLoading(false);
+      toast.error(t("auth.signup.error"));
     }
   };
 
@@ -126,18 +230,6 @@ const SignUp: React.FC = () => {
     i18n.changeLanguage(lng.code);
     setSelectedLanguage(lng);
   };
-
-  // Profile picture handling
-  const handleProfilePicChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setProfilePic(imageUrl);
-    }
-  };
-
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -220,7 +312,12 @@ const SignUp: React.FC = () => {
               <p className="text-gray-600 ">{t("auth.signup.subtitle")}</p>
             </div>
 
-            <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-2">
+            <form
+              onSubmit={handleSubmit(onSubmit)}
+              className="w-full space-y-2"
+              name="signup"
+              autoComplete="on"
+            >
               {/* Profile Picture Upload */}
               <div className="flex justify-center">
                 <label
@@ -250,6 +347,7 @@ const SignUp: React.FC = () => {
                 <TextInput
                   id="username"
                   type="text"
+                  autoComplete="name"
                   color={errors.username ? "failure" : "indigo"}
                   placeholder={t("auth.signup.usernamePlaceholder")}
                   {...register("username")}
@@ -264,6 +362,7 @@ const SignUp: React.FC = () => {
                 <TextInput
                   id="email"
                   type="email"
+                  autoComplete="email"
                   color={errors.email ? "failure" : "indigo"}
                   placeholder={t("auth.signup.emailPlaceholder")}
                   {...register("email")}
@@ -278,6 +377,7 @@ const SignUp: React.FC = () => {
                 <TextInput
                   id="company"
                   type="text"
+                  autoComplete="organization"
                   color={errors.company ? "failure" : "indigo"}
                   placeholder={t("auth.signup.companyPlaceholder")}
                   {...register("company")}
@@ -292,6 +392,7 @@ const SignUp: React.FC = () => {
                 <TextInput
                   id="password"
                   type="password"
+                  autoComplete="new-password"
                   color={errors.password ? "failure" : "indigo"}
                   placeholder={t("auth.signup.passwordPlaceholder")}
                   {...register("password")}
@@ -306,6 +407,7 @@ const SignUp: React.FC = () => {
                 <TextInput
                   id="confirmPassword"
                   type="password"
+                  autoComplete="new-password"
                   color={errors.confirmPassword ? "failure" : "indigo"}
                   placeholder={t("auth.signup.confirmPasswordPlaceholder")}
                   rightIcon={(watch("password") && watch("password") === watch("confirmPassword")) ? Check : undefined}

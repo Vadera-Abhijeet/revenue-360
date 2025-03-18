@@ -71,4 +71,5 @@ export interface IUser {
   email: string;
   password: string;
   photoURL: string;
+  company?: string;
 }

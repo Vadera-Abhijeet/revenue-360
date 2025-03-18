@@ -27,6 +27,7 @@ import { CurrencyProvider } from "./contexts/CurrencyContext";
 import { NotificationProvider } from "./contexts/NotificationContext";
 // Theme
 import { flowbiteTheme } from "./theme";
+import { Toaster } from "react-hot-toast";
 
 function App() {
   const { i18n } = useTranslation();
@@ -126,6 +127,10 @@ function App() {
                   <Route path="*" element={<Navigate to="/404" replace />} />
                 </Routes>
               </div>
+              <Toaster
+                position="bottom-right"
+                reverseOrder={false}
+              />
             </ChartConfigProvider>
           </NotificationProvider>
         </CurrencyProvider>

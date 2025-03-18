@@ -34,7 +34,7 @@ const LANGUAGES: ILanguageOption[] = [
 ];
 
 interface SignInFormInputs {
-  username: string;
+  email: string;
   password: string;
 }
 
@@ -49,7 +49,7 @@ const SignIn: React.FC = () => {
 
   // Add Yup Schema
   const schema = yup.object({
-    username: yup
+    email: yup
       .string()
       .email(t("auth.login.invalidEmail"))
       .required(t("auth.login.emailRequired")),
@@ -86,7 +86,7 @@ const SignIn: React.FC = () => {
 
     // Get users from localStorage
     const users = JSON.parse(localStorage.getItem("users") || "[]");
-    const foundUser = users.find((user: IUser) => user.email === data.username);
+    const foundUser = users.find((user: IUser) => user.email === data.email);
 
     if (foundUser) {
       // Check if password matches
@@ -192,18 +192,24 @@ const SignIn: React.FC = () => {
               <p className="text-gray-600 mt-2">{t("auth.login.subtitle")}</p>
             </div>
 
-            <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-4">
+            <form
+              onSubmit={handleSubmit(onSubmit)}
+              className="w-full space-y-4"
+              name="login"
+              autoComplete="on"
+            >
               <div>
-                <Label htmlFor="username" value={t("auth.login.username")} />
+                <Label htmlFor="email" value={t("auth.login.email")} />
                 <TextInput
-                  color={errors.username ? "failure" : "indigo"}
-                  id="username"
+                  color={errors.email ? "failure" : "indigo"}
+                  id="email"
                   type="email"
-                  placeholder={t("auth.login.usernamePlaceholder")}
-                  {...register("username")}
+                  autoComplete="username"
+                  placeholder={t("auth.login.emailPlaceholder")}
+                  {...register("email")}
                 />
-                {errors.username && (
-                  <p className="text-red-500 text-sm mt-1">{errors.username.message}</p>
+                {errors.email && (
+                  <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
                 )}
               </div>
               <div>
@@ -212,6 +218,7 @@ const SignIn: React.FC = () => {
                   id="password"
                   color={errors.password ? "failure" : "indigo"}
                   type="password"
+                  autoComplete="current-password"
                   placeholder={t("auth.login.passwordPlaceholder")}
                   {...register("password")}
                 />
