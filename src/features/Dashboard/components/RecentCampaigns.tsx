@@ -34,10 +34,11 @@ const RecentCampaigns = ({
     return (
       <button
         onClick={() => setActiveFilter(value)}
-        className={`px-4 py-2 text-sm font-medium rounded-md mr-2 ${isActive
-          ? "bg-purple-100 text-gray-900"
-          : "text-gray-500 hover:text-gray-700 hover:bg-gray-50"
-          }`}
+        className={`px-4 py-2 text-sm font-medium rounded-md mr-2 ${
+          isActive
+            ? "bg-purple-100 text-gray-900"
+            : "text-gray-500 hover:text-gray-700 hover:bg-gray-50"
+        }`}
       >
         {color && (
           <span
@@ -50,14 +51,16 @@ const RecentCampaigns = ({
   };
 
   return (
-    <Card theme={{
-      root: {
-        base: "flex rounded-lg border border-gray-200 bg-white  dark:border-gray-700 dark:bg-gray-800"
-      }
-    }}>
+    <Card
+      theme={{
+        root: {
+          base: "flex rounded-lg border border-gray-200 bg-white  dark:border-gray-700 dark:bg-gray-800",
+        },
+      }}
+    >
       <div className="h-full">
         <div className="mb-4 flex justify-between items-center">
-          <h5 className="text-xl font-bold text-gray-900 mb-3">
+          <h5 className="text-xl font-bold text-gray-700 mb-3">
             {t("dashboard.recentCampaigns.title")}
           </h5>
           <div className="flex flex-wrap  pb-2">
@@ -102,8 +105,8 @@ const RecentCampaigns = ({
                           campaign.status === "active"
                             ? "success"
                             : campaign.status === "paused"
-                              ? "warning"
-                              : "failure"
+                            ? "warning"
+                            : "failure"
                         }
                         className="w-max capitalize"
                       >

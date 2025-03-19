@@ -286,7 +286,7 @@
     }
   },
   "apps": {
-    "title": "Liste des applications",
+    "title": "Liste",
     "addApp": "Ajouter une application",
     "search": "Rechercher des applications...",
     "filter": "Filtrer",
@@ -329,7 +329,7 @@
     }
   },
   "campaigns": {
-    "title": "Campagnes",
+    "title": "Liste",
     "addCampaign": "Ajouter une campagne",
     "search": "Rechercher des campagnes...",
     "filter": "Filtrer",

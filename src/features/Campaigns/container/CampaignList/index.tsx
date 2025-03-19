@@ -81,13 +81,13 @@ const Campaigns: React.FC = () => {
   return (
     <div className="space-y-6">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-        <h1 className="text-2xl font-bold text-indigo-700">
+        <h1 className="text-2xl font-bold text-gray-700">
           {t("campaigns.title")}
         </h1>
         <div className="flex gap-2">
           <DateRangePicker onDateRangeChange={handleDateRangeChange} />
           <TextInput
-            color={"indigo"}
+            color={"gray"}
             id="search"
             type="text"
             icon={Search}

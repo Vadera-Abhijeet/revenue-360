@@ -174,11 +174,12 @@ const Settings: React.FC = () => {
       });
       setCurrency(formData.preferences.currency);
 
-      if (user && (
-        formData.account.name !== user.name ||
-        formData.account.email !== user.email ||
-        formData.account.photoURL !== user.photoURL
-      )) {
+      if (
+        user &&
+        (formData.account.name !== user.name ||
+          formData.account.email !== user.email ||
+          formData.account.photoURL !== user.photoURL)
+      ) {
         setUser({
           ...user,
           name: formData.account.name,
@@ -198,12 +199,12 @@ const Settings: React.FC = () => {
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setFormData(prev => ({
+        setFormData((prev) => ({
           ...prev,
           account: {
             ...prev.account,
-            photoURL: reader.result as string
-          }
+            photoURL: reader.result as string,
+          },
         }));
       };
       reader.readAsDataURL(file);
@@ -220,7 +221,7 @@ const Settings: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold text-gray-900">
+      <h1 className="text-2xl font-bold text-gray-700">
         {t("settings.title")}
       </h1>
 
@@ -505,10 +506,11 @@ const Settings: React.FC = () => {
                 {plans.map((plan) => (
                   <Card
                     key={plan.name}
-                    className={`p-6 w-80 shadow-lg ${plan.buttonVariant === "active"
-                      ? "border-2 border-blue-600"
-                      : ""
-                      }`}
+                    className={`p-6 w-80 shadow-lg ${
+                      plan.buttonVariant === "active"
+                        ? "border-2 border-blue-600"
+                        : ""
+                    }`}
                     theme={{
                       root: {
                         children:

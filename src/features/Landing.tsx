@@ -16,7 +16,7 @@ import {
   IllustrationAnalyticsTeam,
   IllustrationDataChart,
 } from "../assets/Illustrations";
-import brandLogo from "../assets/images/brand.png";
+import brandLogo from "../assets/images/Logo.png";
 
 const Landing: React.FC = () => {
   const { t } = useTranslation();

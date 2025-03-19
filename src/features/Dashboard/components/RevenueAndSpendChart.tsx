@@ -22,12 +22,14 @@ const RevenueAndSpendChart = ({
   const { formatCurrency } = useCurrency();
 
   return (
-    <Card theme={{
-      root: {
-        base: "flex rounded-lg border border-gray-200 bg-white  dark:border-gray-700 dark:bg-gray-800"
-      }
-    }}>
-      <h5 className="text-xl font-bold mb-2 text-gray-900">
+    <Card
+      theme={{
+        root: {
+          base: "flex rounded-lg border border-gray-200 bg-white  dark:border-gray-700 dark:bg-gray-800",
+        },
+      }}
+    >
+      <h5 className="text-xl font-bold mb-2 text-gray-700">
         {t("dashboard.revenueVsSpend.title")}
       </h5>
       <div className="h-80">

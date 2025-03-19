@@ -152,4 +152,37 @@ export const flowbiteTheme: CustomFlowbiteTheme = {
       },
     },
   },
+  textInput: {
+    field: {
+      input: {
+        colors: {
+          gray: "border-gray-300 bg-gray-50 text-gray-900 focus:ring-4 focus:border-gray-300 focus:ring-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:ring-gray-700",
+        },
+      },
+    },
+  },
+  textarea: {
+    colors: {
+      gray: "border-gray-300 bg-gray-50 text-gray-900 focus:ring-4 focus:border-gray-300 focus:ring-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:ring-gray-700",
+    },
+  },
+  fileInput: {
+    field: {
+      input: {
+        colors: {
+          gray: "border-gray-300 bg-gray-50 text-gray-900 focus:ring-4 focus:border-gray-300 focus:ring-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:ring-gray-700",
+        },
+      },
+    },
+  },
+  select: {
+    field: {
+      select: {
+        base: "block w-full border disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer",
+        colors: {
+          gray: "border-gray-300 bg-gray-50 text-gray-900 focus:ring-4 focus:border-gray-300 focus:ring-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:ring-gray-700",
+        },
+      },
+    },
+  },
 };

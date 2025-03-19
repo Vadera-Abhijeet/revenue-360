@@ -66,14 +66,14 @@ const StatCard: React.FC<StatCardProps> = ({
       onClick={onClick}
       theme={{
         root: {
-          base: "flex rounded-lg border border-gray-200 bg-white  dark:border-gray-700 dark:bg-gray-800"
-        }
+          base: "flex rounded-lg border border-gray-200 bg-white  dark:border-gray-700 dark:bg-gray-800",
+        },
       }}
     >
       <div className="flex items-center justify-between">
         <div>
           <p className="text-sm font-medium text-gray-500">{title}</p>
-          <h3 className="text-2xl font-bold mt-1">
+          <h3 className="text-2xl font-bold mt-1 text-gray-700">
             <CountUp
               end={value}
               separator={isCurrency ? formatCurrency(1000).charAt(1) : ","}
@@ -95,8 +95,9 @@ const StatCard: React.FC<StatCardProps> = ({
           {previousValue !== undefined && (
             <div className="flex items-center mt-6">
               <span
-                className={`text-sm font-medium ${isPositive ? "text-green-600" : "text-red-600"
-                  }`}
+                className={`text-sm font-medium ${
+                  isPositive ? "text-green-600" : "text-red-600"
+                }`}
               >
                 {isPositive ? (
                   <ArrowUp size={16} className="inline" />

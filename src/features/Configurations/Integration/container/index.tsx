@@ -79,8 +79,8 @@ const Configurations: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-        <h1 className="text-2xl font-bold text-indigo-700">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 min-h-[42px]">
+        <h1 className="text-2xl font-bold text-gray-700">
           {t("configurations.title")}
         </h1>
       </div>

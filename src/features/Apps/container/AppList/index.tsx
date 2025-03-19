@@ -80,15 +80,13 @@ const AppList: React.FC = () => {
   return (
     <div className="space-y-5">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-        <h1 className="text-2xl font-bold text-indigo-700">
-          {t("apps.title")}
-        </h1>
+        <h1 className="text-2xl font-bold text-gray-700">{t("apps.title")}</h1>
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div className="w-full">
             <TextInput
               id="search"
               type="text"
-              color={"indigo"}
+              color={"gray"}
               icon={Search}
               placeholder={t("apps.search")}
               value={searchTerm}

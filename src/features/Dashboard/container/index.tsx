@@ -73,7 +73,7 @@ const Dashboard: React.FC = () => {
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div className="flex items-center gap-4">
           <h1 className="text-2xl font-bold text-gray-700">
-            {t("dashboard.title")}
+            {t("common.account")}
           </h1>
           <Select
             color={"gray"}
