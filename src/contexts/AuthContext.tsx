@@ -44,7 +44,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const logout = () => {
     setUser(null);
     localStorage.removeItem("user");
-    navigate("/sign-in");
+    navigate("/auth");
   };
 
   const signup = (userData: IUser) => {

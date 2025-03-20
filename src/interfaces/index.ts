@@ -73,3 +73,10 @@ export interface IUser {
   photoURL: string;
   company?: string;
 }
+
+
+export interface ILanguageOption {
+  code: string;
+  name: string;
+  flag: string;
+}

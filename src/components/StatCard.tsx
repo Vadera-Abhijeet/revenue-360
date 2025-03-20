@@ -95,9 +95,8 @@ const StatCard: React.FC<StatCardProps> = ({
           {previousValue !== undefined && (
             <div className="flex items-center mt-6">
               <span
-                className={`text-sm font-medium ${
-                  isPositive ? "text-green-600" : "text-red-600"
-                }`}
+                className={`text-sm font-medium ${isPositive ? "text-green-600" : "text-red-600"
+                  }`}
               >
                 {isPositive ? (
                   <ArrowUp size={16} className="inline" />

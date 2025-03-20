@@ -30,10 +30,10 @@ const Landing: React.FC = () => {
           <img src={brandLogo} alt="brand-logo" className="h-9" />
         </Navbar.Brand>
         <div className="flex md:order-2 gap-2">
-          <Button color="light" onClick={() => navigate("/sign-up")}>
+          <Button color="light" onClick={() => navigate("/auth")}>
             {t("landing.hero.login")}
           </Button>
-          <Button color="indigo" onClick={() => navigate("/sign-up")}>
+          <Button color="indigo" onClick={() => navigate("/auth?mode=signup")}>
             {t("landing.hero.cta")}
           </Button>
           <Navbar.Toggle />
@@ -68,14 +68,14 @@ const Landing: React.FC = () => {
               <Button
                 size="lg"
                 color="indigo"
-                onClick={() => navigate("/sign-up")}
+                onClick={() => navigate("/auth?mode=signup")}
               >
                 {t("landing.hero.cta")}
               </Button>
               <Button
                 size="lg"
                 color="light"
-                onClick={() => navigate("/sign-up")}
+                onClick={() => navigate("/auth?mode=signup")}
               >
                 {t("landing.hero.login")}
               </Button>
@@ -184,7 +184,7 @@ const Landing: React.FC = () => {
             <Button
               size="lg"
               color="light"
-              onClick={() => navigate("/sign-up")}
+              onClick={() => navigate("/auth?mode=signup")}
             >
               {t("landing.cta.button")}
             </Button>

@@ -13,8 +13,7 @@ import NotFound from "./features/NotFound";
 import Notifications from "./features/Notifications";
 import Settings from "./features/Settings";
 import Configurations from "./features/Configurations/Integration/container";
-import SignIn from "./features/SignIn";
-import SignUp from "./features/SignUp";
+import Auth from "./features/Auth";
 
 // Components
 import Layout from "./components/Layout";
@@ -41,8 +40,7 @@ function App() {
               <div dir={i18n.dir()} className="min-h-screen bg-gray-50">
                 <Routes>
                   <Route path="/" element={<Landing />} />
-                  <Route path="/sign-in" element={<SignIn />} />
-                  <Route path="/sign-up" element={<SignUp />} />
+                  <Route path="/auth" element={<Auth />} />
                   <Route
                     path="/dashboard"
                     element={

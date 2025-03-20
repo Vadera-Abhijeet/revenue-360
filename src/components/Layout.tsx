@@ -1,4 +1,4 @@
-import { IUser } from "@/interfaces";
+import { IUser } from "../interfaces";
 import { PuzzlePiece } from "@phosphor-icons/react";
 import {
   Avatar,
@@ -30,8 +30,8 @@ import { CurrencyCode, useCurrency } from "../contexts/CurrencyContext";
 import { useNotifications } from "../contexts/NotificationContext";
 import Notifications from "../features/Notifications";
 import { useAuth } from "../hooks/useAuth";
-import { currencies, languages } from "../shared/constants";
 import { Location, useLocation } from "react-router-dom";
+import { LANGUAGES_OPTIONS, CURRENCIES_OPTIONS } from "../shared/constants";
 
 interface INavItem {
   label: string;
@@ -252,7 +252,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 <Dropdown.Header>
                   <span className="block text-sm">{t("common.language")}</span>
                 </Dropdown.Header>
-                {languages.map((lang) => (
+                {LANGUAGES_OPTIONS.map((lang) => (
                   <Dropdown.Item
                     key={lang.code}
                     onClick={() => changeLanguage(lang.code)}
@@ -303,7 +303,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 <Dropdown.Header>
                   <span className="block text-sm">{t("common.currency")}</span>
                 </Dropdown.Header>
-                {currencies.map((curr) => (
+                {CURRENCIES_OPTIONS.map((curr) => (
                   <Dropdown.Item
                     key={curr.code}
                     onClick={() => setCurrency(curr.code as CurrencyCode)}
