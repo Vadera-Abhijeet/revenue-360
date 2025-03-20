@@ -67,7 +67,7 @@ export interface ChartGroup {
 
 export interface IUser {
   id: string;
-  name: string;
+  name?: string;
   email: string;
   password: string;
   photoURL: string;

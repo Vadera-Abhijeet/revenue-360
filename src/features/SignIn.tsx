@@ -13,7 +13,7 @@ import { useNavigate } from "react-router-dom";
 import * as yup from "yup";
 import { useAuth } from "../hooks/useAuth";
 import { IUser } from "../interfaces";
-
+import brandLogo from "../assets/images/Logo.png";
 interface SignInFormInputs {
   email: string;
   password: string;
@@ -84,11 +84,14 @@ const SignIn: React.FC<{ handleSwap: () => void }> = ({ handleSwap }) => {
               },
             }}
           >
-            <div className="text-center mb-4 max-w-1000">
-              <h2 className="text-2xl font-bold text-gray-900">
+            <div className="flex w-full justify-center items-center z-20">
+              <img src={brandLogo} alt="Logo" className="w-1/2 object-contain cursor-pointer" onClick={() => navigate("/")} />
+            </div>
+            <div className="text-center  max-w-1000">
+              {/* <h2 className="text-2xl font-bold text-gray-900">
                 {t("auth.login.title")}
-              </h2>
-              <p className="text-gray-600 mt-2">{t("auth.login.subtitle")}</p>
+              </h2> */}
+              <p className="text-gray-600 ">{t("auth.login.subtitle")}</p>
             </div>
 
             <form
@@ -139,7 +142,7 @@ const SignIn: React.FC<{ handleSwap: () => void }> = ({ handleSwap }) => {
               </Button>
             </form>
 
-            <div className="mt-4 text-center text-sm text-gray-600">
+            {/* <div className="mt-4 text-center text-sm text-gray-600">
               <p>
                 {t("auth.login.terms")}{" "}
                 <a href="#" className="text-primary-600 hover:underline">
@@ -150,7 +153,7 @@ const SignIn: React.FC<{ handleSwap: () => void }> = ({ handleSwap }) => {
                   {t("auth.login.privacyPolicy")}
                 </a>
               </p>
-            </div>
+            </div> */}
             <div className="text-center text-sm text-gray-600">
               <p>
                 {t("auth.login.createNewAccountTitle")}{" "}

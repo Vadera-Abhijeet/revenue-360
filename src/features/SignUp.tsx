@@ -6,7 +6,7 @@ import {
   Spinner,
   TextInput
 } from "flowbite-react";
-import { Camera, Check } from "lucide-react";
+import { Check } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from 'react-hot-toast';
@@ -14,15 +14,15 @@ import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from 'uuid';
 import * as yup from "yup";
+import brandLogo from "../assets/images/Logo.png";
 import { useAuth } from "../hooks/useAuth";
 import { IUser } from "../interfaces";
 import { DEFAULT_AVATAR } from "../shared/constants";
 
-
 interface SignUpFormData {
-  username: string;
+  // username: string;
   email: string;
-  company?: string;
+  // company?: string;
   password: string;
   confirmPassword: string;
 }
@@ -37,15 +37,15 @@ const SignUp: React.FC<{ handleSwap: () => void }> = ({ handleSwap }) => {
   const [profilePic, setProfilePic] = useState<string>(DEFAULT_AVATAR);
 
   const validationSchema = yup.object().shape({
-    username: yup
-      .string()
-      .required(t("auth.signup.errors.usernameRequired"))
-      .min(3, t("auth.signup.errors.usernameMin")),
+    // username: yup
+    //   .string()
+    //   .required(t("auth.signup.errors.usernameRequired"))
+    //   .min(3, t("auth.signup.errors.usernameMin")),
     email: yup
       .string()
       .required(t("auth.signup.errors.emailRequired"))
       .email(t("auth.signup.errors.emailInvalid")),
-    company: yup.string(),
+    // company: yup.string(),
     password: yup
       .string()
       .required(t("auth.signup.errors.passwordRequired"))
@@ -161,11 +161,11 @@ const SignUp: React.FC<{ handleSwap: () => void }> = ({ handleSwap }) => {
 
       const mockUser: IUser = {
         id: uuidv4(),
-        name: data.username,
+        // name: data.username,
         email: data.email,
         password: data.password,
         photoURL: profilePic,
-        company: data.company,
+        // company: data.company,
       };
 
       // Add user to localStorage
@@ -206,10 +206,13 @@ const SignUp: React.FC<{ handleSwap: () => void }> = ({ handleSwap }) => {
               },
             }}
           >
+            <div className="flex w-full justify-center items-center z-20">
+              <img src={brandLogo} alt="Logo" className="w-1/2 object-contain cursor-pointer" onClick={() => navigate("/")} />
+            </div>
             <div className="text-center max-w-1000">
-              <h2 className="text-2xl font-bold text-gray-900">
+              {/* <h2 className="text-2xl font-bold text-gray-900">
                 {t("auth.signup.title")}
-              </h2>
+              </h2> */}
               <p className="text-gray-600 ">{t("auth.signup.subtitle")}</p>
             </div>
 
@@ -220,7 +223,7 @@ const SignUp: React.FC<{ handleSwap: () => void }> = ({ handleSwap }) => {
               autoComplete="on"
             >
               {/* Profile Picture Upload */}
-              <div className="flex justify-center">
+              {/* <div className="flex justify-center">
                 <label
                   htmlFor="profilePicInput"
                   className="relative cursor-pointer group"
@@ -241,9 +244,9 @@ const SignUp: React.FC<{ handleSwap: () => void }> = ({ handleSwap }) => {
                     onChange={handleProfilePicChange}
                   />
                 </label>
-              </div>
+              </div> */}
 
-              <div>
+              {/* <div>
                 <Label htmlFor="username" value={t("auth.signup.username")} />
                 <TextInput
                   id="username"
@@ -255,7 +258,7 @@ const SignUp: React.FC<{ handleSwap: () => void }> = ({ handleSwap }) => {
                   {...register("username")}
                 />
                 <p className="text-red-500 text-xs mt-1 min-h-4">{errors.username?.message || ""}</p>
-              </div>
+              </div> */}
 
               <div>
                 <Label htmlFor="email" value={t("auth.signup.email")} />
@@ -269,7 +272,7 @@ const SignUp: React.FC<{ handleSwap: () => void }> = ({ handleSwap }) => {
                 />
                 <p className="text-red-500 text-xs mt-1 min-h-4">{errors.email?.message || ""}</p>
               </div>
-
+              {/* 
               <div>
                 <Label htmlFor="company" value={t("auth.signup.company")} />
                 <TextInput
@@ -281,7 +284,7 @@ const SignUp: React.FC<{ handleSwap: () => void }> = ({ handleSwap }) => {
                   {...register("company")}
                 />
                 <p className="text-red-500 text-xs mt-1 min-h-4">{errors.company?.message || ""}</p>
-              </div>
+              </div> */}
 
               <div>
                 <Label htmlFor="password" value={t("auth.signup.password")} />

@@ -73,9 +73,7 @@ const Auth: React.FC = () => {
           }}
           transition={{ duration: 0.5, ease: "easeInOut" }}
         >
-          <div className="absolute top-10  flex w-full justify-center items-center z-20">
-            <img src={brandLogo} alt="Logo" className="w-1/3 object-contain cursor-pointer" onClick={() => navigate("/")} />
-          </div>
+
           {[
             {
               title: t("auth.features.trackPerformance.title"),
@@ -127,7 +125,7 @@ const Auth: React.FC = () => {
               transition={{ duration: 0.3 }}
             >
               {/* Language Switcher - Top Right */}
-              <div className={`absolute top-4 ${formMode === 'signup' ? "left-4" : "right-4"} z-10`}>
+              {/* <div className={`absolute top-4 ${formMode === 'signup' ? "left-4" : "right-4"} z-10`}>
                 <Dropdown
                   label={
                     <div className="flex items-center gap-2">
@@ -150,7 +148,7 @@ const Auth: React.FC = () => {
                     </Dropdown.Item>
                   ))}
                 </Dropdown>
-              </div>
+              </div> */}
               {/* Sign-up and Sign-in forms */}
               {formMode === 'signup' ? (
                 <SignUp handleSwap={handleSwap} />
