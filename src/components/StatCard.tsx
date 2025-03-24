@@ -62,7 +62,7 @@ const StatCard: React.FC<StatCardProps> = ({
 
   return (
     <Card
-      className={`overflow-hidden ${onClick ? "cursor-pointer" : ""}`}
+      className={`overflow-hidden transition-all duration-200 ${onClick ? "cursor-pointer hover:shadow-lg hover:scale-105" : ""}`}
       onClick={onClick}
       theme={{
         root: {

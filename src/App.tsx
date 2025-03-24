@@ -12,7 +12,8 @@ import Landing from "./features/Landing";
 import NotFound from "./features/NotFound";
 import Notifications from "./features/Notifications";
 import Settings from "./features/Settings";
-import Configurations from "./features/Configurations/Integration/container";
+import Integrations from "./features/Configurations/Integration/container";
+import TeamManagement from "./features/Configurations/TeamManagement/container";
 import Auth from "./features/Auth";
 
 // Components
@@ -112,11 +113,21 @@ function App() {
                     }
                   />
                   <Route
-                    path="/configurations"
+                    path="/configurations/integrations"
                     element={
                       <ProtectedRoute>
                         <Layout>
-                          <Configurations />
+                          <Integrations />
+                        </Layout>
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/configurations/team-management"
+                    element={
+                      <ProtectedRoute>
+                        <Layout>
+                          <TeamManagement />
                         </Layout>
                       </ProtectedRoute>
                     }

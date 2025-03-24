@@ -1,5 +1,5 @@
 import { Badge, Button, Table, TextInput } from "flowbite-react";
-import { BarChart2, Eye, Search } from "lucide-react";
+import { BarChart2, Eye, Megaphone, Search } from "lucide-react";
 import React, { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
@@ -81,9 +81,12 @@ const Campaigns: React.FC = () => {
   return (
     <div className="space-y-6">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-        <h1 className="text-2xl font-bold text-gray-700">
-          {t("campaigns.title")}
-        </h1>
+        <div className="flex items-center gap-4">
+          <Megaphone size={20} className="text-gray-700" />
+          <h1 className="text-2xl font-bold text-gray-700">
+            {t("campaigns.title")}
+          </h1>
+        </div>
         <div className="flex gap-2">
           <DateRangePicker onDateRangeChange={handleDateRangeChange} />
           <TextInput

@@ -1,22 +1,21 @@
-import { Select } from "flowbite-react";
-import {
-  BarChart2,
-  Calculator,
-  DollarSign,
-  Smartphone,
-  TrendingUp,
-} from "lucide-react";
-import React, { useEffect, useState } from "react";
+import { Button, ListGroup, Popover } from "flowbite-react";
+import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
+import { Calculator, ChevronDown, Smartphone, Users } from "lucide-react";
 import DateRangePicker from "../../../components/DateRangePicker";
 import StatCard from "../../../components/StatCard";
 import { useCurrency } from "../../../contexts/CurrencyContext";
-import { fetchDashboardData } from "../../../services/api";
-import RecentCampaigns from "../components/RecentCampaigns";
+import { IDashboard } from "../interface";
+import {
+  BarChart2,
+  DollarSign,
+  TrendingUp,
+} from "lucide-react";
 import RevenueAndSpendChart from "../components/RevenueAndSpendChart";
 import TopPerformingAppChart from "../components/TopPerformingAppChart";
-import { IDashboard } from "../interface";
+import { fetchDashboardData } from "../../../services/api";
+import RecentCampaigns from "../components/RecentCampaigns";
 
 const accounts = [
   { label: "All", value: "" },
@@ -33,6 +32,7 @@ const Dashboard: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [dashboardData, setDashboardData] = useState<IDashboard | undefined>();
   const [selectedAccount, setSelectedAccount] = useState(accounts[0].value);
+  const [openAccountDropdown, setOpenAccountDropdown] = useState(false);
   const [startDate, setStartDate] = useState<Date>(
     new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
   );
@@ -68,24 +68,45 @@ const Dashboard: React.FC = () => {
     return convertCurrency(value, currency, "INR");
   };
 
+  const handleAccountChange = useCallback((account: string) => {
+    setSelectedAccount(account)
+    setOpenAccountDropdown(false)
+  }, [])
+
+
   return (
     <div className="space-y-6">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div className="flex items-center gap-4">
+          <Users size={20} className="text-gray-700" />
           <h1 className="text-2xl font-bold text-gray-700">
             {t("common.account")}
           </h1>
-          <Select
-            color={"gray"}
-            defaultValue={selectedAccount}
-            onChange={(e) => setSelectedAccount(e.target.value)}
+          <Popover
+            color="light"
+            placement="right-start"
+            open={openAccountDropdown}
+            onOpenChange={setOpenAccountDropdown}
+            content={
+              <ListGroup className="w-48" color="light">
+                {accounts.map((account) => (<ListGroup.Item key={account.value} active={selectedAccount === account.value} onClick={() => handleAccountChange(account.value)}>{account.label}</ListGroup.Item>))}
+              </ListGroup>
+            }
+            theme={{
+              content: "z-10 overflow-hidden rounded-[7px] shadow-md ",
+            }}
           >
-            {accounts.map((account) => (
-              <option key={account.value} value={account.value}>
-                {account.label}
-              </option>
-            ))}
-          </Select>
+            <Button color="light" type="button" className="min-w-[150px]" theme={{
+              inner: {
+                base: "flex items-stretch w-full transition-all duration-200"
+              }
+            }}>
+              <div className="flex items-center gap-2 w-full justify-between">
+                {accounts.find(acc => acc.value === selectedAccount)?.label || "Select Account"}
+                <ChevronDown size={16} />
+              </div>
+            </Button>
+          </Popover>
         </div>
         <DateRangePicker onDateRangeChange={handleDateRangeChange} />
       </div>

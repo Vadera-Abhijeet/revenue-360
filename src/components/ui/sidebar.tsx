@@ -1,4 +1,4 @@
-import { Menu, X } from "lucide-react";
+import { Menu, X, ChevronDown } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import React, { createContext, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -9,6 +9,7 @@ interface Links {
   href?: string;
   onClick?: () => void;
   icon: React.JSX.Element | React.ReactNode;
+  submenu?: Links[];
 }
 
 interface SidebarContextProps {
@@ -164,42 +165,81 @@ export const SidebarLink = ({
 }) => {
   const navigate = useNavigate();
   const { open, animate } = useSidebar();
+  const [isSubmenuOpen, setIsSubmenuOpen] = useState(false);
 
   const handleClick = () => {
-    if (link.onClick) {
+    if (link.submenu) {
+      setIsSubmenuOpen(!isSubmenuOpen);
+    } else if (link.onClick) {
       link.onClick();
     } else if (link.href) {
       navigate(link.href);
     }
   };
+
+  const isActive = active || (link.submenu && link.submenu.some(sub => sub.href === window.location.pathname));
+
   return (
-    <div
-      className={cn(
-        "flex items-center justify-start gap-2  group/sidebar py-2 cursor-pointer",
-        className
-      )}
-      onClick={() => handleClick()}
-    >
+    <div className="flex flex-col">
       <div
-        className={`text-${active ? "indigo" : "gray"}-700 dark:text-${
-          active ? "indigo" : "gray"
-        }-200`}
+        className={cn(
+          "flex items-center justify-start gap-2 group/sidebar py-2 cursor-pointer",
+          className
+        )}
+        onClick={() => handleClick()}
       >
-        {link.icon}
+        <div
+          className={`text-${isActive ? "indigo" : "gray"}-700 dark:text-${isActive ? "indigo" : "gray"
+            }-200`}
+        >
+          {link.icon}
+        </div>
+
+        <motion.span
+          animate={{
+            display: animate ? (open ? "inline-block" : "none") : "inline-block",
+            opacity: animate ? (open ? 1 : 0) : 1,
+          }}
+          className={`text-${isActive ? "indigo" : "gray"}-700 dark:text-${isActive ? "indigo" : "gray"
+            }-200 text-sm group-hover/sidebar:translate-x-1 transition duration-150 whitespace-pre inline-block !p-0 !m-0`}
+        >
+          {link.label}
+        </motion.span>
+
+        {link.submenu && open && (
+          <motion.div
+            animate={{ rotate: isSubmenuOpen ? 180 : 0 }}
+            transition={{ duration: 0.2 }}
+            className="ml-auto"
+          >
+            <ChevronDown size={16} />
+          </motion.div>
+        )}
       </div>
 
-      <motion.span
-        animate={{
-          display: animate ? (open ? "inline-block" : "none") : "inline-block",
-          opacity: animate ? (open ? 1 : 0) : 1,
-        }}
-        // className={`text-${active ? "indigo" : "gray"}-700 dark:text-${
-        //   active ? "indigo" : "gray"
-        // }-200 text-sm group-hover/sidebar:translate-x-1 transition duration-150 whitespace-pre inline-block !p-0 !m-0`}
-        className={`text-gray-700 dark:text-gray-200 text-sm group-hover/sidebar:translate-x-1 transition duration-150 whitespace-pre inline-block !p-0 !m-0`}
-      >
-        {link.label}
-      </motion.span>
+      {link.submenu && open && (
+        <AnimatePresence>
+          {isSubmenuOpen && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="overflow-hidden"
+            >
+              <div className="pl-7 flex flex-col gap-1">
+                {link.submenu.map((subLink, idx) => (
+                  <SidebarLink
+                    key={idx}
+                    link={subLink}
+                    active={window.location.pathname === subLink.href}
+                  />
+                ))}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      )}
     </div>
   );
 };

@@ -1,5 +1,5 @@
 import { Button, Table, TextInput } from "flowbite-react";
-import { Eye, Search } from "lucide-react";
+import { Eye, Search, } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
@@ -8,6 +8,7 @@ import ConnectAppModal, {
 } from "../../../../components/ConnectAppModal";
 import { useCurrency } from "../../../../contexts/CurrencyContext";
 import { fetchApps } from "../../../../services/api";
+import { PuzzlePiece } from "@phosphor-icons/react";
 
 interface App {
   id: string;
@@ -80,8 +81,13 @@ const AppList: React.FC = () => {
   return (
     <div className="space-y-5">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-        <h1 className="text-2xl font-bold text-gray-700">{t("apps.title")}</h1>
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div className="flex items-center gap-4">
+          <PuzzlePiece size={20} className="text-gray-700" />
+          <h1 className="text-2xl font-bold text-gray-700">
+            {t("apps.title")}
+          </h1>
+        </div>
+        <div className="flex flex-col md:flex-row justify-between items-start md:items- center gap-4">
           <div className="w-full">
             <TextInput
               id="search"
@@ -177,13 +183,12 @@ const AppList: React.FC = () => {
                   <Table.Cell>{app.totalCostINR}</Table.Cell>
                   <Table.Cell>{formatCurrency(app.netUSD)}</Table.Cell>
                   <Table.Cell
-                    className={`${
-                      app.percentage <= 0.25
-                        ? "text-red-500"
-                        : app.percentage <= 0.5
+                    className={`${app.percentage <= 0.25
+                      ? "text-red-500"
+                      : app.percentage <= 0.5
                         ? "text-yellow-500"
                         : "text-green-500"
-                    }`}
+                      }`}
                   >
                     {app.percentage.toFixed(2)}%
                   </Table.Cell>

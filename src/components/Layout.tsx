@@ -1,4 +1,3 @@
-import { IUser } from "../interfaces";
 import { PuzzlePiece } from "@phosphor-icons/react";
 import {
   Avatar,
@@ -19,10 +18,13 @@ import {
   PanelLeftClose,
   PanelLeftOpen,
   Settings,
+  User,
+  Users,
 } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import React, { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { Location, useLocation } from "react-router-dom";
 import brandLogo from "../assets/images/Logo.png";
 import brandLogoIcon from "../assets/images/LogoIcon.png";
 import { Sidebar, SidebarBody, SidebarLink } from "../components/ui/sidebar";
@@ -30,13 +32,14 @@ import { CurrencyCode, useCurrency } from "../contexts/CurrencyContext";
 import { useNotifications } from "../contexts/NotificationContext";
 import Notifications from "../features/Notifications";
 import { useAuth } from "../hooks/useAuth";
-import { Location, useLocation } from "react-router-dom";
-import { LANGUAGES_OPTIONS, CURRENCIES_OPTIONS } from "../shared/constants";
+import { IUser } from "../interfaces";
+import { CURRENCIES_OPTIONS, LANGUAGES_OPTIONS } from "../shared/constants";
 
 interface INavItem {
   label: string;
   href: string;
   icon: JSX.Element;
+  submenu?: INavItem[];
 }
 
 interface IRenderSideBarProps {
@@ -78,7 +81,7 @@ const RenderSideBar = (props: IRenderSideBarProps) => {
                 link={link}
                 active={
                   location.pathname === link.href ||
-                  location.pathname.startsWith(link.href)
+                  location.pathname.startsWith(link.href + "/")
                 }
               />
             ))}
@@ -155,6 +158,18 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         label: t("common.configurations"),
         href: "/configurations",
         icon: <Settings size={20} />,
+        submenu: [
+          {
+            label: t("common.integrations"),
+            href: "/configurations/integrations",
+            icon: <PuzzlePiece size={16} />,
+          },
+          {
+            label: t("configurations.team.title"),
+            href: "/configurations/team-management",
+            icon: <User size={16} />,
+          },
+        ],
       },
     ],
     [t]
@@ -168,6 +183,15 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     );
   }, [location.pathname, navItems]);
 
+  const subMenuActiveItem = useMemo(() => {
+    return (activeNavItem?.submenu || []).find(
+      (item) =>
+        location.pathname === item.href ||
+        location.pathname.startsWith(item.href)
+    );
+  }, [location.pathname, activeNavItem]);
+  console.log(" subMenuActiveItem subMenuActiveItem:", subMenuActiveItem)
+
   const changeLanguage = (lng: string) => {
     i18n.changeLanguage(lng);
   };
@@ -177,7 +201,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   };
 
   return (
-    <div className="flex min-h-screen gap-2 p-2 ">
+    <div className="flex min-h-screen gap-2 p-2">
       <div className="hidden md:block">
         <RenderSideBar
           user={user}
@@ -196,7 +220,12 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         {/* Top Navbar */}
         <Navbar
           fluid
-          className="border border-gray-200 bg-white rounded-lg shadow-sm"
+          className="border border-gray-200 bg-white rounded-lg shadow-sm "
+          theme={{
+            root: {
+              base: "bg-white px-2 py-2.5 dark:border-gray-700 dark:bg-gray-800 sm:px-6",
+            },
+          }}
         >
           <div className="items-center hidden md:flex gap-3">
             <AnimatePresence>
@@ -205,12 +234,12 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 content={animateSidebar ? "Open Sidebar" : "Close Sidebar"}
               >
                 <motion.button
-                  whileTap={{ scale: 0.5 }} // Click animation
-                  whileHover={{ scale: 1.2 }} // Hover effect
+                  whileTap={{ scale: 0.5 }}
+                  whileHover={{ scale: 1.2 }}
                   transition={{ type: "spring", stiffness: 300, damping: 15 }}
                   className="border border-gray-300 bg-white text-gray-900 px-2 py-1 rounded-md text-xs 
-                 enabled:hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-600 dark:text-white 
-                 dark:enabled:hover:border-gray-700 dark:enabled:hover:bg-gray-700"
+                  enabled:hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-600 dark:text-white 
+                  dark:enabled:hover:border-gray-700 dark:enabled:hover:bg-gray-700"
                   onClick={toggleSidebar}
                 >
                   {animateSidebar ? (
@@ -221,7 +250,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 </motion.button>
               </Tooltip>
             </AnimatePresence>
-            {/* <p className="text-gray-200">|</p> */}
             <h1 className="text-2xl font-bold text-gray-700">
               {activeNavItem?.label || null}
             </h1>
@@ -239,85 +267,79 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             />
           </div>
           <div className="flex items-center gap-2 md:gap-4">
-            <Tooltip content={t("common.language")}>
-              <Dropdown
-                arrowIcon={false}
-                inline
-                label={<Languages size={20} />}
-                theme={{
-                  inlineWrapper:
-                    "flex items-center py-2 px-1 text-gray-700 hover:text-gray-900",
-                }}
-              >
-                <Dropdown.Header>
-                  <span className="block text-sm">{t("common.language")}</span>
-                </Dropdown.Header>
-                {LANGUAGES_OPTIONS.map((lang) => (
-                  <Dropdown.Item
-                    key={lang.code}
-                    onClick={() => changeLanguage(lang.code)}
-                    className={i18n.language === lang.code ? "bg-gray-100" : ""}
+            <Dropdown
+              arrowIcon={false}
+              inline
+              label={<Languages size={20} />}
+              theme={{
+                inlineWrapper:
+                  "flex items-center py-2 px-1 text-gray-700 hover:text-gray-900",
+              }}
+            >
+              <Dropdown.Header>
+                <span className="block text-sm">{t("common.language")}</span>
+              </Dropdown.Header>
+              {LANGUAGES_OPTIONS.map((lang) => (
+                <Dropdown.Item
+                  key={lang.code}
+                  onClick={() => changeLanguage(lang.code)}
+                  className={i18n.language === lang.code ? "bg-gray-100" : ""}
+                >
+                  {lang.name}
+                </Dropdown.Item>
+              ))}
+            </Dropdown>
+            <Popover
+              aria-labelledby="area-popover"
+              open={openNotification}
+              onOpenChange={setOpenNotification}
+              content={<Notifications />}
+              theme={{
+                content: "z-10 overflow-hidden rounded-[7px] shadow-sm",
+              }}
+            >
+              <div className="relative py-2 px-1 cursor-pointer">
+                <Bell
+                  size={20}
+                  className="text-gray-700 hover:text-gray-900"
+                />
+                {unreadCount > 0 && (
+                  <Badge
+                    color="indigo"
+                    className="absolute -top-1.5 -right-4"
                   >
-                    {lang.name}
-                  </Dropdown.Item>
-                ))}
-              </Dropdown>
-            </Tooltip>
-            <Tooltip content={t("common.notifications")}>
-              <Popover
-                aria-labelledby="area-popover"
-                open={openNotification}
-                onOpenChange={setOpenNotification}
-                content={<Notifications />}
-                theme={{
-                  content: "z-10 overflow-hidden rounded-[7px] shadow-sm",
-                }}
-              >
-                <div className="relative py-2 px-1 cursor-pointer">
-                  <Bell
-                    size={20}
-                    className="text-gray-700 hover:text-gray-900 "
-                  />
-                  {unreadCount > 0 && (
-                    <Badge
-                      color="indigo"
-                      className="absolute -top-1.5 -right-4"
-                    >
-                      {unreadCount}
-                    </Badge>
-                  )}
-                </div>
-              </Popover>
-            </Tooltip>
-
-            <Tooltip content={t("common.currency")}>
-              <Dropdown
-                arrowIcon={false}
-                inline
-                label={<DollarSign size={20} />}
-                theme={{
-                  inlineWrapper:
-                    "flex items-center py-2 px-1 text-gray-700 hover:text-gray-900",
-                }}
-              >
-                <Dropdown.Header>
-                  <span className="block text-sm">{t("common.currency")}</span>
-                </Dropdown.Header>
-                {CURRENCIES_OPTIONS.map((curr) => (
-                  <Dropdown.Item
-                    key={curr.code}
-                    onClick={() => setCurrency(curr.code as CurrencyCode)}
-                    className={currency === curr.code ? "bg-gray-100" : ""}
-                  >
-                    {curr.symbol} - {curr.name}
-                  </Dropdown.Item>
-                ))}
-              </Dropdown>
-            </Tooltip>
+                    {unreadCount}
+                  </Badge>
+                )}
+              </div>
+            </Popover>
+            <Dropdown
+              arrowIcon={false}
+              inline
+              label={<DollarSign size={20} />}
+              theme={{
+                inlineWrapper:
+                  "flex items-center py-2 px-1 text-gray-700 hover:text-gray-900",
+              }}
+            >
+              <Dropdown.Header>
+                <span className="block text-sm">{t("common.currency")}</span>
+              </Dropdown.Header>
+              {CURRENCIES_OPTIONS.map((curr) => (
+                <Dropdown.Item
+                  key={curr.code}
+                  onClick={() => setCurrency(curr.code as CurrencyCode)}
+                  className={currency === curr.code ? "bg-gray-100" : ""}
+                >
+                  {curr.symbol} - {curr.name}
+                </Dropdown.Item>
+              ))}
+            </Dropdown>
           </div>
         </Navbar>
+
         {/* Main Content */}
-        <div className="flex-1 overflow-auto p-4 md:p-6 bg-white max-h-[calc(100vh-82px)] overflow-y-auto border border-gray-200  rounded-lg shadow-lg">
+        <div className="flex-1 overflow-auto p-2 md:p-6 bg-white max-h-[calc(100vh-82px)] overflow-y-auto border border-gray-200 rounded-lg shadow-lg">
           {children}
         </div>
       </div>
