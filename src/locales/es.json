@@ -135,7 +135,9 @@
     "confirmation": "Confirmación",
     "country": "País",
     "last7Days": "Últimos 7 días",
-    "last30Days": "Últimos 30 días"
+    "last30Days": "Últimos 30 días",
+    "confirm_logout": "Confirmar cierre de sesión",
+    "logout_confirmation_message": "¿Está seguro de que desea cerrar sesión? Necesitará iniciar sesión nuevamente para acceder a su cuenta."
   },
   "landing": {
     "hero": {
@@ -475,5 +477,12 @@
       "status": "Estado",
       "actions": "Acciones"
     }
+  },
+  "notFound": {
+    "title": "404",
+    "heading": "Página no encontrada",
+    "description": "La página que estás buscando podría haber sido eliminada, haber cambiado su nombre o estar temporalmente no disponible.",
+    "goHome": "Ir al inicio",
+    "goBack": "Volver"
   }
 }

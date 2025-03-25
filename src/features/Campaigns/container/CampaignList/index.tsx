@@ -9,6 +9,7 @@ import { useCurrency } from "../../../../contexts/CurrencyContext";
 import { fetchCampaigns } from "../../../../services/api";
 import CampaignsDataTable from "../../component/CampaignListModal";
 import { ICampaignData } from "../../interface";
+import ListSkeleton from "../../../../components/SkeletonLoaders/ListSkeleton";
 
 const Campaigns: React.FC = () => {
   const { t } = useTranslation();
@@ -102,9 +103,7 @@ const Campaigns: React.FC = () => {
       </div>
 
       {isLoading ? (
-        <div className="flex items-center justify-center h-64">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary-600"></div>
-        </div>
+        <ListSkeleton />
       ) : (
         <div className="overflow-x-auto border border-gray-200 dark:border-gray-700 rounded-md">
           <Table>

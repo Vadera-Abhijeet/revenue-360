@@ -1,4 +1,3 @@
-import { PuzzlePiece } from "@phosphor-icons/react";
 import {
   Avatar,
   Badge,
@@ -12,14 +11,9 @@ import {
   Bell,
   DollarSign,
   Languages,
-  LayoutDashboard,
   LogOut,
-  Megaphone,
   PanelLeftClose,
   PanelLeftOpen,
-  Settings,
-  User,
-  Users,
 } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import React, { useMemo, useState } from "react";
@@ -27,18 +21,22 @@ import { useTranslation } from "react-i18next";
 import { Location, useLocation } from "react-router-dom";
 import brandLogo from "../assets/images/Logo.png";
 import brandLogoIcon from "../assets/images/LogoIcon.png";
-import { Sidebar, SidebarBody, SidebarLink } from "../components/ui/sidebar";
+import { Sidebar, SidebarBody, SidebarLink } from "./Sidebar";
+import AnimatedModal from "./AnimatedModal";
 import { CurrencyCode, useCurrency } from "../contexts/CurrencyContext";
 import { useNotifications } from "../contexts/NotificationContext";
 import Notifications from "../features/Notifications";
 import { useAuth } from "../hooks/useAuth";
 import { IUser } from "../interfaces";
 import { CURRENCIES_OPTIONS, LANGUAGES_OPTIONS } from "../shared/constants";
+import { getNavItems } from "../config/routes";
 
 interface INavItem {
   label: string;
-  href: string;
-  icon: JSX.Element;
+  href?: string;
+  path?: string;
+  onClick?: () => void;
+  icon?: React.ReactNode;
   submenu?: INavItem[];
 }
 
@@ -133,45 +131,22 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const { unreadCount } = useNotifications();
   const { currency, setCurrency } = useCurrency();
   const [openNotification, setOpenNotification] = useState(false);
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
 
   const [open, setOpen] = useState(false);
   const [animateSidebar, setAnimateSidebar] = useState(false);
 
   const navItems = useMemo(
-    () => [
-      {
-        label: t("common.dashboard"),
-        href: "/dashboard",
-        icon: <LayoutDashboard size={20} />,
-      },
-      {
-        label: t("common.apps"),
-        href: "/apps",
-        icon: <PuzzlePiece size={20} />,
-      },
-      {
-        label: t("common.campaigns"),
-        href: "/campaigns",
-        icon: <Megaphone size={20} />,
-      },
-      {
-        label: t("common.configurations"),
-        href: "/configurations",
-        icon: <Settings size={20} />,
-        submenu: [
-          {
-            label: t("common.integrations"),
-            href: "/configurations/integrations",
-            icon: <PuzzlePiece size={16} />,
-          },
-          {
-            label: t("configurations.team.title"),
-            href: "/configurations/team-management",
-            icon: <User size={16} />,
-          },
-        ],
-      },
-    ],
+    () => getNavItems().map(item => ({
+      label: t(item.label || ''),
+      href: item.path,
+      icon: item.icon,
+      submenu: item.submenu?.map(subItem => ({
+        label: t(subItem.label || ''),
+        href: subItem.path,
+        icon: subItem.icon
+      }))
+    })),
     [t]
   );
 
@@ -179,18 +154,9 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     return navItems.find(
       (item) =>
         location.pathname === item.href ||
-        location.pathname.startsWith(item.href)
+        location.pathname.startsWith(item.href + "/")
     );
   }, [location.pathname, navItems]);
-
-  const subMenuActiveItem = useMemo(() => {
-    return (activeNavItem?.submenu || []).find(
-      (item) =>
-        location.pathname === item.href ||
-        location.pathname.startsWith(item.href)
-    );
-  }, [location.pathname, activeNavItem]);
-  console.log(" subMenuActiveItem subMenuActiveItem:", subMenuActiveItem)
 
   const changeLanguage = (lng: string) => {
     i18n.changeLanguage(lng);
@@ -198,6 +164,15 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
   const toggleSidebar = () => {
     setAnimateSidebar(!animateSidebar);
+  };
+
+  const activeMenuLabel = useMemo(() => {
+    return activeNavItem?.label || (location.pathname === "/settings" ? t("common.settings") : null)
+  }, [activeNavItem, location.pathname, t])
+
+  const handleLogout = () => {
+    setShowLogoutModal(false);
+    logout();
   };
 
   return (
@@ -209,7 +184,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           animateSidebar={animateSidebar}
           open={open}
           setOpen={setOpen}
-          logout={logout}
+          logout={() => setShowLogoutModal(true)}
           navItems={navItems}
           location={location}
         />
@@ -251,7 +226,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               </Tooltip>
             </AnimatePresence>
             <h1 className="text-2xl font-bold text-gray-700">
-              {activeNavItem?.label || null}
+              {activeMenuLabel}
             </h1>
           </div>
           <div className="bg-white block md:hidden">
@@ -261,7 +236,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               animateSidebar={animateSidebar}
               open={open}
               setOpen={setOpen}
-              logout={logout}
+              logout={() => setShowLogoutModal(true)}
               navItems={navItems}
               location={location}
             />
@@ -343,6 +318,17 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           {children}
         </div>
       </div>
+
+      {/* Logout Confirmation Modal */}
+      <AnimatedModal
+        show={showLogoutModal}
+        onClose={() => setShowLogoutModal(false)}
+        onConfirm={handleLogout}
+        title={t("common.confirm_logout")}
+        message={t("common.logout_confirmation_message")}
+        confirmText={t("common.logout")}
+        confirmButtonColor="red"
+      />
     </div>
   );
 };

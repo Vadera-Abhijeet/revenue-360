@@ -2,13 +2,14 @@ import { Menu, X, ChevronDown } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import React, { createContext, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { cn } from "../../lib/utils";
+import { cn } from "../lib/utils";
 
 interface Links {
   label: string;
   href?: string;
+  path?: string;
   onClick?: () => void;
-  icon: React.JSX.Element | React.ReactNode;
+  icon?: React.ReactNode;
   submenu?: Links[];
 }
 

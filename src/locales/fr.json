@@ -135,7 +135,9 @@
     "confirmation": "Confirmation",
     "country": "Pays",
     "last7Days": "7 derniers jours",
-    "last30Days": "30 derniers jours"
+    "last30Days": "30 derniers jours",
+    "confirm_logout": "Confirmer la déconnexion",
+    "logout_confirmation_message": "Êtes-vous sûr de vouloir vous déconnecter ? Vous devrez vous reconnecter pour accéder à votre compte."
   },
   "landing": {
     "hero": {
@@ -475,5 +477,12 @@
       "status": "Statut",
       "actions": "Actions"
     }
+  },
+  "notFound": {
+    "title": "404",
+    "heading": "Page non trouvée",
+    "description": "La page que vous recherchez a peut-être été supprimée, renommée ou est temporairement indisponible.",
+    "goHome": "Aller à l'accueil",
+    "goBack": "Retour"
   }
 }

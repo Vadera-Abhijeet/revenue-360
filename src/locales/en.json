@@ -135,7 +135,9 @@
     "confirmation": "Confirmation",
     "country": "Country",
     "last7Days": "Last 7 Days",
-    "last30Days": "Last 30 Days"
+    "last30Days": "Last 30 Days",
+    "confirm_logout": "Confirm Logout",
+    "logout_confirmation_message": "Are you sure you want to logout? You will need to login again to access your account."
   },
   "landing": {
     "hero": {
@@ -478,5 +480,12 @@
       "status": "Status",
       "actions": "Actions"
     }
+  },
+  "notFound": {
+    "title": "404",
+    "heading": "Page Not Found",
+    "description": "The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.",
+    "goHome": "Go to Home",
+    "goBack": "Go Back"
   }
 }

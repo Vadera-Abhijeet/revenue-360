@@ -67,16 +67,29 @@ export interface ChartGroup {
 
 export interface IUser {
   id: string;
-  name?: string;
+  name: string;
   email: string;
+  role: "super-admin" | "admin" | "sub-admin";
   password: string;
-  photoURL: string;
-  company?: string;
+  permissions: string[];
+  photoURL?: string;
+  status: 'active' | 'inactive';
+  isNewMerchant?: boolean;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
+export interface IPermission {
+  id: string;
+  name: string;
+  description: string;
+  category: string;
+}
 
 export interface ILanguageOption {
   code: string;
   name: string;
   flag: string;
 }
+
+export type Role = "super-admin" | "admin" | "sub-admin";

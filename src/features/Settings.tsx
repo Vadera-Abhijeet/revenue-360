@@ -221,10 +221,6 @@ const Settings: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold text-gray-700">
-        {t("settings.title")}
-      </h1>
-
       <Tabs aria-label="Settings tabs" style="pills">
         <Tabs.Item active title={t("settings.account.title")} icon={User}>
           <Card>
@@ -506,11 +502,10 @@ const Settings: React.FC = () => {
                 {plans.map((plan) => (
                   <Card
                     key={plan.name}
-                    className={`p-6 w-80 shadow-lg ${
-                      plan.buttonVariant === "active"
+                    className={`p-6 w-80 shadow-lg ${plan.buttonVariant === "active"
                         ? "border-2 border-blue-600"
                         : ""
-                    }`}
+                      }`}
                     theme={{
                       root: {
                         children:

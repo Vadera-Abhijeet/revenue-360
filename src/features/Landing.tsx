@@ -75,7 +75,7 @@ const Landing: React.FC = () => {
               <Button
                 size="lg"
                 color="light"
-                onClick={() => navigate("/auth?mode=signup")}
+                onClick={() => navigate("/auth")}
               >
                 {t("landing.hero.login")}
               </Button>

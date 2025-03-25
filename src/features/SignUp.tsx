@@ -72,71 +72,71 @@ const SignUp: React.FC<{ handleSwap: () => void }> = ({ handleSwap }) => {
 
 
   // Function to convert file to Base64
-  const convertToBase64 = (file: File): Promise<string> => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result as string);
-      reader.onerror = (error) => reject(error);
-    });
-  };
+  // const convertToBase64 = (file: File): Promise<string> => {
+  //   return new Promise((resolve, reject) => {
+  //     const reader = new FileReader();
+  //     reader.readAsDataURL(file);
+  //     reader.onload = () => resolve(reader.result as string);
+  //     reader.onerror = (error) => reject(error);
+  //   });
+  // };
 
   // Function to validate image dimensions and size
-  const validateImage = (file: File): Promise<boolean> => {
-    return new Promise((resolve) => {
-      const img = new Image();
-      img.src = URL.createObjectURL(file);
-      img.onload = () => {
-        URL.revokeObjectURL(img.src);
-        const maxDimension = 1000; // Max width/height in pixels
-        const maxSize = 5 * 1024 * 1024; // 5MB in bytes
+  // const validateImage = (file: File): Promise<boolean> => {
+  //   return new Promise((resolve) => {
+  //     const img = new Image();
+  //     img.src = URL.createObjectURL(file);
+  //     img.onload = () => {
+  //       URL.revokeObjectURL(img.src);
+  //       const maxDimension = 1000; // Max width/height in pixels
+  //       const maxSize = 5 * 1024 * 1024; // 5MB in bytes
 
-        if (file.size > maxSize) {
-          alert(t("auth.signup.errors.imageTooLarge", "Image size should be less than 5MB"));
-          resolve(false);
-        } else if (img.width > maxDimension || img.height > maxDimension) {
-          alert(t("auth.signup.errors.imageDimensionsTooLarge", "Image dimensions should be less than 1000x1000 pixels"));
-          resolve(false);
-        } else {
-          resolve(true);
-        }
-      };
-      img.onerror = () => {
-        URL.revokeObjectURL(img.src);
-        resolve(false);
-      };
-    });
-  };
+  //       if (file.size > maxSize) {
+  //         alert(t("auth.signup.errors.imageTooLarge", "Image size should be less than 5MB"));
+  //         resolve(false);
+  //       } else if (img.width > maxDimension || img.height > maxDimension) {
+  //         alert(t("auth.signup.errors.imageDimensionsTooLarge", "Image dimensions should be less than 1000x1000 pixels"));
+  //         resolve(false);
+  //       } else {
+  //         resolve(true);
+  //       }
+  //     };
+  //     img.onerror = () => {
+  //       URL.revokeObjectURL(img.src);
+  //       resolve(false);
+  //     };
+  //   });
+  // };
 
   // Modified profile picture handling
-  const handleProfilePicChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      try {
-        // Validate file type
-        if (!file.type.startsWith('image/')) {
-          alert(t("auth.signup.errors.invalidImageType", "Please upload a valid image file"));
-          return;
-        }
+  // const handleProfilePicChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   const file = event.target.files?.[0];
+  //   if (file) {
+  //     try {
+  //       // Validate file type
+  //       if (!file.type.startsWith('image/')) {
+  //         alert(t("auth.signup.errors.invalidImageType", "Please upload a valid image file"));
+  //         return;
+  //       }
 
-        // Validate image dimensions and size
-        const isValid = await validateImage(file);
-        if (!isValid) return;
+  //       // Validate image dimensions and size
+  //       const isValid = await validateImage(file);
+  //       if (!isValid) return;
 
-        // Convert to Base64
-        const base64String = await convertToBase64(file);
+  //       // Convert to Base64
+  //       const base64String = await convertToBase64(file);
 
-        // Compress if needed (you might want to add a compression step here)
-        setProfilePic(base64String);
+  //       // Compress if needed (you might want to add a compression step here)
+  //       setProfilePic(base64String);
 
-        // Store in localStorage as a backup
-        localStorage.setItem('tempProfilePic', base64String);
-      } catch (error) {
-        console.error('Error processing image:', error);
-        alert(t("auth.signup.errors.imageProcessingError", "Error processing image. Please try again."));
-      }
-    }
-  };
+  //       // Store in localStorage as a backup
+  //       localStorage.setItem('tempProfilePic', base64String);
+  //     } catch (error) {
+  //       console.error('Error processing image:', error);
+  //       alert(t("auth.signup.errors.imageProcessingError", "Error processing image. Please try again."));
+  //     }
+  //   }
+  // };
 
   // Load profile pic from localStorage on component mount
   useEffect(() => {
@@ -161,11 +161,15 @@ const SignUp: React.FC<{ handleSwap: () => void }> = ({ handleSwap }) => {
 
       const mockUser: IUser = {
         id: uuidv4(),
-        // name: data.username,
         email: data.email,
+        role: 'admin',
         password: data.password,
+        permissions: [],
         photoURL: profilePic,
-        // company: data.company,
+        name: "",
+        status: "active",
+        createdAt: new Date(),
+        updatedAt: new Date()
       };
 
       // Add user to localStorage

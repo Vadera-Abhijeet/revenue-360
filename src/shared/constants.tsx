@@ -1,3 +1,5 @@
+import { Role } from "../interfaces";
+
 export const PLATFORM_ICON_MAP: Record<string, string> = {
   googleAds: "https://www.gstatic.com/images/branding/product/2x/ads_48dp.png",
   adMob: "https://cdn.worldvectorlogo.com/logos/google-admob.svg",
@@ -34,3 +36,5 @@ export const LANGUAGES_OPTIONS = [
   { code: "es", name: "Español", flag: "🇪🇸" },
   { code: "ja", name: "日本語", flag: "🇯🇵" },
 ];
+
+export const ROLES: Role[] = ['super-admin', 'admin', 'sub-admin']

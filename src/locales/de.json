@@ -135,7 +135,9 @@
     "confirmation": "Bestätigung",
     "country": "Land",
     "last7Days": "Letzte 7 Tage",
-    "last30Days": "Letzte 30 Tage"
+    "last30Days": "Letzte 30 Tage",
+    "confirm_logout": "Abmeldung bestätigen",
+    "logout_confirmation_message": "Sind Sie sicher, dass Sie sich abmelden möchten? Sie müssen sich erneut anmelden, um auf Ihr Konto zugreifen zu können."
   },
   "landing": {
     "hero": {
@@ -475,5 +477,12 @@
       "status": "Status",
       "actions": "Aktionen"
     }
+  },
+  "notFound": {
+    "title": "404",
+    "heading": "Seite nicht gefunden",
+    "description": "Die gesuchte Seite wurde möglicherweise entfernt, umbenannt oder ist vorübergehend nicht verfügbar.",
+    "goHome": "Zur Startseite",
+    "goBack": "Zurück"
   }
 }

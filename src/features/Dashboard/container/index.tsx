@@ -1,21 +1,17 @@
 import { Button, ListGroup, Popover } from "flowbite-react";
+import { BarChart2, Calculator, ChevronDown, DollarSign, Smartphone, TrendingUp, Users } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
-import { Calculator, ChevronDown, Smartphone, Users } from "lucide-react";
 import DateRangePicker from "../../../components/DateRangePicker";
 import StatCard from "../../../components/StatCard";
 import { useCurrency } from "../../../contexts/CurrencyContext";
-import { IDashboard } from "../interface";
-import {
-  BarChart2,
-  DollarSign,
-  TrendingUp,
-} from "lucide-react";
+import { fetchDashboardData } from "../../../services/api";
+import DashboardSkeleton from "../../../components/SkeletonLoaders/DashboardSkeleton";
+import RecentCampaigns from "../components/RecentCampaigns";
 import RevenueAndSpendChart from "../components/RevenueAndSpendChart";
 import TopPerformingAppChart from "../components/TopPerformingAppChart";
-import { fetchDashboardData } from "../../../services/api";
-import RecentCampaigns from "../components/RecentCampaigns";
+import { IDashboard } from "../interface";
 
 const accounts = [
   { label: "All", value: "" },
@@ -111,9 +107,7 @@ const Dashboard: React.FC = () => {
         <DateRangePicker onDateRangeChange={handleDateRangeChange} />
       </div>
       {isLoading || !dashboardData ? (
-        <div className="flex items-center justify-center h-64">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary-600"></div>
-        </div>
+        <DashboardSkeleton />
       ) : (
         <div className="space-y-6">
           {/* Summary Cards */}

@@ -135,7 +135,9 @@
     "confirmation": "確認",
     "country": "国",
     "last7Days": "過去 7 日間",
-    "last30Days": "過去 30 日間"
+    "last30Days": "過去 30 日間",
+    "confirm_logout": "ログアウトの確認",
+    "logout_confirmation_message": "ログアウトしてもよろしいですか？アカウントにアクセスするには再度ログインする必要があります。"
   },
   "landing": {
     "hero": {
@@ -475,5 +477,12 @@
       "status": "ステータス",
       "actions": "アクション"
     }
+  },
+  "notFound": {
+    "title": "404",
+    "heading": "ページが見つかりません",
+    "description": "お探しのページは削除されたか、名前が変更されたか、一時的に利用できない状態の可能性があります。",
+    "goHome": "ホームに戻る",
+    "goBack": "戻る"
   }
 }
