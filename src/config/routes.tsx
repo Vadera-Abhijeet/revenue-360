@@ -1,7 +1,7 @@
-import { LayoutDashboard, Megaphone, Puzzle, Settings as SettingsIcon, User } from 'lucide-react';
+import { LayoutDashboard, Megaphone, Puzzle, Settings as SettingsIcon, User, Users } from 'lucide-react';
 import React from 'react';
 import { Role } from '../interfaces';
-import { AppDetail, AppList, Auth, CampaignDetail, Campaigns, Dashboard, Integrations, Landing, NotFound, Settings, TeamManagement } from '../routes/asyncComponents';
+import { AppDetail, AppList, Auth, CampaignDetail, Campaigns, Dashboard, Integrations, Landing, NotFound, Settings, TeamManagement, MerchantUsers } from '../routes/asyncComponents';
 
 export interface RouteConfig {
     path: string;
@@ -35,10 +35,18 @@ export const routesConfig: RouteConfig[] = [
         icon: <LayoutDashboard size={20} />
     },
     {
+        path: '/merchant-users',
+        element: <MerchantUsers />,
+        protected: true,
+        allowedRoles: ['super-admin'],
+        label: 'common.merchants',
+        icon: <Users size={16} />
+    },
+    {
         path: '/apps',
         element: <AppList />,
         protected: true,
-        allowedRoles: ['super-admin', 'admin', 'sub-admin'],
+        allowedRoles: ['admin', 'sub-admin'],
         label: 'common.apps',
         icon: <Puzzle size={20} />
     },
@@ -46,13 +54,13 @@ export const routesConfig: RouteConfig[] = [
         path: '/apps/:id',
         element: <AppDetail />,
         protected: true,
-        allowedRoles: ['super-admin', 'admin', 'sub-admin']
+        allowedRoles: ['admin', 'sub-admin']
     },
     {
         path: '/campaigns',
         element: <Campaigns />,
         protected: true,
-        allowedRoles: ['super-admin', 'admin'],
+        allowedRoles: ['admin'],
         label: 'common.campaigns',
         icon: <Megaphone size={20} />
     },
@@ -60,7 +68,7 @@ export const routesConfig: RouteConfig[] = [
         path: '/campaigns/:id',
         element: <CampaignDetail />,
         protected: true,
-        allowedRoles: ['super-admin', 'admin', 'sub-admin']
+        allowedRoles: ['admin', 'sub-admin']
     },
     {
         path: '/settings',
@@ -72,7 +80,7 @@ export const routesConfig: RouteConfig[] = [
         path: '/configurations',
         element: <Settings />,
         protected: true,
-        allowedRoles: ['super-admin', 'admin'],
+        allowedRoles: ['admin'],
         label: 'common.configurations',
         icon: <SettingsIcon size={20} />,
         submenu: [
@@ -80,7 +88,7 @@ export const routesConfig: RouteConfig[] = [
                 path: '/configurations/integrations',
                 element: <Integrations />,
                 protected: true,
-                allowedRoles: ['super-admin', 'admin'],
+                allowedRoles: ['admin'],
                 label: 'common.integrations',
                 icon: <Puzzle size={16} />
             },
@@ -88,10 +96,11 @@ export const routesConfig: RouteConfig[] = [
                 path: '/configurations/team-management',
                 element: <TeamManagement />,
                 protected: true,
-                allowedRoles: ['super-admin', 'admin'],
+                allowedRoles: ['admin'],
                 label: 'configurations.team.title',
                 icon: <User size={16} />
-            }
+            },
+
         ]
     },
     {

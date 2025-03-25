@@ -1,4 +1,3 @@
-import { Dropdown } from "flowbite-react";
 import { AnimatePresence, motion } from "motion/react";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -7,17 +6,14 @@ import {
   IllustrationAnalyticsTeam,
   IllustrationDataChart,
 } from "../assets/Illustrations";
-import brandLogo from "../assets/images/Logo.png";
 import { useAuth } from "../hooks/useAuth";
-import { ILanguageOption } from "../interfaces";
-import { LANGUAGES_OPTIONS } from "../shared/constants";
 import SignIn from "./SignIn";
 import SignUp from "./SignUp";
 
 
 
 const Auth: React.FC = () => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
@@ -26,9 +22,9 @@ const Auth: React.FC = () => {
   const [currentFrame, setCurrentFrame] = useState(0);
   const [isSwapped, setIsSwapped] = useState(isSignUpMode);
   const [formMode, setFormMode] = useState<'signin' | 'signup'>(isSignUpMode ? 'signup' : 'signin');
-  const [selectedLanguage, setSelectedLanguage] = useState<ILanguageOption>(
-    LANGUAGES_OPTIONS[0]
-  );
+  // const [selectedLanguage, setSelectedLanguage] = useState<ILanguageOption>(
+  //   LANGUAGES_OPTIONS[0]
+  // );
   useEffect(() => {
     if (isAuthenticated) {
       navigate("/dashboard");
@@ -49,10 +45,10 @@ const Auth: React.FC = () => {
   };
 
   // Language switcher function
-  const changeLanguage = (lng: ILanguageOption) => {
-    i18n.changeLanguage(lng.code);
-    setSelectedLanguage(lng);
-  };
+  // const changeLanguage = (lng: ILanguageOption) => {
+  //   i18n.changeLanguage(lng.code);
+  //   setSelectedLanguage(lng);
+  // };
 
 
   return (

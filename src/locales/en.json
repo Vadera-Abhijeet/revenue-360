@@ -137,7 +137,12 @@
     "last7Days": "Last 7 Days",
     "last30Days": "Last 30 Days",
     "confirm_logout": "Confirm Logout",
-    "logout_confirmation_message": "Are you sure you want to logout? You will need to login again to access your account."
+    "logout_confirmation_message": "Are you sure you want to logout? You will need to login again to access your account.",
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive"
+    },
+    "merchants": "Merchants"
   },
   "landing": {
     "hero": {
@@ -480,6 +485,25 @@
       "status": "Status",
       "actions": "Actions"
     }
+  },
+  "merchant": {
+    "title": "List",
+    "search": "Search merchants...",
+    "description": "Manage merchant users and their permissions",
+    "addMerchant": "Add Merchant",
+    "editMerchant": "Edit Merchant",
+    "deleteMerchant": "Delete Merchant",
+    "confirmDelete": "Are you sure you want to delete this merchant?",
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive"
+    },
+    "name": "Name",
+    "email": "Email",
+    "company": "Company",
+    "statusLabel": "Status",
+    "actions": "Actions",
+    "view": "View"
   },
   "notFound": {
     "title": "404",

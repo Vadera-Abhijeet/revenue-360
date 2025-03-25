@@ -1,7 +1,7 @@
 // Mock API service for Revenue-360
 // In a real application, this would connect to a backend API
 
-import { IAccount, IPreferences, ISettings } from "../interfaces";
+import { IUser, IPreferences, ISettings } from "../interfaces";
 
 // Helper function to generate random data
 const randomNumber = (min: number, max: number) => {
@@ -553,9 +553,16 @@ export const fetchUserSettings = async () => {
       name: currentUser.name || "Demo User",
       email: currentUser.email || "demo@example.com",
       company: currentUser.company || "Demo Company",
-      role: currentUser.role || "Administrator",
+      role: currentUser.role || "admin",
       timezone: currentUser.timezone || "America/New_York",
       photoURL: currentUser.photoURL || "https://via.placeholder.com/150",
+      id: currentUser.id || "1234567890",
+      password: currentUser.password || "password",
+      permissions: currentUser.permissions || [],
+      status: currentUser.status || "active",
+      isNewMerchant: currentUser.isNewMerchant || false,
+      createdAt: currentUser.createdAt || new Date(),
+      updatedAt: currentUser.updatedAt || new Date(),
     },
     integrations: [
       {
@@ -674,7 +681,7 @@ const validateImage = (file: File): Promise<boolean> => {
 
 // Update user settings
 export const updateUserSettings = async (settings: {
-  account: IAccount;
+  account: IUser;
   preferences: IPreferences;
   profilePic?: File;
 }) => {

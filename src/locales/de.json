@@ -137,7 +137,8 @@
     "last7Days": "Letzte 7 Tage",
     "last30Days": "Letzte 30 Tage",
     "confirm_logout": "Abmeldung bestätigen",
-    "logout_confirmation_message": "Sind Sie sicher, dass Sie sich abmelden möchten? Sie müssen sich erneut anmelden, um auf Ihr Konto zugreifen zu können."
+    "logout_confirmation_message": "Sind Sie sicher, dass Sie sich abmelden möchten? Sie müssen sich erneut anmelden, um auf Ihr Konto zugreifen zu können.",
+    "merchants": "Händler"
   },
   "landing": {
     "hero": {
@@ -477,6 +478,25 @@
       "status": "Status",
       "actions": "Aktionen"
     }
+  },
+  "merchant": {
+    "title": "Liste",
+    "search": "Händler suchen...",
+    "description": "Verwalten Sie Händler-Benutzer und ihre Berechtigungen",
+    "addMerchant": "Händler hinzufügen",
+    "editMerchant": "Händler bearbeiten",
+    "deleteMerchant": "Händler löschen",
+    "confirmDelete": "Sind Sie sicher, dass Sie diesen Händler löschen möchten?",
+    "status": {
+      "active": "Aktiv",
+      "inactive": "Inaktiv"
+    },
+    "name": "Name",
+    "email": "E-Mail",
+    "company": "Unternehmen",
+    "statusLabel": "Status",
+    "actions": "Aktionen",
+    "view": "Ansehen"
   },
   "notFound": {
     "title": "404",

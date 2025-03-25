@@ -169,7 +169,8 @@ const SignUp: React.FC<{ handleSwap: () => void }> = ({ handleSwap }) => {
         name: "",
         status: "active",
         createdAt: new Date(),
-        updatedAt: new Date()
+        updatedAt: new Date(),
+        timezone: "America/New_York"
       };
 
       // Add user to localStorage

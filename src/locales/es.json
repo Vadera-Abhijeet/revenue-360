@@ -137,7 +137,8 @@
     "last7Days": "Últimos 7 días",
     "last30Days": "Últimos 30 días",
     "confirm_logout": "Confirmar cierre de sesión",
-    "logout_confirmation_message": "¿Está seguro de que desea cerrar sesión? Necesitará iniciar sesión nuevamente para acceder a su cuenta."
+    "logout_confirmation_message": "¿Está seguro de que desea cerrar sesión? Necesitará iniciar sesión nuevamente para acceder a su cuenta.",
+    "merchants": "Comerciantes"
   },
   "landing": {
     "hero": {
@@ -477,6 +478,25 @@
       "status": "Estado",
       "actions": "Acciones"
     }
+  },
+  "merchant": {
+    "title": "Lista",
+    "search": "Buscar comerciantes...",
+    "description": "Gestionar usuarios comerciantes y sus permisos",
+    "addMerchant": "Agregar Comerciante",
+    "editMerchant": "Editar Comerciante",
+    "deleteMerchant": "Eliminar Comerciante",
+    "confirmDelete": "¿Está seguro de que desea eliminar este comerciante?",
+    "status": {
+      "active": "Activo",
+      "inactive": "Inactivo"
+    },
+    "name": "Nombre",
+    "email": "Correo electrónico",
+    "company": "Empresa",
+    "statusLabel": "Estado",
+    "actions": "Acciones",
+    "view": "Ver"
   },
   "notFound": {
     "title": "404",

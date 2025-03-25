@@ -137,7 +137,8 @@
     "last7Days": "7 derniers jours",
     "last30Days": "30 derniers jours",
     "confirm_logout": "Confirmer la déconnexion",
-    "logout_confirmation_message": "Êtes-vous sûr de vouloir vous déconnecter ? Vous devrez vous reconnecter pour accéder à votre compte."
+    "logout_confirmation_message": "Êtes-vous sûr de vouloir vous déconnecter ? Vous devrez vous reconnecter pour accéder à votre compte.",
+    "merchants": "Marchandes"
   },
   "landing": {
     "hero": {
@@ -477,6 +478,25 @@
       "status": "Statut",
       "actions": "Actions"
     }
+  },
+  "merchant": {
+    "title": "Liste",
+    "search": "Rechercher des marchands...",
+    "description": "Gérer les utilisateurs marchands et leurs permissions",
+    "addMerchant": "Ajouter un Marchand",
+    "editMerchant": "Modifier le Marchand",
+    "deleteMerchant": "Supprimer le Marchand",
+    "confirmDelete": "Êtes-vous sûr de vouloir supprimer ce marchand ?",
+    "status": {
+      "active": "Actif",
+      "inactive": "Inactif"
+    },
+    "name": "Nom",
+    "email": "E-mail",
+    "company": "Entreprise",
+    "statusLabel": "Statut",
+    "actions": "Actions",
+    "view": "Voir"
   },
   "notFound": {
     "title": "404",

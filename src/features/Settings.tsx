@@ -25,7 +25,7 @@ import {
   Camera,
 } from "lucide-react";
 import { fetchUserSettings, updateUserSettings } from "../services/api";
-import { IAccount, IPreferences } from "../interfaces";
+import { IUser, IPreferences } from "../interfaces";
 import { CurrencyCode, useCurrency } from "../contexts/CurrencyContext";
 import RazorpayButton from "../components/RazorPayButton";
 import { useAuth } from "../hooks/useAuth";
@@ -67,16 +67,22 @@ const Settings: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [formData, setFormData] = useState<{
-    account: IAccount;
+    account: IUser;
     preferences: IPreferences;
   }>({
     account: {
       name: "",
       email: "",
       company: "",
-      role: "",
-      timezone: "",
+      role: "admin",
+      createdAt: new Date(),
+      updatedAt: new Date(),
       photoURL: "",
+      id: "",
+      password: "",
+      permissions: [],
+      status: "active",
+      timezone: "America/New_York",
     },
     preferences: {
       language: "",
@@ -503,8 +509,8 @@ const Settings: React.FC = () => {
                   <Card
                     key={plan.name}
                     className={`p-6 w-80 shadow-lg ${plan.buttonVariant === "active"
-                        ? "border-2 border-blue-600"
-                        : ""
+                      ? "border-2 border-blue-600"
+                      : ""
                       }`}
                     theme={{
                       root: {

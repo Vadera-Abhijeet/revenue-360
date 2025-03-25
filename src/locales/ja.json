@@ -137,7 +137,8 @@
     "last7Days": "過去 7 日間",
     "last30Days": "過去 30 日間",
     "confirm_logout": "ログアウトの確認",
-    "logout_confirmation_message": "ログアウトしてもよろしいですか？アカウントにアクセスするには再度ログインする必要があります。"
+    "logout_confirmation_message": "ログアウトしてもよろしいですか？アカウントにアクセスするには再度ログインする必要があります。",
+    "merchants": "商人"
   },
   "landing": {
     "hero": {
@@ -477,6 +478,25 @@
       "status": "ステータス",
       "actions": "アクション"
     }
+  },
+  "merchant": {
+    "title": "リスト",
+    "search": "マーチャントを検索...",
+    "description": "マーチャントユーザーとその権限を管理",
+    "addMerchant": "マーチャントを追加",
+    "editMerchant": "マーチャントを編集",
+    "deleteMerchant": "マーチャントを削除",
+    "confirmDelete": "このマーチャントを削除してもよろしいですか？",
+    "status": {
+      "active": "アクティブ",
+      "inactive": "非アクティブ"
+    },
+    "name": "名前",
+    "email": "メールアドレス",
+    "company": "会社",
+    "statusLabel": "ステータス",
+    "actions": "アクション",
+    "view": "表示"
   },
   "notFound": {
     "title": "404",

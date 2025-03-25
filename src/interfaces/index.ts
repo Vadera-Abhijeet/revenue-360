@@ -2,19 +2,19 @@ import { CurrencyCode } from "../contexts/CurrencyContext";
 import { TDataKeyTypes } from "../features/Campaigns/interface";
 
 export interface ISettings {
-  account: IAccount;
+  account: IUser;
   integrations: IIntegrations[];
   preferences: IPreferences;
   team?: ITeamEntity[] | null;
 }
-export interface IAccount {
-  name: string;
-  email: string;
-  company: string;
-  role: string;
-  timezone: string;
-  photoURL?: string;
-}
+// export interface IAccount {
+//   name: string;
+//   email: string;
+//   company: string;
+//   role: string;
+//   timezone: string;
+//   photoURL?: string;
+// }
 
 export interface IIntegrations {
   inward: IIntegrationsSet;
@@ -71,6 +71,8 @@ export interface IUser {
   email: string;
   role: "super-admin" | "admin" | "sub-admin";
   password: string;
+  timezone: string;
+  company?: string;
   permissions: string[];
   photoURL?: string;
   status: 'active' | 'inactive';
