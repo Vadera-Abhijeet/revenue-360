@@ -52,7 +52,7 @@ export const routesConfig: RouteConfig[] = [
         path: '/campaigns',
         element: <Campaigns />,
         protected: true,
-        allowedRoles: ['super-admin', 'admin', 'sub-admin'],
+        allowedRoles: ['super-admin', 'admin'],
         label: 'common.campaigns',
         icon: <Megaphone size={20} />
     },
@@ -103,6 +103,7 @@ export const routesConfig: RouteConfig[] = [
 
 // Helper functions to get specific route configurations
 export const getPublicRoutes = () => routesConfig.filter(route => !route.protected);
+
 export const getProtectedRoutes = () => {
     const flattenRoutes = (routes: RouteConfig[]): RouteConfig[] => {
         return routes.reduce((acc: RouteConfig[], route) => {
@@ -116,4 +117,41 @@ export const getProtectedRoutes = () => {
 
     return flattenRoutes(routesConfig.filter(route => route.protected));
 };
-export const getNavItems = () => routesConfig.filter(route => route.label && route.icon);
+
+const hasAccessToRoute = (route: RouteConfig, userRole: Role): boolean => {
+    // If route has no allowed roles, it's accessible to all
+    if (!route.allowedRoles) return true;
+
+    // Check if user's role is in allowed roles
+    return route.allowedRoles.includes(userRole);
+};
+
+const filterSubmenuByRole = (submenu: RouteConfig[], userRole: Role): RouteConfig[] => {
+    return submenu.filter(subItem => hasAccessToRoute(subItem, userRole));
+};
+
+export const getNavItems = (userRole: Role) => {
+    const filterRoutesByRole = (routes: RouteConfig[]): RouteConfig[] => {
+        return routes.filter(route => {
+            // If route has submenu
+            if (route.submenu) {
+                // Filter submenu items by role
+                const accessibleSubmenu = filterSubmenuByRole(route.submenu, userRole);
+
+                // If no submenu items are accessible, hide the parent menu
+                if (accessibleSubmenu.length === 0) {
+                    return false;
+                }
+
+                // Update route's submenu with only accessible items
+                route.submenu = accessibleSubmenu;
+                return true;
+            }
+
+            // For routes without submenu, check direct access
+            return hasAccessToRoute(route, userRole);
+        });
+    };
+
+    return filterRoutesByRole(routesConfig.filter(route => route.label && route.icon));
+};

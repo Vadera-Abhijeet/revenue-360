@@ -137,7 +137,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const [animateSidebar, setAnimateSidebar] = useState(false);
 
   const navItems = useMemo(
-    () => getNavItems().map(item => ({
+    () => getNavItems(user?.role || 'sub-admin').map(item => ({
       label: t(item.label || ''),
       href: item.path,
       icon: item.icon,
@@ -147,7 +147,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         icon: subItem.icon
       }))
     })),
-    [t]
+    [t, user?.role]
   );
 
   const activeNavItem = useMemo(() => {
