@@ -17,6 +17,44 @@ const randomFloat = (min: number, max: number, decimals: number = 2) => {
   return parseFloat(value.toFixed(decimals));
 };
 
+export const allRoleDemoUsers = [{
+  "id": "a08f1321-f046-40fe-ae73-0a0b57d7e568",
+  "email": "superadmin@gmail.com",
+  "role": "super-admin",
+  "password": "Admin@123",
+  "permissions": [],
+  "photoURL": "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541",
+  "name": "Super Admin",
+  "status": "active",
+  "company": "Demo Company",
+  "createdAt": "2025-03-25T08:43:47.510Z",
+  "updatedAt": "2025-03-25T08:43:47.510Z"
+}, {
+  "id": "149a0132-9fa3-49bd-bc9e-e5a33aad517f",
+  "email": "admin@gmail.com",
+  "role": "admin",
+  "password": "Admin@123",
+  "permissions": [],
+  "company": "Demo Company",
+  "photoURL": "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541",
+  "name": "Admin",
+  "status": "active",
+  "createdAt": "2025-03-25T13:54:57.978Z",
+  "updatedAt": "2025-03-25T13:54:57.978Z"
+}, {
+  "id": "149a0132-9fa3-49bd-bc9e-e5a33aad519d",
+  "email": "subadmin@gmail.com",
+  "role": "sub-admin",
+  "password": "Admin@123",
+  "permissions": [],
+  "company": "Demo Company",
+  "photoURL": "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541",
+  "name": "Sub Admin",
+  "status": "active",
+  "createdAt": "2025-03-25T13:54:57.978Z",
+  "updatedAt": "2025-03-25T13:54:57.978Z"
+}]
+
 // Dashboard data
 export const fetchDashboardData = async (startDate: Date, endDate: Date) => {
   // Simulate API call delay

@@ -9,7 +9,7 @@ import {
 } from "@phosphor-icons/react";
 import { Button, Navbar } from "flowbite-react";
 import { LayoutDashboard } from "lucide-react";
-import React from "react";
+import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import {
@@ -17,10 +17,30 @@ import {
   IllustrationDataChart,
 } from "../assets/Illustrations";
 import brandLogo from "../assets/images/Logo.png";
+import { allRoleDemoUsers } from "../services/api";
 
 const Landing: React.FC = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const existingUsers = localStorage.getItem("users");
+    const existingUsersData = existingUsers ? JSON.parse(existingUsers) : null;
+
+    // Check if local storage has users data
+    if (existingUsersData) {
+      // Check if existing data is the same as allRoleDemoUsers
+      const isSameData = JSON.stringify(existingUsersData) === JSON.stringify(allRoleDemoUsers);
+      if (!isSameData) {
+        // Merge existing data with allRoleDemoUsers
+        const mergedUsers = [...existingUsersData, ...allRoleDemoUsers];
+        localStorage.setItem("users", JSON.stringify(mergedUsers));
+      }
+    } else {
+      // If no data in local storage, add allRoleDemoUsers
+      localStorage.setItem("users", JSON.stringify(allRoleDemoUsers));
+    }
+  }, []);
 
   return (
     <div className="min-h-screen flex flex-col">
