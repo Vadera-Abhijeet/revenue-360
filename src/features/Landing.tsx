@@ -25,20 +25,15 @@ const Landing: React.FC = () => {
 
   useEffect(() => {
     const existingUsers = localStorage.getItem("users");
-    const existingUsersData = existingUsers ? JSON.parse(existingUsers) : null;
-
-    // Check if local storage has users data
-    if (existingUsersData) {
-      // Check if existing data is the same as allRoleDemoUsers
-      const isSameData = JSON.stringify(existingUsersData) === JSON.stringify(allRoleDemoUsers);
-      if (!isSameData) {
-        // Merge existing data with allRoleDemoUsers
-        const mergedUsers = [...existingUsersData, ...allRoleDemoUsers];
-        localStorage.setItem("users", JSON.stringify(mergedUsers));
+    const existingUsersReviewed = localStorage.getItem("usersReviewed");
+    if (existingUsersReviewed !== "true") {
+      if (existingUsers) {
+        localStorage.removeItem("users")
       }
-    } else {
-      // If no data in local storage, add allRoleDemoUsers
-      localStorage.setItem("users", JSON.stringify(allRoleDemoUsers));
+      setTimeout(() => {
+        localStorage.setItem("users", JSON.stringify(allRoleDemoUsers));
+        localStorage.setItem("usersReviewed", "true");
+      }, 100);
     }
   }, []);
 
