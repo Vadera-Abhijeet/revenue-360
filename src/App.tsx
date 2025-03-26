@@ -12,13 +12,11 @@ import { CurrencyProvider } from './contexts/CurrencyContext';
 import { NotificationProvider } from './contexts/NotificationContext';
 import ProtectedRoute from './routes/ProtectedRoute';
 import { flowbiteTheme } from './theme';
-import { useAuth } from './hooks/useAuth';
 
 const Layout = lazy(() => import('./components/Layout'));
 
 function AppContent() {
   const { i18n } = useTranslation();
-  const { isAuthenticated } = useAuth();
 
   return (
     <div dir={i18n.dir()} className="min-h-screen bg-gray-50">
@@ -27,17 +25,15 @@ function AppContent() {
           <Route key={path} path={path} element={element} />
         )}
       </Routes>
-      <Layout key={isAuthenticated.toString()}>
-        <RedirectIfAuthenticated>
-          <Routes>
-            {getProtectedRoutes().map(({ path, element, allowedRoles }) =>
-              <Route key={path} element={<ProtectedRoute allowedRoles={allowedRoles || []} />}>
-                <Route path={path} element={element} />
-              </Route>
-            )}
-          </Routes>
-        </RedirectIfAuthenticated>
-      </Layout>
+      <RedirectIfAuthenticated>
+        <Routes>
+          {getProtectedRoutes().map(({ path, element, allowedRoles }) =>
+            <Route key={path} element={<ProtectedRoute allowedRoles={allowedRoles || []} />}>
+              <Route path={path} element={<Layout>{element}</Layout>} />
+            </Route>
+          )}
+        </Routes>
+      </RedirectIfAuthenticated>
       <Toaster position="bottom-right" reverseOrder={false} />
     </div >
   );
