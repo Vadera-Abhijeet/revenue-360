@@ -1,6 +1,7 @@
 import React, { createContext, useState, useEffect, ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
 import { IUser } from "../interfaces";
+import { getFirstPathByRole } from "../config/routes";
 
 
 interface AuthContextType {
@@ -25,7 +26,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<IUser | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const navigate = useNavigate();
-
+  const roleBasedFirstPath = getFirstPathByRole()
   useEffect(() => {
     // Check if user is already logged in
     const storedUser = localStorage.getItem("user");
@@ -38,7 +39,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const login = (userData: IUser) => {
     setUser(userData);
     localStorage.setItem("user", JSON.stringify(userData));
-    navigate("/dashboard");
+    navigate(roleBasedFirstPath[userData.role] || "/dashboard");
   };
 
   const logout = () => {
@@ -56,7 +57,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     // Log the user in after signup
     setUser(userData);
     localStorage.setItem("user", JSON.stringify(userData));
-    navigate("/dashboard");
+    navigate(roleBasedFirstPath[userData.role] || "/dashboard");
   };
 
 

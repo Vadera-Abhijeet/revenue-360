@@ -23,13 +23,15 @@ function AppContent() {
     <div dir={i18n.dir()} className="min-h-screen bg-gray-50">
       <Routes>
         {publicRoutes.map(({ path, element }) =>
-          <Route key={path} path={path} element={element} />
-        )}
-        {protectedRoutes.map(({ path, element }) =>
           <Route key={path} element={<RouteInspector />}>
-            <Route path={path} element={<Layout>{element}</Layout>} />
+            <Route key={path} path={path} element={element} />
           </Route>
         )}
+        <Route element={<RouteInspector />}>
+          {protectedRoutes.map(({ path, element }) =>
+            <Route key={path} path={path} element={<Layout>{element}</Layout>} />
+          )}
+        </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>
       <Toaster position="bottom-right" reverseOrder={false} />
