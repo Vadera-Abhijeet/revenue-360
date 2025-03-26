@@ -18,11 +18,12 @@ import {
 } from "../assets/Illustrations";
 import brandLogo from "../assets/images/Logo.png";
 import { allRoleDemoUsers } from "../services/api";
+import { useAuth } from "../hooks/useAuth";
 
 const Landing: React.FC = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-
+  const { logout } = useAuth();
   useEffect(() => {
     const existingUsers = localStorage.getItem("users");
     const existingUsersReviewed = localStorage.getItem("usersReviewed");
@@ -31,11 +32,12 @@ const Landing: React.FC = () => {
         localStorage.removeItem("users")
       }
       setTimeout(() => {
+        logout()
         localStorage.setItem("users", JSON.stringify(allRoleDemoUsers));
         localStorage.setItem("usersReviewed", "true");
       }, 100);
     }
-  }, []);
+  }, [logout]);
 
   return (
     <div className="min-h-screen flex flex-col">
