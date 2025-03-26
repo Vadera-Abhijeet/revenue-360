@@ -190,7 +190,8 @@
       "userNotFound": "このメールアドレスのアカウントが見つかりません",
       "wrongPassword": "パスワードが正しくありません",
       "createNewAccountTitle": "アカウントをお持ちでない方",
-      "createNewAccountSubtitle": "こちらで登録"
+      "createNewAccountSubtitle": "こちらで登録",
+      "success": "ログイン成功！"
     },
     "features": {
       "trackPerformance": {

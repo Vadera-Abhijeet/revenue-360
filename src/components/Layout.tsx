@@ -59,19 +59,33 @@ const RenderSideBar = (props: IRenderSideBarProps) => {
     <Sidebar open={open} setOpen={setOpen} animate={animateSidebar}>
       <SidebarBody className="h-full justify-between gap-10">
         <div className="flex flex-1 flex-col overflow-x-hidden overflow-y-auto">
-          {!animateSidebar || open ? (
-            <img
-              src={brandLogo}
-              alt="brand logo"
-              style={{ maxHeight: "60px" }}
-            />
-          ) : (
-            <img
-              src={brandLogoIcon}
-              alt="brand logo"
-              style={{ maxHeight: "41px", width: "41px" }}
-            />
-          )}
+          {/* <AnimatePresence> */}
+          <motion.div
+            key={(!animateSidebar || open).toString()}
+            className="w-full"
+            style={{ maxHeight: "41px", height: "41px" }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 1, easings: "ease-in-out" }}
+          >
+            {!animateSidebar || open ? (
+              <motion.img
+                key="full-logo"
+                src={brandLogo}
+                alt="brand logo"
+                style={{ height: "41px", minWidth: '41px', objectFit: "contain" }}
+              />
+            ) : (
+              <motion.img
+                key="icon-logo"
+                src={brandLogoIcon}
+                alt="brand logo"
+                style={{ height: "41px", width: "41px", objectFit: "contain" }}
+              />
+            )}
+          </motion.div>
+          {/* </AnimatePresence> */}
           <div className={`mt-8 flex flex-col gap-2 pl-3`}>
             {navItems.map((link, idx) => (
               <SidebarLink
@@ -176,8 +190,18 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   };
 
   return (
-    <div className="flex min-h-screen gap-2 p-2">
-      <div className="hidden md:block">
+    <motion.div
+      className="flex min-h-screen gap-2 p-2 overflow-hidden"
+      initial={{ opacity: 0 }} // Initial state: transparent and slightly smaller
+      animate={{ opacity: 1 }} // Final state: fully opaque and normal size
+      transition={{ duration: 0.5, easings: "ease-in-out" }} // Animation duration
+    >
+      <motion.div
+        className="hidden md:block"
+        initial={{ x: '-20%', opacity: 0 }} // Start off-screen to the left and transparent
+        animate={{ x: 0, opacity: 1 }} // End at its original position and fully opaque
+        transition={{ duration: 0.5, easings: "ease-in-out" }} // Animation duration
+      >
         <RenderSideBar
           user={user}
           t={t}
@@ -188,10 +212,15 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           navItems={navItems}
           location={location}
         />
-      </div>
+      </motion.div>
 
       {/* Main Content with Sidebar */}
-      <div className="flex flex-col flex-1 gap-2">
+      <motion.div
+        className="flex flex-col flex-1 gap-2"
+        initial={{ x: '5%', opacity: 0 }} // Start off-screen to the left and transparent
+        animate={{ x: 0, opacity: 1 }} // End at its original position and fully opaque
+        transition={{ duration: 0.5, easings: "ease-in-out" }} // Animation duration
+      >
         {/* Top Navbar */}
         <Navbar
           fluid
@@ -317,7 +346,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         <div className="flex-1 overflow-auto p-2 md:p-6 bg-white max-h-[calc(100vh-82px)] overflow-y-auto border border-gray-200 rounded-lg shadow-lg">
           {children}
         </div>
-      </div>
+      </motion.div>
 
       {/* Logout Confirmation Modal */}
       <AnimatedModal
@@ -329,7 +358,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         confirmText={t("common.logout")}
         confirmButtonColor="red"
       />
-    </div>
+    </motion.div>
   );
 };
 

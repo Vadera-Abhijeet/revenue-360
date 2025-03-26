@@ -23,7 +23,7 @@ const StatCard: React.FC<StatCardProps> = ({
   isCurrency = false,
   isPercentage = false,
   valueInINR,
-  color = "primary",
+  // color = "primary",
   icon,
   onClick,
 }) => {
@@ -54,11 +54,12 @@ const StatCard: React.FC<StatCardProps> = ({
     info: "bg-blue-50 text-blue-600",
     purple: "bg-purple-50 text-purple-600",
     yellow: "bg-yellow-50 text-yellow-600",
+    indigo: "bg-[#f5f3ff] text-[#6366f1]",
   };
 
-  const iconColorClass =
-    colorClasses[color as keyof typeof colorClasses] || colorClasses.primary;
-  // const iconColorClass = colorClasses.primary;
+  // const iconColorClass =
+  //   colorClasses[color as keyof typeof colorClasses] || colorClasses.primary;
+  const iconColorClass = colorClasses.secondary;
 
   return (
     <Card
@@ -66,7 +67,7 @@ const StatCard: React.FC<StatCardProps> = ({
       onClick={onClick}
       theme={{
         root: {
-          base: "flex rounded-lg border border-gray-200 bg-white  dark:border-gray-700 dark:bg-gray-800",
+          base: "flex rounded-lg border border-gray-200 bg-white  dark:border-gray-700 dark:bg-gray-800 min-h-[174px]",
         },
       }}
     >
@@ -75,6 +76,7 @@ const StatCard: React.FC<StatCardProps> = ({
           <p className="text-sm font-medium text-gray-500">{title}</p>
           <h3 className="text-2xl font-bold mt-1 text-gray-700">
             <CountUp
+              key={value}
               end={value}
               separator={isCurrency ? formatCurrency(1000).charAt(1) : ","}
               decimal={isCurrency ? formatCurrency(1.1).charAt(4) : "."}

@@ -52,7 +52,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const users = JSON.parse(localStorage.getItem("users") || "[]");
     users.push(userData);
     localStorage.setItem("users", JSON.stringify(users));
-
+    localStorage.removeItem('tempProfilePic');
     // Log the user in after signup
     setUser(userData);
     localStorage.setItem("user", JSON.stringify(userData));

@@ -227,6 +227,7 @@ const Configurations: React.FC = () => {
               size={"md"}
               show={editModal.open}
               onClose={() => setEditModal(initialModalState)}
+              initialFocus={undefined}
             >
               <Modal.Header>
                 {t("configurations.integrations.editEmail")}
@@ -271,6 +272,7 @@ const Configurations: React.FC = () => {
               size={"md"}
               show={confirmModal.open}
               onClose={() => setConfirmModal({ ...confirmModal, open: false })}
+              initialFocus={undefined}
             >
               <Modal.Header>{t(`common.confirmation`)}</Modal.Header>
               <Modal.Body>
@@ -324,6 +326,7 @@ const Configurations: React.FC = () => {
             <Modal
               size="md"
               show={confirmDeleteIntegrationModal.open}
+              initialFocus={undefined}
               onClose={() =>
                 setConfirmDeleteIntegrationModal({
                   ...confirmDeleteIntegrationModal,

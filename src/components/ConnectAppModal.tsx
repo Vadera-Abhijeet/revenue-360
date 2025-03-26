@@ -84,7 +84,7 @@ const ConnectAppModal: React.FC<ConnectAppModalProps> = ({
   };
 
   return (
-    <Modal show={isOpen} onClose={onClose} size="md">
+    <Modal show={isOpen} onClose={onClose} size="md" initialFocus={undefined}>
       <Modal.Header
         theme={{
           title: "text-xl font-medium text-indigo-600 dark:text-white",

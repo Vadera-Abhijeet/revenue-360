@@ -95,7 +95,7 @@ const ChartConfigModal: React.FC<ChartConfigModalProps> = ({
   };
 
   return (
-    <Modal show={isOpen} onClose={onClose}>
+    <Modal show={isOpen} onClose={onClose} initialFocus={undefined}>
       <Modal.Header>
         {initialConfig ? t("charts.editChart") : t("charts.addChart")}
       </Modal.Header>

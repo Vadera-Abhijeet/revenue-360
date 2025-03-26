@@ -173,15 +173,11 @@ const SignUp: React.FC<{ handleSwap: () => void }> = ({ handleSwap }) => {
         timezone: "America/New_York"
       };
 
-      // Add user to localStorage
-      localStorage.setItem("users", JSON.stringify([...users, mockUser]));
-
       toast.promise(
         new Promise((resolve) => {
           setTimeout(() => {
             signup(mockUser);
-            localStorage.removeItem('tempProfilePic');
-            navigate("/dashboard");
+
             resolve(true);
           }, 1500);
         }),

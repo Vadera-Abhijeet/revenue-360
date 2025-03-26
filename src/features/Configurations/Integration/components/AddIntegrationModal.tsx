@@ -35,19 +35,17 @@ const Stepper: React.FC<StepperProps> = ({ currentStep }) => {
         return (
           <li
             key={index}
-            className={`flex items-center space-x-2.5 rtl:space-x-reverse ${
-              isActive || isCompleted
+            className={`flex items-center space-x-2.5 rtl:space-x-reverse ${isActive || isCompleted
                 ? "text-indigo-600 dark:text-indigo-500"
                 : "text-gray-500 dark:text-gray-400"
-            }`}
+              }`}
           >
             {/* Step Number Circle */}
             <span
               className={`flex items-center justify-center w-8 h-8 border rounded-full shrink-0 
-                ${
-                  isCompleted
-                    ? "border-indigo-600 bg-indigo-600 text-white dark:border-indigo-500 dark:bg-indigo-500"
-                    : isActive
+                ${isCompleted
+                  ? "border-indigo-600 bg-indigo-600 text-white dark:border-indigo-500 dark:bg-indigo-500"
+                  : isActive
                     ? "border-indigo-600 text-indigo-600 dark:border-indigo-500 dark:text-indigo-500"
                     : "border-gray-500 dark:border-gray-400"
                 }`}
@@ -107,7 +105,7 @@ const NewIntegrationModal = ({
   };
 
   return (
-    <Modal dismissible show={open} size="4xl" onClose={closeModal}>
+    <Modal dismissible show={open} size="4xl" onClose={closeModal} initialFocus={undefined}>
       <Modal.Header>
         {t("configurations.integrations.add_new_integration")}
       </Modal.Header>
@@ -138,10 +136,9 @@ const NewIntegrationModal = ({
                 isProcessing={loading}
                 processingSpinner={<Spinner color="purple" />}
               >
-                {`Connect ${
-                  PLATFORM_OPTIONS.find((pt) => pt.value === inward.platform)
+                {`Connect ${PLATFORM_OPTIONS.find((pt) => pt.value === inward.platform)
                     ?.label
-                }`}
+                  }`}
               </Button>
             </div>
           </div>
@@ -170,10 +167,9 @@ const NewIntegrationModal = ({
                 isProcessing={loading}
                 processingSpinner={<Spinner color="purple" />}
               >
-                {`Connect ${
-                  PLATFORM_OPTIONS.find((pt) => pt.value === outward.platform)
+                {`Connect ${PLATFORM_OPTIONS.find((pt) => pt.value === outward.platform)
                     ?.label
-                }`}
+                  }`}
               </Button>
             </div>
           </div>

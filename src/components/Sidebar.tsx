@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from "motion/react";
 import React, { createContext, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { cn } from "../lib/utils";
+import { Tooltip } from "flowbite-react";
 
 interface Links {
   label: string;
@@ -179,7 +180,6 @@ export const SidebarLink = ({
   };
 
   const isActive = active || (link.submenu && link.submenu.some(sub => sub.href === window.location.pathname));
-
   return (
     <div className="flex flex-col">
       <div
@@ -189,12 +189,23 @@ export const SidebarLink = ({
         )}
         onClick={() => handleClick()}
       >
-        <div
-          className={`text-${isActive ? "indigo" : "gray"}-700 dark:text-${isActive ? "indigo" : "gray"
-            }-200`}
-        >
-          {link.icon}
-        </div>
+        {!open && animate ? (
+          <Tooltip content={link.label} placement="right">
+            <div
+              className={`text-${isActive ? "indigo" : "gray"}-700 dark:text-${isActive ? "indigo" : "gray"
+                }-200`}
+            >
+              {link.icon}
+            </div>
+          </Tooltip>
+        ) : (
+          <div
+            className={`text-${isActive ? "indigo" : "gray"}-700 dark:text-${isActive ? "indigo" : "gray"
+              }-200`}
+          >
+            {link.icon}
+          </div>
+        )}
 
         <motion.span
           animate={{

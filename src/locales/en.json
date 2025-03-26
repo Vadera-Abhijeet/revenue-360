@@ -194,7 +194,8 @@
       "invalidEmail": "Please enter a valid email address",
       "emailRequired": "Email is required",
       "passwordRequired": "Password is required",
-      "passwordMinLength": "Password must be at least 6 characters"
+      "passwordMinLength": "Password must be at least 6 characters",
+      "success": "Login successful!"
     },
     "signup": {
       "title": "Create a New Account",

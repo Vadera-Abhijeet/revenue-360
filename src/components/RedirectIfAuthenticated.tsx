@@ -13,31 +13,28 @@ const RedirectIfAuthenticated: React.FC<RedirectIfAuthenticatedProps> = ({ child
     const location = useLocation();
     const hasRedirected = useRef(false);
     const [isReady, setIsReady] = useState(false);
+
     useEffect(() => {
-        const handleRedirect = async () => {
-            if (hasRedirected.current || isLoading) return;
+        if (hasRedirected.current || isLoading) return;
 
-            hasRedirected.current = true;
+        hasRedirected.current = true;
 
-            if (!user) {
-                setIsReady(true);
-                navigate(location.pathname === '/' ? '/' : '/auth');
-                return;
-            }
-
-            if (user.role === 'admin' && user.isNewMerchant) {
-                navigate('/onboarding');
-            } else if (ROLES.includes(user.role)) {
-                navigate('/dashboard');
-            } else {
-                navigate('/404');
-            }
-
-            // Mark as ready after redirection logic is complete
+        if (!user) {
             setIsReady(true);
-        };
+            navigate(location.pathname === '/' ? '/' : '/auth');
+            return;
+        }
 
-        handleRedirect();
+        if (user.role === 'admin' && user.isNewMerchant) {
+            navigate('/onboarding');
+        } else if (ROLES.includes(user.role)) {
+            navigate('/dashboard');
+        } else {
+            navigate('/404');
+        }
+
+        // Mark as ready after redirection logic is complete
+        setIsReady(true);
     }, [user, navigate, location, isLoading]);
 
     // Show loading state while checking authentication
@@ -46,7 +43,7 @@ const RedirectIfAuthenticated: React.FC<RedirectIfAuthenticatedProps> = ({ child
     }
 
     // Render children only after redirection logic is complete
-    return children;
+    return <>{children}</>;
 };
 
 export default RedirectIfAuthenticated; 

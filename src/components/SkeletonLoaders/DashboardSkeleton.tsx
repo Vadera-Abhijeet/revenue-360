@@ -20,7 +20,7 @@ const DashboardSkeleton: React.FC = () => {
             {/* Charts Section */}
             <div className="p-4 rounded-lg border border-gray-200">
                 <div className="h-8 w-48 rounded bg-gray-200 animate-pulse mb-4"></div>
-                <div className="h-64 rounded bg-gray-200 animate-pulse"></div>
+                <div className="h-[338px] rounded bg-gray-200 animate-pulse"></div>
             </div>
 
             {/* Bottom Grid */}

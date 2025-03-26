@@ -190,7 +190,8 @@
       "userNotFound": "No se encontró ninguna cuenta con este correo electrónico",
       "wrongPassword": "Contraseña incorrecta",
       "createNewAccountTitle": "¿No tienes una cuenta?",
-      "createNewAccountSubtitle": "Regístrate aquí."
+      "createNewAccountSubtitle": "Regístrate aquí.",
+      "success": "Inicio de sesión exitoso!"
     },
     "features": {
       "trackPerformance": {

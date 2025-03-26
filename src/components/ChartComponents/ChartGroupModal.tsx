@@ -45,7 +45,7 @@ const ChartGroupModal: React.FC<ChartGroupModalProps> = ({
   };
 
   return (
-    <Modal show={isOpen} onClose={onClose}>
+    <Modal show={isOpen} onClose={onClose} initialFocus={undefined}>
       <Modal.Header>
         {initialGroup ? t("charts.editGroup") : t("charts.createGroup")}
       </Modal.Header>

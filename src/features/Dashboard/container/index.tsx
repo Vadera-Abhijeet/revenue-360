@@ -12,6 +12,7 @@ import RecentCampaigns from "../components/RecentCampaigns";
 import RevenueAndSpendChart from "../components/RevenueAndSpendChart";
 import TopPerformingAppChart from "../components/TopPerformingAppChart";
 import { IDashboard } from "../interface";
+import { motion } from "motion/react";
 
 const accounts = [
   { label: "All", value: "" },
@@ -27,7 +28,7 @@ const Dashboard: React.FC = () => {
   const { currency, convertCurrency } = useCurrency();
   const [isLoading, setIsLoading] = useState(true);
   const [dashboardData, setDashboardData] = useState<IDashboard | undefined>();
-  const [selectedAccount, setSelectedAccount] = useState(accounts[0].value);
+  const [selectedAccounts, setSelectedAccounts] = useState([accounts[0].value]);
   const [openAccountDropdown, setOpenAccountDropdown] = useState(false);
   const [startDate, setStartDate] = useState<Date>(
     new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
@@ -48,7 +49,7 @@ const Dashboard: React.FC = () => {
     };
 
     loadData();
-  }, [startDate, endDate, selectedAccount]);
+  }, [startDate, endDate, selectedAccounts]);
 
   const handleDateRangeChange = (start: Date, end: Date) => {
     setStartDate(start);
@@ -64,8 +65,14 @@ const Dashboard: React.FC = () => {
     return convertCurrency(value, currency, "INR");
   };
 
-  const handleAccountChange = useCallback((account: string) => {
-    setSelectedAccount(account)
+  const handleAccountChange = useCallback((value: string) => {
+    setSelectedAccounts((prev) => {
+      if (prev.includes(value)) {
+        return prev.filter((account) => account !== value);
+      } else {
+        return [...prev, value];
+      }
+    });
     setOpenAccountDropdown(false)
   }, [])
 
@@ -85,20 +92,51 @@ const Dashboard: React.FC = () => {
             onOpenChange={setOpenAccountDropdown}
             content={
               <ListGroup className="w-48" color="light">
-                {accounts.map((account) => (<ListGroup.Item key={account.value} active={selectedAccount === account.value} onClick={() => handleAccountChange(account.value)}>{account.label}</ListGroup.Item>))}
+                {accounts.map((account) => (
+                  <motion.div
+                    key={account.value}
+                    initial={{ opacity: 0, scale: 0.9 }} // Initial state for animation
+                    animate={{ opacity: 1, scale: 1 }} // Final state for animation
+                    exit={{ opacity: 0, scale: 0.9 }} // Exit state for animation
+                    transition={{ duration: 0.2 }} // Animation duration
+                  >
+                    <motion.div
+                      onClick={() => handleAccountChange(account.value)}
+                      initial={{ backgroundColor: 'transparent' }}
+                      animate={{
+                        backgroundColor: selectedAccounts.includes(account.value) ? '#d1fae5' : 'transparent', // Change color when selected
+                        scale: selectedAccounts.includes(account.value) ? 1.05 : 1, // Scale up when selected
+                      }}
+                      transition={{ duration: 0.2 }} // Animation duration for color and scale
+                    >
+                      <ListGroup.Item
+                        active={selectedAccounts.includes(account.value)} // Check if account is selected
+                      >
+                        {account.label}
+                      </ListGroup.Item>
+                    </motion.div>
+                  </motion.div>
+                ))}
               </ListGroup>
             }
             theme={{
               content: "z-10 overflow-hidden rounded-[7px] shadow-md ",
             }}
           >
-            <Button color="light" type="button" className="min-w-[150px]" theme={{
-              inner: {
-                base: "flex items-stretch w-full transition-all duration-200"
-              }
-            }}>
+            <Button
+              color="light"
+              type="button"
+              className="min-w-[150px]"
+              theme={{
+                inner: {
+                  base: "flex items-stretch w-full transition-all duration-200"
+                }
+              }}
+            >
               <div className="flex items-center gap-2 w-full justify-between">
-                {accounts.find(acc => acc.value === selectedAccount)?.label || "Select Account"}
+                {selectedAccounts.length > 0
+                  ? selectedAccounts.map((acc) => accounts.find(a => a.value === acc)?.label).join(', ')
+                  : "Select Account"}
                 <ChevronDown size={16} />
               </div>
             </Button>

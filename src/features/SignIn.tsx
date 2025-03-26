@@ -14,6 +14,7 @@ import * as yup from "yup";
 import { useAuth } from "../hooks/useAuth";
 import { IUser } from "../interfaces";
 import brandLogo from "../assets/images/Logo.png";
+import toast from "react-hot-toast";
 interface SignInFormInputs {
   email: string;
   password: string;
@@ -58,10 +59,19 @@ const SignIn: React.FC<{ handleSwap: () => void }> = ({ handleSwap }) => {
     if (foundUser) {
       // Check if password matches
       if (foundUser.password === data.password) {
-        setTimeout(() => {
-          login(foundUser);
-          navigate("/dashboard");
-        }, 1500);
+        toast.promise(
+          new Promise((resolve) => {
+            setTimeout(() => {
+              login(foundUser);
+              resolve(true);
+            }, 1500);
+          }),
+          {
+            loading: t("auth.login.loggingIn"),
+            success: t("auth.login.success"),
+            error: t("auth.login.error"),
+          }
+        );
       } else {
         setIsLoading(false);
         setError(t("auth.login.wrongPassword"));

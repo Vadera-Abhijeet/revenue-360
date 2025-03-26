@@ -190,7 +190,8 @@
       "userNotFound": "Kein Konto mit dieser E-Mail gefunden",
       "wrongPassword": "Falsches Passwort",
       "createNewAccountTitle": "Noch kein Konto?",
-      "createNewAccountSubtitle": "Hier registrieren."
+      "createNewAccountSubtitle": "Hier registrieren.",
+      "success": "Anmeldung erfolgreich!"
     },
     "features": {
       "trackPerformance": {

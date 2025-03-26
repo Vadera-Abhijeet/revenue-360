@@ -13,7 +13,7 @@ const CampaignsDataTable = (props: IChartDataProps) => {
   const { t } = useTranslation();
 
   return (
-    <Modal show={selectedCampaign && isModalOpen} onClose={() => closeModal()}>
+    <Modal show={selectedCampaign && isModalOpen} onClose={() => closeModal()} initialFocus={undefined}>
       <Modal.Header>{`${selectedCampaign?.name}'s campaigns`}</Modal.Header>
       <Modal.Body>
         <div className="overflow-x-auto border border-gray-200 dark:border-gray-700 rounded-md">
