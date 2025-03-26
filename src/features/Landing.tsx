@@ -17,8 +17,8 @@ import {
   IllustrationDataChart,
 } from "../assets/Illustrations";
 import brandLogo from "../assets/images/Logo.png";
-import { allRoleDemoUsers } from "../services/api";
 import { useAuth } from "../hooks/useAuth";
+import { allRoleDemoUsers } from "../services/api";
 
 const Landing: React.FC = () => {
   const { t } = useTranslation();

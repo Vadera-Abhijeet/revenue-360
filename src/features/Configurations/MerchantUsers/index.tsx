@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import Loading from "../../../components/Loading";
 import { IUser } from "../../../interfaces";
 
-const MerchantUsers = () => {
+const Merchants = () => {
     const { t } = useTranslation();
     const [merchantUsers, setMerchantUsers] = useState<IUser[]>([]);
     const [loading, setLoading] = useState(true);
@@ -113,4 +113,4 @@ const MerchantUsers = () => {
     );
 };
 
-export default MerchantUsers; 
+export default Merchants; 

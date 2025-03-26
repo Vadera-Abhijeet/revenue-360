@@ -4,36 +4,34 @@ import { Toaster } from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
 import { Route, Routes } from 'react-router-dom';
 import Loading from './components/Loading';
-import RedirectIfAuthenticated from './components/RedirectIfAuthenticated';
 import { getProtectedRoutes, getPublicRoutes } from './config/routes';
 import { AuthProvider } from './contexts/AuthContext';
 import { ChartConfigProvider } from './contexts/ChartConfigContext';
 import { CurrencyProvider } from './contexts/CurrencyContext';
 import { NotificationProvider } from './contexts/NotificationContext';
-import ProtectedRoute from './routes/ProtectedRoute';
+import NotFound from './features/NotFound';
+import RouteInspector from './routes/RouteInspector';
 import { flowbiteTheme } from './theme';
 
 const Layout = lazy(() => import('./components/Layout'));
 
 function AppContent() {
   const { i18n } = useTranslation();
-
+  const publicRoutes = getPublicRoutes();
+  const protectedRoutes = getProtectedRoutes();
   return (
     <div dir={i18n.dir()} className="min-h-screen bg-gray-50">
       <Routes>
-        {getPublicRoutes().map(({ path, element }) =>
+        {publicRoutes.map(({ path, element }) =>
           <Route key={path} path={path} element={element} />
         )}
+        {protectedRoutes.map(({ path, element }) =>
+          <Route key={path} element={<RouteInspector />}>
+            <Route path={path} element={<Layout>{element}</Layout>} />
+          </Route>
+        )}
+        <Route path="*" element={<NotFound />} />
       </Routes>
-      <RedirectIfAuthenticated>
-        <Routes>
-          {getProtectedRoutes().map(({ path, element, allowedRoles }) =>
-            <Route key={path} element={<ProtectedRoute allowedRoles={allowedRoles || []} />}>
-              <Route path={path} element={<Layout>{element}</Layout>} />
-            </Route>
-          )}
-        </Routes>
-      </RedirectIfAuthenticated>
       <Toaster position="bottom-right" reverseOrder={false} />
     </div >
   );

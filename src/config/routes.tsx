@@ -1,7 +1,7 @@
 import { LayoutDashboard, Megaphone, Puzzle, Settings as SettingsIcon, User, Users } from 'lucide-react';
 import React from 'react';
 import { Role } from '../interfaces';
-import { AppDetail, AppList, Auth, CampaignDetail, Campaigns, Dashboard, Integrations, Landing, NotFound, Settings, TeamManagement, MerchantUsers } from '../routes/asyncComponents';
+import { AppDetail, AppList, Auth, CampaignDetail, Campaigns, Dashboard, Integrations, Landing, Merchants, NotFound, Settings, TeamManagement } from '../routes/asyncComponents';
 
 export interface RouteConfig {
     path: string;
@@ -30,13 +30,13 @@ export const routesConfig: RouteConfig[] = [
         path: '/dashboard',
         element: <Dashboard />,
         protected: true,
-        allowedRoles: ['super-admin', 'admin', 'sub-admin'],
+        allowedRoles: ['admin', 'sub-admin'],
         label: 'common.dashboard',
         icon: <LayoutDashboard size={20} />
     },
     {
-        path: '/merchant-users',
-        element: <MerchantUsers />,
+        path: '/merchants',
+        element: <Merchants />,
         protected: true,
         allowedRoles: ['super-admin'],
         label: 'common.merchants',
@@ -163,4 +163,21 @@ export const getNavItems = (userRole: Role) => {
     };
 
     return filterRoutesByRole(routesConfig.filter(route => route.label && route.icon));
+};
+
+export const getFirstPathByRole = (): Record<string, string | undefined> => {
+    const rolePaths: { [key: string]: string } = {};
+
+    routesConfig.forEach(route => {
+        if (route.allowedRoles) {
+            route.allowedRoles.forEach(role => {
+                // Only set the path if it hasn't been set yet
+                if (!rolePaths[role]) {
+                    rolePaths[role] = route.path;
+                }
+            });
+        }
+    });
+
+    return rolePaths;
 };
