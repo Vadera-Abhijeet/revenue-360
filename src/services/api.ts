@@ -1,7 +1,7 @@
 // Mock API service for Revenue-360
 // In a real application, this would connect to a backend API
 
-import { IUser, IPreferences, ISettings } from "../interfaces";
+import { IMerchant, IPreferences, ISettings } from "../interfaces";
 
 // Helper function to generate random data
 const randomNumber = (min: number, max: number) => {
@@ -17,7 +17,7 @@ const randomFloat = (min: number, max: number, decimals: number = 2) => {
   return parseFloat(value.toFixed(decimals));
 };
 
-export const allRoleDemoUsers = [{
+export const allRoleDemoUsers: IMerchant[] = [{
   "id": "a08f1321-f046-40fe-ae73-0a0b57d7e568",
   "email": "superadmin@gmail.com",
   "role": "super-admin",
@@ -27,8 +27,9 @@ export const allRoleDemoUsers = [{
   "name": "Super Admin",
   "status": "active",
   "company": "Demo Company",
-  "createdAt": "2025-03-25T08:43:47.510Z",
-  "updatedAt": "2025-03-25T08:43:47.510Z"
+  "createdAt": new Date("2025-03-25T08:43:47.510Z"),
+  "updatedAt": new Date("2025-03-25T08:43:47.510Z"),
+  "timezone": "America/New_York"
 }, {
   "id": "149a0132-9fa3-49bd-bc9e-e5a33aad517f",
   "email": "admin@gmail.com",
@@ -39,8 +40,25 @@ export const allRoleDemoUsers = [{
   "photoURL": "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541",
   "name": "Admin",
   "status": "active",
-  "createdAt": "2025-03-25T13:54:57.978Z",
-  "updatedAt": "2025-03-25T13:54:57.978Z"
+  "createdAt": new Date("2025-03-25T13:54:57.978Z"),
+  "updatedAt": new Date("2025-03-25T13:54:57.978Z"),
+  "timezone": "America/New_York",
+  "teamMembers": [
+    {
+      "id": "149a0132-9fa3-49bd-bc9e-e5a33aad519d",
+      "email": "subadmin@gmail.com",
+      "role": "sub-admin",
+      "password": "Admin@123",
+      "permissions": [],
+      "photoURL": "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541",
+      "name": "Sub Admin",
+      "status": "active",
+      "createdAt": new Date("2025-03-25T13:54:57.978Z"),
+      "updatedAt": new Date("2025-03-25T13:54:57.978Z"),
+      "timezone": "America/New_York",
+      "inviteStatus": "accepted"
+    }
+  ]
 }, {
   "id": "149a0132-9fa3-49bd-bc9e-e5a33aad519d",
   "email": "subadmin@gmail.com",
@@ -51,8 +69,9 @@ export const allRoleDemoUsers = [{
   "photoURL": "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541",
   "name": "Sub Admin",
   "status": "active",
-  "createdAt": "2025-03-25T13:54:57.978Z",
-  "updatedAt": "2025-03-25T13:54:57.978Z"
+  "createdAt": new Date("2025-03-25T13:54:57.978Z"),
+  "updatedAt": new Date("2025-03-25T13:54:57.978Z"),
+  "timezone": "America/New_York"
 }]
 
 // Dashboard data
@@ -585,7 +604,7 @@ export const fetchUserSettings = async () => {
   // Simulate API call delay
   await new Promise((resolve) => setTimeout(resolve, 600));
   // Get current user from localStorage
-  const currentUser = JSON.parse(localStorage.getItem("user") || "{}");
+  const currentUser: IMerchant = JSON.parse(localStorage.getItem("user") || "{}");
   return {
     account: {
       name: currentUser.name || "Demo User",
@@ -598,9 +617,10 @@ export const fetchUserSettings = async () => {
       password: currentUser.password || "password",
       permissions: currentUser.permissions || [],
       status: currentUser.status || "active",
-      isNewMerchant: currentUser.isNewMerchant || false,
       createdAt: currentUser.createdAt || new Date(),
       updatedAt: currentUser.updatedAt || new Date(),
+      teamMembers: currentUser.teamMembers || [],
+      isNewMerchant: currentUser.isNewMerchant || false,
     },
     integrations: [
       {
@@ -659,22 +679,40 @@ export const fetchUserSettings = async () => {
         id: "user1",
         name: "Demo User",
         email: "demo@example.com",
-        role: "Administrator",
+        role: "sub-admin",
         status: "active",
+        password: "password",
+        timezone: "America/New_York",
+        permissions: [],
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        inviteStatus: "pending",
       },
       {
         id: "user2",
         name: "John Doe",
         email: "john@example.com",
-        role: "Editor",
+        role: "sub-admin",
         status: "active",
+        password: "password",
+        timezone: "America/New_York",
+        permissions: [],
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        inviteStatus: "pending",
       },
       {
         id: "user3",
         name: "Jane Smith",
         email: "jane@example.com",
-        role: "Viewer",
+        role: "sub-admin",
         status: "pending",
+        password: "password",
+        timezone: "America/New_York",
+        permissions: [],
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        inviteStatus: "pending",
       },
     ],
   } as ISettings;
@@ -719,7 +757,7 @@ const validateImage = (file: File): Promise<boolean> => {
 
 // Update user settings
 export const updateUserSettings = async (settings: {
-  account: IUser;
+  account: IMerchant;
   preferences: IPreferences;
   profilePic?: File;
 }) => {

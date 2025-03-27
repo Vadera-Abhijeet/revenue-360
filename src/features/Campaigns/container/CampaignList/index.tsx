@@ -25,9 +25,7 @@ const Campaigns: React.FC = () => {
   const [startDate, setStartDate] = useState<Date>(
     new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
   );
-  console.log(" startDate:", startDate);
   const [endDate, setEndDate] = useState<Date>(new Date());
-  console.log(" endDate:", endDate);
 
   useEffect(() => {
     const loadCampaigns = async () => {
@@ -43,7 +41,7 @@ const Campaigns: React.FC = () => {
     };
 
     loadCampaigns();
-  }, []);
+  }, [startDate, endDate]);
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);

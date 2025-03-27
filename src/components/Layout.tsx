@@ -1,11 +1,4 @@
-import {
-  Avatar,
-  Badge,
-  Dropdown,
-  Navbar,
-  Popover,
-  Tooltip,
-} from "flowbite-react";
+import { Avatar, Dropdown, Navbar, Popover, Tooltip } from "flowbite-react";
 import { TFunction } from "i18next";
 import {
   Bell,
@@ -21,15 +14,16 @@ import { useTranslation } from "react-i18next";
 import { Location, useLocation } from "react-router-dom";
 import brandLogo from "../assets/images/Logo.png";
 import brandLogoIcon from "../assets/images/LogoIcon.png";
-import { Sidebar, SidebarBody, SidebarLink } from "./Sidebar";
-import AnimatedModal from "./AnimatedModal";
+import { getNavItems } from "../config/routes";
 import { CurrencyCode, useCurrency } from "../contexts/CurrencyContext";
 import { useNotifications } from "../contexts/NotificationContext";
 import Notifications from "../features/Notifications";
 import { useAuth } from "../hooks/useAuth";
-import { IUser } from "../interfaces";
+import { IMerchant } from "../interfaces";
 import { CURRENCIES_OPTIONS, LANGUAGES_OPTIONS } from "../shared/constants";
-import { getNavItems } from "../config/routes";
+import AnimatedModal from "./AnimatedModal";
+import NotificationDot from "./NotificationDot";
+import { Sidebar, SidebarBody, SidebarLink } from "./Sidebar";
 
 interface INavItem {
   label: string;
@@ -46,7 +40,7 @@ interface IRenderSideBarProps {
   animateSidebar: boolean;
   t: TFunction<"translation", undefined>;
   logout: () => void;
-  user: IUser | null;
+  user: IMerchant | null;
   navItems: INavItem[];
   location: Location;
 }
@@ -74,7 +68,11 @@ const RenderSideBar = (props: IRenderSideBarProps) => {
                 key="full-logo"
                 src={brandLogo}
                 alt="brand logo"
-                style={{ height: "41px", minWidth: '41px', objectFit: "contain" }}
+                style={{
+                  height: "41px",
+                  minWidth: "41px",
+                  objectFit: "contain",
+                }}
               />
             ) : (
               <motion.img
@@ -151,16 +149,17 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const [animateSidebar, setAnimateSidebar] = useState(false);
 
   const navItems = useMemo(
-    () => getNavItems(user?.role || 'sub-admin').map(item => ({
-      label: t(item.label || ''),
-      href: item.path,
-      icon: item.icon,
-      submenu: item.submenu?.map(subItem => ({
-        label: t(subItem.label || ''),
-        href: subItem.path,
-        icon: subItem.icon
-      }))
-    })),
+    () =>
+      getNavItems(user?.role || "sub-admin").map((item) => ({
+        label: t(item.label || ""),
+        href: item.path,
+        icon: item.icon,
+        submenu: item.submenu?.map((subItem) => ({
+          label: t(subItem.label || ""),
+          href: subItem.path,
+          icon: subItem.icon,
+        })),
+      })),
     [t, user?.role]
   );
 
@@ -181,8 +180,11 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   };
 
   const activeMenuLabel = useMemo(() => {
-    return activeNavItem?.label || (location.pathname === "/settings" ? t("common.settings") : null)
-  }, [activeNavItem, location.pathname, t])
+    return (
+      activeNavItem?.label ||
+      (location.pathname === "/settings" ? t("common.settings") : null)
+    );
+  }, [activeNavItem, location.pathname, t]);
 
   const handleLogout = () => {
     setShowLogoutModal(false);
@@ -198,7 +200,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     >
       <motion.div
         className="hidden md:block"
-        initial={{ x: '-20%', opacity: 0 }} // Start off-screen to the left and transparent
+        initial={{ x: "-20%", opacity: 0 }} // Start off-screen to the left and transparent
         animate={{ x: 0, opacity: 1 }} // End at its original position and fully opaque
         transition={{ duration: 0.5, easings: "ease-in-out" }} // Animation duration
       >
@@ -217,7 +219,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       {/* Main Content with Sidebar */}
       <motion.div
         className="flex flex-col flex-1 gap-2"
-        initial={{ x: '5%', opacity: 0 }} // Start off-screen to the left and transparent
+        initial={{ x: "5%", opacity: 0 }} // Start off-screen to the left and transparent
         animate={{ x: 0, opacity: 1 }} // End at its original position and fully opaque
         transition={{ duration: 0.5, easings: "ease-in-out" }} // Animation duration
       >
@@ -302,19 +304,18 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 content: "z-10 overflow-hidden rounded-[7px] shadow-sm",
               }}
             >
-              <div className="relative py-2 px-1 cursor-pointer">
-                <Bell
-                  size={20}
-                  className="text-gray-700 hover:text-gray-900"
-                />
-                {unreadCount > 0 && (
-                  <Badge
-                    color="indigo"
-                    className="absolute -top-1.5 -right-4"
-                  >
-                    {unreadCount}
-                  </Badge>
-                )}
+              <div>
+                <NotificationDot
+                  dotColor="bg-indigo-700"
+                  dotSize="w-2 h-2"
+                  show={unreadCount > 0}
+                  className="relative py-2 px-1 cursor-pointer"
+                >
+                  <Bell
+                    size={20}
+                    className="text-gray-700 hover:text-gray-900"
+                  />
+                </NotificationDot>
               </div>
             </Popover>
             <Dropdown
@@ -350,11 +351,16 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
       {/* Logout Confirmation Modal */}
       <AnimatedModal
+        isConfirmation
         show={showLogoutModal}
         onClose={() => setShowLogoutModal(false)}
         onConfirm={handleLogout}
         title={t("common.confirm_logout")}
-        message={t("common.logout_confirmation_message")}
+        children={
+          <div className="text-gray-700">
+            {t("common.logout_confirmation_message")}
+          </div>
+        }
         confirmText={t("common.logout")}
         confirmButtonColor="red"
       />

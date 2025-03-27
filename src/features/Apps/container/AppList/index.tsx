@@ -3,9 +3,6 @@ import { Eye, Search, } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
-import ConnectAppModal, {
-  AppFormData,
-} from "../../../../components/ConnectAppModal";
 import { useCurrency } from "../../../../contexts/CurrencyContext";
 import { fetchApps } from "../../../../services/api";
 import { PuzzlePiece } from "@phosphor-icons/react";
@@ -31,7 +28,7 @@ const AppList: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [apps, setApps] = useState<App[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  // const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const loadApps = async () => {
@@ -53,24 +50,24 @@ const AppList: React.FC = () => {
     setSearchTerm(e.target.value);
   };
 
-  const handleConnectApp = (appData: AppFormData) => {
-    // In a real app, this would send the data to the server
-    const newApp: App = {
-      id: `app-${Date.now()}`,
-      name: appData.name,
-      platform: appData.platform,
-      estimateRevenueUSD: 0,
-      estimateRevenue: formatCurrency(0), // Default formatted revenue
-      totalCostUSD: 0,
-      totalCostINR: formatCurrency(0),
-      netUSD: 0,
-      percentage: 0,
-      icon: "/default-app-icon.png", // Default icon if not provided
-    };
+  // const handleConnectApp = (appData: AppFormData) => {
+  //   // In a real app, this would send the data to the server
+  //   const newApp: App = {
+  //     id: `app-${Date.now()}`,
+  //     name: appData.name,
+  //     platform: appData.platform,
+  //     estimateRevenueUSD: 0,
+  //     estimateRevenue: formatCurrency(0), // Default formatted revenue
+  //     totalCostUSD: 0,
+  //     totalCostINR: formatCurrency(0),
+  //     netUSD: 0,
+  //     percentage: 0,
+  //     icon: "/default-app-icon.png", // Default icon if not provided
+  //   };
 
-    setApps([...apps, newApp]);
-    setIsModalOpen(false);
-  };
+  //   setApps([...apps, newApp]);
+  //   setIsModalOpen(false);
+  // };
 
   const filteredApps = apps.filter((app) => {
     const matchesSearch = app.name
@@ -207,11 +204,11 @@ const AppList: React.FC = () => {
             </Table>
           </div>
 
-          <ConnectAppModal
+          {/* <ConnectAppModal
             isOpen={isModalOpen}
             onClose={() => setIsModalOpen(false)}
             onSubmit={handleConnectApp}
-          />
+          /> */}
         </>
       )}
     </div>

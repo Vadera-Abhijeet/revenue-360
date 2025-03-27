@@ -1,19 +1,19 @@
-import { Flowbite } from 'flowbite-react';
-import { lazy, Suspense } from 'react';
-import { Toaster } from 'react-hot-toast';
-import { useTranslation } from 'react-i18next';
-import { Route, Routes } from 'react-router-dom';
-import Loading from './components/Loading';
-import { getProtectedRoutes, getPublicRoutes } from './config/routes';
-import { AuthProvider } from './contexts/AuthContext';
-import { ChartConfigProvider } from './contexts/ChartConfigContext';
-import { CurrencyProvider } from './contexts/CurrencyContext';
-import { NotificationProvider } from './contexts/NotificationContext';
-import NotFound from './features/NotFound';
-import RouteInspector from './routes/RouteInspector';
-import { flowbiteTheme } from './theme';
+import { Flowbite } from "flowbite-react";
+import { lazy, Suspense } from "react";
+import { Toaster } from "react-hot-toast";
+import { useTranslation } from "react-i18next";
+import { Route, Routes } from "react-router-dom";
+import Loading from "./components/Loading";
+import { getProtectedRoutes, getPublicRoutes } from "./config/routes";
+import { AuthProvider } from "./contexts/AuthContext";
+import { ChartConfigProvider } from "./contexts/ChartConfigContext";
+import { CurrencyProvider } from "./contexts/CurrencyContext";
+import { NotificationProvider } from "./contexts/NotificationContext";
+import NotFound from "./features/NotFound";
+import RouteInspector from "./routes/RouteInspector";
+import { flowbiteTheme } from "./theme";
 
-const Layout = lazy(() => import('./components/Layout'));
+const Layout = lazy(() => import("./components/Layout"));
 
 function AppContent() {
   const { i18n } = useTranslation();
@@ -22,20 +22,27 @@ function AppContent() {
   return (
     <div dir={i18n.dir()} className="min-h-screen bg-gray-50">
       <Routes>
-        {publicRoutes.map(({ path, element }) =>
-          <Route key={path} element={<RouteInspector />}>
+        {publicRoutes.map(({ path, element }) => (
+          <Route
+            key={path}
+            element={<RouteInspector key={window.location.pathname} />}
+          >
             <Route key={path} path={path} element={element} />
           </Route>
-        )}
+        ))}
         <Route element={<RouteInspector />}>
-          {protectedRoutes.map(({ path, element }) =>
-            <Route key={path} path={path} element={<Layout>{element}</Layout>} />
-          )}
+          {protectedRoutes.map(({ path, element }) => (
+            <Route
+              key={path}
+              path={path}
+              element={<Layout>{element}</Layout>}
+            />
+          ))}
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>
       <Toaster position="bottom-right" reverseOrder={false} />
-    </div >
+    </div>
   );
 }
 

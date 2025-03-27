@@ -25,7 +25,7 @@ import {
   Camera,
 } from "lucide-react";
 import { fetchUserSettings, updateUserSettings } from "../services/api";
-import { IUser, IPreferences } from "../interfaces";
+import { IMerchant, IPreferences } from "../interfaces";
 import { CurrencyCode, useCurrency } from "../contexts/CurrencyContext";
 import RazorpayButton from "../components/RazorPayButton";
 import { useAuth } from "../hooks/useAuth";
@@ -67,7 +67,7 @@ const Settings: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [formData, setFormData] = useState<{
-    account: IUser;
+    account: IMerchant;
     preferences: IPreferences;
   }>({
     account: {

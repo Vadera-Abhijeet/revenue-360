@@ -1,85 +1,51 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import {
-  Button,
-  Card,
-  Label,
-  Spinner,
-  TextInput
-} from "flowbite-react";
-import React, { useState } from "react";
+import { Button, Card, Label, Spinner, TextInput } from "flowbite-react";
+import React from "react";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import * as yup from "yup";
-import { useAuth } from "../hooks/useAuth";
-import { IUser } from "../interfaces";
 import brandLogo from "../assets/images/Logo.png";
-import toast from "react-hot-toast";
+import { useAuth } from "../hooks/useAuth";
 interface SignInFormInputs {
   email: string;
   password: string;
 }
 
 const SignIn: React.FC<{ handleSwap: () => void }> = ({ handleSwap }) => {
-  const { t, } = useTranslation();
+  const { t } = useTranslation();
   const navigate = useNavigate();
-  const { login } = useAuth();
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
+  const { login, isLoading } = useAuth();
 
   // Add Yup Schema
-  const schema = yup.object({
-    email: yup
-      .string()
-      .email(t("auth.login.invalidEmail"))
-      .required(t("auth.login.emailRequired")),
-    password: yup
-      .string()
-      .min(6, t("auth.login.passwordMinLength"))
-      .required(t("auth.login.passwordRequired")),
-  }).required();
+  const schema = yup
+    .object({
+      email: yup
+        .string()
+        .email(t("auth.login.invalidEmail"))
+        .required(t("auth.login.emailRequired")),
+      password: yup
+        .string()
+        .min(6, t("auth.login.passwordMinLength"))
+        .required(t("auth.login.passwordRequired")),
+    })
+    .required();
 
   const {
     register,
     handleSubmit,
-    formState: { errors }
+    formState: { errors },
   } = useForm<SignInFormInputs>({
-    resolver: yupResolver(schema)
+    resolver: yupResolver(schema),
   });
 
-
   const onSubmit = async (data: SignInFormInputs) => {
-    setError("");
-    setIsLoading(true);
-
-    // Get users from localStorage
-    const users = JSON.parse(localStorage.getItem("users") || "[]");
-    const foundUser = users.find((user: IUser) => user.email === data.email);
-
-    if (foundUser) {
-      // Check if password matches
-      if (foundUser.password === data.password) {
-        toast.promise(
-          new Promise((resolve) => {
-            setTimeout(() => {
-              login(foundUser);
-              resolve(true);
-            }, 1500);
-          }),
-          {
-            loading: t("auth.login.loggingIn"),
-            success: t("auth.login.success"),
-            error: t("auth.login.error"),
-          }
-        );
-      } else {
-        setIsLoading(false);
-        setError(t("auth.login.wrongPassword"));
-      }
-    } else {
-      setIsLoading(false);
-      setError(t("auth.login.userNotFound"));
-    }
+    toast.promise(login(data), {
+      loading: t("auth.login.loggingIn"),
+      success: t("auth.login.success"),
+      error: t("auth.login.error"),
+    });
   };
 
   return (
@@ -95,7 +61,12 @@ const SignIn: React.FC<{ handleSwap: () => void }> = ({ handleSwap }) => {
             }}
           >
             <div className="flex w-full justify-center items-center z-20">
-              <img src={brandLogo} alt="Logo" className="w-1/2 object-contain cursor-pointer" onClick={() => navigate("/")} />
+              <img
+                src={brandLogo}
+                alt="Logo"
+                className="w-1/2 object-contain cursor-pointer"
+                onClick={() => navigate("/")}
+              />
             </div>
             <div className="text-center  max-w-1000">
               {/* <h2 className="text-2xl font-bold text-gray-900">
@@ -120,7 +91,9 @@ const SignIn: React.FC<{ handleSwap: () => void }> = ({ handleSwap }) => {
                   placeholder={t("auth.login.emailPlaceholder")}
                   {...register("email")}
                 />
-                <p className="text-red-500 text-xs mt-1 min-h-4">{errors.email?.message || ""}</p>
+                <p className="text-red-500 text-xs mt-1 min-h-4">
+                  {errors.email?.message || ""}
+                </p>
               </div>
               <div>
                 <Label htmlFor="password" value={t("auth.login.password")} />
@@ -132,9 +105,11 @@ const SignIn: React.FC<{ handleSwap: () => void }> = ({ handleSwap }) => {
                   placeholder={t("auth.login.passwordPlaceholder")}
                   {...register("password")}
                 />
-                <p className="text-red-500 text-xs mt-1 min-h-4">{errors.password?.message || ""}</p>
+                <p className="text-red-500 text-xs mt-1 min-h-4">
+                  {errors.password?.message || ""}
+                </p>
               </div>
-              {error && <p className="text-red-500 text-sm">{error}</p>}
+              {/* {error && <p className="text-red-500 text-sm">{error}</p>} */}
               <Button
                 type="submit"
                 color="indigo"

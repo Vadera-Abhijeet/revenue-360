@@ -9,7 +9,7 @@ import Notifications from '../features/Notifications';
 import Settings from '../features/Settings';
 import Integrations from '../features/Configurations/Integration/container';
 import TeamManagement from '../features/Configurations/TeamManagement/container';
-import Merchants from '../features/Configurations/MerchantUsers/index';
+import Merchants from '../features/Merchants/container';
 import NotFound from '../features/NotFound';
 
 export { Landing, Auth, Dashboard, AppList, AppDetail, Campaigns, CampaignDetail, Notifications, Settings, Integrations, TeamManagement, Merchants, NotFound };

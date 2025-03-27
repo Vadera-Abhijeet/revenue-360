@@ -504,7 +504,8 @@
     "company": "Company",
     "statusLabel": "Status",
     "actions": "Actions",
-    "view": "View"
+    "view": "View",
+    "teamMembers": "Team Members"
   },
   "notFound": {
     "title": "404",

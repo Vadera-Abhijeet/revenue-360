@@ -497,7 +497,8 @@
     "company": "会社",
     "statusLabel": "ステータス",
     "actions": "アクション",
-    "view": "表示"
+    "view": "表示",
+    "teamMembers": "チームメンバー"
   },
   "notFound": {
     "title": "404",

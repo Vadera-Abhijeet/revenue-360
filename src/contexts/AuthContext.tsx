@@ -1,17 +1,29 @@
-import React, { createContext, useState, useEffect, ReactNode } from "react";
+import React, { createContext, ReactNode, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { IUser } from "../interfaces";
 import { getFirstPathByRole } from "../config/routes";
+import { ILoginResponse, IMerchant, SignupResponse } from "../interfaces";
+import { httpService } from "../services/httpService";
+import { API_CONFIG } from "../shared/constants";
 
+export interface ISignUpPayload extends Record<string, unknown> {
+  email: string;
+  password: string;
+  confirmPassword: string;
+}
+
+export interface ILoginPayload extends Record<string, unknown> {
+  email: string;
+  password: string;
+}
 
 interface AuthContextType {
-  user: IUser | null;
+  user: IMerchant | null;
   isAuthenticated: boolean;
   isLoading: boolean;
-  login: (user: IUser) => void;
+  login: (credentials: ILoginPayload) => Promise<void>;
   logout: () => void;
-  signup: (user: IUser) => void;
-  setUser: (user: IUser) => void;
+  signup: (userData: ISignUpPayload) => Promise<void>;
+  setUser: React.Dispatch<React.SetStateAction<IMerchant | null>>;
 }
 
 export const AuthContext = createContext<AuthContextType | undefined>(
@@ -23,10 +35,12 @@ interface AuthProviderProps {
 }
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [user, setUser] = useState<IUser | null>(null);
+  const [user, setUser] = useState<IMerchant | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const navigate = useNavigate();
-  const roleBasedFirstPath = getFirstPathByRole()
+
+  const roleBasedFirstPath = getFirstPathByRole();
+
   useEffect(() => {
     // Check if user is already logged in
     const storedUser = localStorage.getItem("user");
@@ -36,30 +50,75 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     setIsLoading(false);
   }, []);
 
-  const login = (userData: IUser) => {
-    setUser(userData);
-    localStorage.setItem("user", JSON.stringify(userData));
-    navigate(roleBasedFirstPath[userData.role] || "/dashboard");
+  const login = async (credentials: ILoginPayload) => {
+    try {
+      setIsLoading(true);
+      const response = await httpService.post<ILoginResponse>(
+        API_CONFIG.path.login,
+        credentials,
+        {}, // query params
+        { headers: { Authorization: undefined } } // don't send auth header for login
+      );
+
+      const { user, access, refresh } = response;
+
+      if (!user.roles || user.roles.length === 0) {
+        setIsLoading(false);
+        throw new Error("User roles not found");
+      }
+
+      // Store tokens and user data securely
+      httpService.setTokens({ access, refresh });
+      httpService.setUserData(user);
+
+      // Set user in state and navigate
+      setUser(user);
+      setIsLoading(false);
+      navigate(roleBasedFirstPath[user.roles[0]] || "/dashboard");
+    } catch (error) {
+      console.error("Login error:", error);
+      setIsLoading(false);
+      throw error;
+    }
   };
 
   const logout = () => {
+    httpService.clearAllData();
     setUser(null);
-    localStorage.removeItem("user");
     navigate("/auth");
   };
 
-  const signup = (userData: IUser) => {
-    // Store user in localStorage
-    const users = JSON.parse(localStorage.getItem("users") || "[]");
-    users.push(userData);
-    localStorage.setItem("users", JSON.stringify(users));
-    localStorage.removeItem('tempProfilePic');
-    // Log the user in after signup
-    setUser(userData);
-    localStorage.setItem("user", JSON.stringify(userData));
-    navigate(roleBasedFirstPath[userData.role] || "/dashboard");
-  };
+  const signup = async (userData: ISignUpPayload) => {
+    try {
+      setIsLoading(true);
+      const response = await httpService.post<SignupResponse>(
+        API_CONFIG.path.register,
+        userData,
+        {}, // query params
+        { headers: { Authorization: undefined } } // don't send auth header for signup
+      );
 
+      const { user, access, refresh } = response;
+
+      if (!user.roles || user.roles.length === 0) {
+        setIsLoading(false);
+        throw new Error("User roles not found");
+      }
+
+      // Store tokens and user data securely
+      httpService.setTokens({ access, refresh });
+      httpService.setUserData(user);
+
+      // Set user in state and navigate
+      setUser(user);
+      setIsLoading(false);
+      navigate(roleBasedFirstPath[user.roles[0]] || "/dashboard");
+    } catch (error) {
+      setIsLoading(false);
+      console.error("Signup error:", error);
+      throw error;
+    }
+  };
 
   const value = {
     user,
@@ -68,7 +127,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     login,
     logout,
     signup,
-    setUser
+    setUser,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

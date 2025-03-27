@@ -10,18 +10,18 @@ import { useAuth } from "../hooks/useAuth";
 import SignIn from "./SignIn";
 import SignUp from "./SignUp";
 
-
-
 const Auth: React.FC = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
-  const isSignUpMode = searchParams.get('mode') === 'signup';
+  const isSignUpMode = searchParams.get("mode") === "signup";
   const { isAuthenticated } = useAuth();
   const [currentFrame, setCurrentFrame] = useState(0);
   const [isSwapped, setIsSwapped] = useState(isSignUpMode);
-  const [formMode, setFormMode] = useState<'signin' | 'signup'>(isSignUpMode ? 'signup' : 'signin');
+  const [formMode, setFormMode] = useState<"signin" | "signup">(
+    isSignUpMode ? "signup" : "signin"
+  );
   // const [selectedLanguage, setSelectedLanguage] = useState<ILanguageOption>(
   //   LANGUAGES_OPTIONS[0]
   // );
@@ -40,8 +40,10 @@ const Auth: React.FC = () => {
 
   const handleSwap = () => {
     setIsSwapped(!isSwapped);
-    setFormMode(prev => prev === 'signin' ? 'signup' : 'signin');
-    navigate(`/auth${formMode === 'signin' ? '?mode=signup' : ''}`, { replace: true });
+    setFormMode((prev) => (prev === "signin" ? "signup" : "signin"));
+    navigate(`/auth${formMode === "signin" ? "?mode=signup" : ""}`, {
+      replace: true,
+    });
   };
 
   // Language switcher function
@@ -49,7 +51,6 @@ const Auth: React.FC = () => {
   //   i18n.changeLanguage(lng.code);
   //   setSelectedLanguage(lng);
   // };
-
 
   return (
     <motion.div
@@ -62,14 +63,16 @@ const Auth: React.FC = () => {
         {/* Left side illustration */}
         <motion.div
           className={`hidden lg:flex lg:w-1/2 relative overflow-hidden bg-purple-100 z-10 shadow-xl`}
-          initial={{ x: isSignUpMode ? "100%" : 0, borderRadius: isSignUpMode ? "2rem 0 0 2rem" : "0 2rem 2rem 0" }}
+          initial={{
+            x: isSignUpMode ? "100%" : 0,
+            borderRadius: isSignUpMode ? "2rem 0 0 2rem" : "0 2rem 2rem 0",
+          }}
           animate={{
             x: isSwapped ? "100%" : 0,
-            borderRadius: isSwapped ? "2rem 0 0 2rem" : "0 2rem 2rem 0"
+            borderRadius: isSwapped ? "2rem 0 0 2rem" : "0 2rem 2rem 0",
           }}
           transition={{ duration: 0.5, ease: "easeInOut" }}
         >
-
           {[
             {
               title: t("auth.features.trackPerformance.title"),
@@ -89,8 +92,9 @@ const Auth: React.FC = () => {
           ].map((frame, index) => (
             <div
               key={index}
-              className={`absolute  inset-0 transition-opacity duration-1000 flex flex-col justify-center items-center text-white p-12 ${currentFrame === index ? "opacity-100" : "opacity-0"
-                }`}
+              className={`absolute  inset-0 transition-opacity duration-1000 flex flex-col justify-center items-center text-white p-12 ${
+                currentFrame === index ? "opacity-100" : "opacity-0"
+              }`}
             >
               {frame.image}
               <h2 className="text-4xl font-bold mt-8 mb-4 text-center text-gray-900 dark:text-white">
@@ -111,7 +115,6 @@ const Auth: React.FC = () => {
           exit={{ opacity: 0 }}
           transition={{ duration: 0.5, ease: "easeInOut" }}
         >
-
           <AnimatePresence mode="wait">
             <motion.div
               key={formMode}
@@ -146,7 +149,7 @@ const Auth: React.FC = () => {
                 </Dropdown>
               </div> */}
               {/* Sign-up and Sign-in forms */}
-              {formMode === 'signup' ? (
+              {formMode === "signup" ? (
                 <SignUp handleSwap={handleSwap} />
               ) : (
                 <SignIn handleSwap={handleSwap} />

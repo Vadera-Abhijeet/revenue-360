@@ -497,7 +497,8 @@
     "company": "Entreprise",
     "statusLabel": "Statut",
     "actions": "Actions",
-    "view": "Voir"
+    "view": "Voir",
+    "teamMembers": "Membres de l'équipe"
   },
   "notFound": {
     "title": "404",

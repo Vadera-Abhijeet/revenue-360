@@ -1,5 +1,18 @@
 import { Role } from "../interfaces";
 
+export const API_CONFIG = {
+  baseUrl: import.meta.env.VITE_API_URL,
+  timeout: 10000,
+  headers: {
+    "Content-Type": "application/json",
+  },
+  path: {
+    login: "login",
+    logout: "logout",
+    register: "register",
+  },
+};
+
 export const PLATFORM_ICON_MAP: Record<string, string> = {
   googleAds: "https://www.gstatic.com/images/branding/product/2x/ads_48dp.png",
   adMob: "https://cdn.worldvectorlogo.com/logos/google-admob.svg",
@@ -16,7 +29,6 @@ export const PLATFORM_OPTIONS = [
 export const DEFAULT_AVATAR =
   "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541";
 
-
 export const CURRENCIES_OPTIONS = [
   { code: "USD", symbol: "$", name: "US Dollar" },
   { code: "EUR", symbol: "€", name: "Euro" },
@@ -28,7 +40,6 @@ export const CURRENCIES_OPTIONS = [
   { code: "CAD", symbol: "C$", name: "Canadian Dollar" },
 ];
 
-
 export const LANGUAGES_OPTIONS = [
   { code: "en", name: "English", flag: "🇺🇸" },
   { code: "de", name: "Deutsch", flag: "🇩🇪" },
@@ -37,4 +48,4 @@ export const LANGUAGES_OPTIONS = [
   { code: "ja", name: "日本語", flag: "🇯🇵" },
 ];
 
-export const ROLES: Role[] = ['super-admin', 'admin', 'sub-admin']
+export const ROLES: Role[] = ["super-admin", "admin", "sub-admin"];

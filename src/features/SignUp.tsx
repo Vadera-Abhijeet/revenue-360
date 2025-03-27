@@ -1,51 +1,27 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import {
-  Button,
-  Card,
-  Label,
-  Spinner,
-  TextInput
-} from "flowbite-react";
+import { Button, Card, Label, Spinner, TextInput } from "flowbite-react";
 import { Check } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
-import toast from 'react-hot-toast';
+import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
-import { v4 as uuidv4 } from 'uuid';
 import * as yup from "yup";
 import brandLogo from "../assets/images/Logo.png";
+import { ISignUpPayload } from "../contexts/AuthContext";
 import { useAuth } from "../hooks/useAuth";
-import { IUser } from "../interfaces";
-import { DEFAULT_AVATAR } from "../shared/constants";
-
-interface SignUpFormData {
-  // username: string;
-  email: string;
-  // company?: string;
-  password: string;
-  confirmPassword: string;
-}
-
-
+import { IMerchant } from "../interfaces";
 
 const SignUp: React.FC<{ handleSwap: () => void }> = ({ handleSwap }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { signup } = useAuth();
-  const [isLoading, setIsLoading] = useState(false);
-  const [profilePic, setProfilePic] = useState<string>(DEFAULT_AVATAR);
+  const { isLoading, signup } = useAuth();
 
   const validationSchema = yup.object().shape({
-    // username: yup
-    //   .string()
-    //   .required(t("auth.signup.errors.usernameRequired"))
-    //   .min(3, t("auth.signup.errors.usernameMin")),
     email: yup
       .string()
       .required(t("auth.signup.errors.emailRequired"))
       .email(t("auth.signup.errors.emailInvalid")),
-    // company: yup.string(),
     password: yup
       .string()
       .required(t("auth.signup.errors.passwordRequired"))
@@ -65,135 +41,40 @@ const SignUp: React.FC<{ handleSwap: () => void }> = ({ handleSwap }) => {
     handleSubmit,
     formState: { errors },
     watch,
-  } = useForm<SignUpFormData>({
+  } = useForm<ISignUpPayload>({
     resolver: yupResolver(validationSchema),
     mode: "onChange",
   });
 
-
-  // Function to convert file to Base64
-  // const convertToBase64 = (file: File): Promise<string> => {
-  //   return new Promise((resolve, reject) => {
-  //     const reader = new FileReader();
-  //     reader.readAsDataURL(file);
-  //     reader.onload = () => resolve(reader.result as string);
-  //     reader.onerror = (error) => reject(error);
-  //   });
-  // };
-
-  // Function to validate image dimensions and size
-  // const validateImage = (file: File): Promise<boolean> => {
-  //   return new Promise((resolve) => {
-  //     const img = new Image();
-  //     img.src = URL.createObjectURL(file);
-  //     img.onload = () => {
-  //       URL.revokeObjectURL(img.src);
-  //       const maxDimension = 1000; // Max width/height in pixels
-  //       const maxSize = 5 * 1024 * 1024; // 5MB in bytes
-
-  //       if (file.size > maxSize) {
-  //         alert(t("auth.signup.errors.imageTooLarge", "Image size should be less than 5MB"));
-  //         resolve(false);
-  //       } else if (img.width > maxDimension || img.height > maxDimension) {
-  //         alert(t("auth.signup.errors.imageDimensionsTooLarge", "Image dimensions should be less than 1000x1000 pixels"));
-  //         resolve(false);
-  //       } else {
-  //         resolve(true);
-  //       }
-  //     };
-  //     img.onerror = () => {
-  //       URL.revokeObjectURL(img.src);
-  //       resolve(false);
-  //     };
-  //   });
-  // };
-
-  // Modified profile picture handling
-  // const handleProfilePicChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   const file = event.target.files?.[0];
-  //   if (file) {
-  //     try {
-  //       // Validate file type
-  //       if (!file.type.startsWith('image/')) {
-  //         alert(t("auth.signup.errors.invalidImageType", "Please upload a valid image file"));
-  //         return;
-  //       }
-
-  //       // Validate image dimensions and size
-  //       const isValid = await validateImage(file);
-  //       if (!isValid) return;
-
-  //       // Convert to Base64
-  //       const base64String = await convertToBase64(file);
-
-  //       // Compress if needed (you might want to add a compression step here)
-  //       setProfilePic(base64String);
-
-  //       // Store in localStorage as a backup
-  //       localStorage.setItem('tempProfilePic', base64String);
-  //     } catch (error) {
-  //       console.error('Error processing image:', error);
-  //       alert(t("auth.signup.errors.imageProcessingError", "Error processing image. Please try again."));
-  //     }
-  //   }
-  // };
-
-  // Load profile pic from localStorage on component mount
-  useEffect(() => {
-    const savedProfilePic = localStorage.getItem('tempProfilePic');
-    if (savedProfilePic) {
-      setProfilePic(savedProfilePic);
-    }
-  }, []);
-
-  const onSubmit = async (data: SignUpFormData) => {
-    setIsLoading(true);
+  const onSubmit = async (data: ISignUpPayload) => {
     try {
       // Check if user already exists
       const users = JSON.parse(localStorage.getItem("users") || "[]");
-      const existingUser = users.find((user: IUser) => user.email === data.email);
+      const existingUser = users.find(
+        (user: IMerchant) => user.email === data.email
+      );
 
       if (existingUser) {
-        setIsLoading(false);
         toast.error(t("auth.signup.errors.emailExists"));
         return;
       }
 
-      const mockUser: IUser = {
-        id: uuidv4(),
+      const mockUser = {
         email: data.email,
-        role: 'admin',
         password: data.password,
-        permissions: [],
-        photoURL: profilePic,
-        name: "",
-        status: "active",
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        timezone: "America/New_York"
+        confirmPassword: data.confirmPassword,
       };
 
-      toast.promise(
-        new Promise((resolve) => {
-          setTimeout(() => {
-            signup(mockUser);
-
-            resolve(true);
-          }, 1500);
-        }),
-        {
-          loading: t("auth.signup.signingUp"),
-          success: t("auth.signup.success"),
-          error: t("auth.signup.error"),
-        }
-      );
-
+      toast.promise(signup(mockUser), {
+        loading: t("auth.signup.signingUp"),
+        success: t("auth.signup.success"),
+        error: t("auth.signup.error"),
+      });
     } catch (error) {
       console.error("Signup error:", error);
       toast.error(t("auth.signup.error"));
     }
   };
-
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -208,12 +89,14 @@ const SignUp: React.FC<{ handleSwap: () => void }> = ({ handleSwap }) => {
             }}
           >
             <div className="flex w-full justify-center items-center z-20">
-              <img src={brandLogo} alt="Logo" className="w-1/2 object-contain cursor-pointer" onClick={() => navigate("/")} />
+              <img
+                src={brandLogo}
+                alt="Logo"
+                className="w-1/2 object-contain cursor-pointer"
+                onClick={() => navigate("/")}
+              />
             </div>
             <div className="text-center max-w-1000">
-              {/* <h2 className="text-2xl font-bold text-gray-900">
-                {t("auth.signup.title")}
-              </h2> */}
               <p className="text-gray-600 ">{t("auth.signup.subtitle")}</p>
             </div>
 
@@ -223,44 +106,6 @@ const SignUp: React.FC<{ handleSwap: () => void }> = ({ handleSwap }) => {
               name="signup"
               autoComplete="on"
             >
-              {/* Profile Picture Upload */}
-              {/* <div className="flex justify-center">
-                <label
-                  htmlFor="profilePicInput"
-                  className="relative cursor-pointer group"
-                >
-                  <img
-                    src={profilePic}
-                    alt="Profile"
-                    className="w-24 h-24 rounded-full border-4 border-gray-300 object-cover"
-                  />
-                  <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
-                    <Camera className="w-8 h-8 text-white" />
-                  </div>
-                  <input
-                    id="profilePicInput"
-                    type="file"
-                    accept="image/*"
-                    className="hidden"
-                    onChange={handleProfilePicChange}
-                  />
-                </label>
-              </div> */}
-
-              {/* <div>
-                <Label htmlFor="username" value={t("auth.signup.username")} />
-                <TextInput
-                  id="username"
-                  type="text"
-                  autoComplete="name"
-                  helperText=""
-                  color={errors.username ? "failure" : "indigo"}
-                  placeholder={t("auth.signup.usernamePlaceholder")}
-                  {...register("username")}
-                />
-                <p className="text-red-500 text-xs mt-1 min-h-4">{errors.username?.message || ""}</p>
-              </div> */}
-
               <div>
                 <Label htmlFor="email" value={t("auth.signup.email")} />
                 <TextInput
@@ -271,22 +116,10 @@ const SignUp: React.FC<{ handleSwap: () => void }> = ({ handleSwap }) => {
                   placeholder={t("auth.signup.emailPlaceholder")}
                   {...register("email")}
                 />
-                <p className="text-red-500 text-xs mt-1 min-h-4">{errors.email?.message || ""}</p>
+                <p className="text-red-500 text-xs mt-1 min-h-4">
+                  {errors.email?.message || ""}
+                </p>
               </div>
-              {/* 
-              <div>
-                <Label htmlFor="company" value={t("auth.signup.company")} />
-                <TextInput
-                  id="company"
-                  type="text"
-                  autoComplete="organization"
-                  color={errors.company ? "failure" : "indigo"}
-                  placeholder={t("auth.signup.companyPlaceholder")}
-                  {...register("company")}
-                />
-                <p className="text-red-500 text-xs mt-1 min-h-4">{errors.company?.message || ""}</p>
-              </div> */}
-
               <div>
                 <Label htmlFor="password" value={t("auth.signup.password")} />
                 <TextInput
@@ -297,18 +130,28 @@ const SignUp: React.FC<{ handleSwap: () => void }> = ({ handleSwap }) => {
                   placeholder={t("auth.signup.passwordPlaceholder")}
                   {...register("password")}
                 />
-                <p className="text-red-500 text-xs mt-1 min-h-4">{errors.password?.message || ""}</p>
+                <p className="text-red-500 text-xs mt-1 min-h-4">
+                  {errors.password?.message || ""}
+                </p>
               </div>
 
               <div>
-                <Label htmlFor="confirmPassword" value={t("auth.signup.confirmPassword")} />
+                <Label
+                  htmlFor="confirmPassword"
+                  value={t("auth.signup.confirmPassword")}
+                />
                 <TextInput
                   id="confirmPassword"
                   type="password"
                   autoComplete="new-password"
                   color={errors.confirmPassword ? "failure" : "indigo"}
                   placeholder={t("auth.signup.confirmPasswordPlaceholder")}
-                  rightIcon={(watch("password") && watch("password") === watch("confirmPassword")) ? Check : undefined}
+                  rightIcon={
+                    watch("password") &&
+                    watch("password") === watch("confirmPassword")
+                      ? Check
+                      : undefined
+                  }
                   {...register("confirmPassword")}
                   theme={{
                     field: {
@@ -318,7 +161,9 @@ const SignUp: React.FC<{ handleSwap: () => void }> = ({ handleSwap }) => {
                     },
                   }}
                 />
-                <p className="text-red-500 text-xs mt-1 min-h-4">{errors.confirmPassword?.message || ""}</p>
+                <p className="text-red-500 text-xs mt-1 min-h-4">
+                  {errors.confirmPassword?.message || ""}
+                </p>
               </div>
 
               <Button
