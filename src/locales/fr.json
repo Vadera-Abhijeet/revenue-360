@@ -383,20 +383,21 @@
     "account": {
       "title": "Paramètres du compte",
       "name": "Nom",
-      "email": "Email",
-      "company": "Entreprise",
+      "email": "E-mail",
+      "company": "Nom de l'entreprise",
       "role": "Rôle",
       "timezone": "Fuseau horaire",
       "save": "Enregistrer les modifications",
-      "saving": "Enregistrement en cours..."
+      "saving": "Enregistrement...",
+      "saved": "Paramètres enregistrés avec succès",
+      "error": "Échec de l'enregistrement des paramètres"
     },
     "preferences": {
       "title": "Préférences",
       "language": "Langue",
       "currency": "Devise",
       "theme": "Thème",
-      "notifications": "Notifications",
-      "emailNotifications": "Notifications par email",
+      "emailNotifications": "Notifications par e-mail",
       "pushNotifications": "Notifications push",
       "dataRefresh": "Taux de rafraîchissement des données"
     }
@@ -477,7 +478,11 @@
       "email": "Email",
       "role": "Rôle",
       "status": "Statut",
-      "actions": "Actions"
+      "actions": "Actions",
+      "permissions": "Permissions",
+      "select_permissions": "Sélectionner les permissions",
+      "invite_success": "Membre de l'équipe invité avec succès",
+      "invite_error": "Erreur lors de l'invitation du membre de l'équipe"
     }
   },
   "merchant": {

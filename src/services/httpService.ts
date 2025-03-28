@@ -47,6 +47,12 @@ class HttpService {
           config.headers["x-request-language"] =
             localStorage.getItem("lang") || "en";
         }
+
+        // Don't set Content-Type for FormData
+        if (config.data instanceof FormData) {
+          delete config.headers["Content-Type"];
+        }
+
         return config;
       },
       (error) => {
@@ -106,7 +112,7 @@ class HttpService {
 
     try {
       const response = await axios.post<ResponseObj<TokenResponse>>(
-        `${API_CONFIG.baseUrl}/auth/token/refresh/`,
+        `${API_CONFIG.baseUrl}/${API_CONFIG.path.refreshToken}`,
         { refresh: refreshToken }
       );
 
@@ -222,31 +228,40 @@ class HttpService {
     isAccessTokenRequire?: boolean;
     contentType?: string;
   }): Promise<T> {
-    const headers: Record<string, string> = {
-      "Content-Type": contentType,
-    };
+    // Handle FormData differently from regular JSON data
+    let requestData: unknown;
+    const requestHeaders: Record<string, string> = {};
 
-    if (isAccessTokenRequire) {
-      const token = localStorage.getItem("token");
-      if (token) {
-        headers.Authorization = `Bearer ${token}`;
+    if (data instanceof FormData) {
+      requestData = data;
+      // Don't set Content-Type for FormData
+    } else {
+      requestHeaders["Content-Type"] = contentType;
+      if (data) {
+        const convertedData = this.convertKeysToSnakeCase(data);
+        requestData =
+          contentType === "application/json"
+            ? JSON.stringify(convertedData)
+            : convertedData;
+      } else {
+        requestData = undefined;
       }
     }
 
-    // Convert camelCase to snake_case for the request payload
-    const convertedData = data ? this.convertKeysToSnakeCase(data) : undefined;
-    const body =
-      contentType === "application/json"
-        ? JSON.stringify(convertedData)
-        : convertedData;
+    if (isAccessTokenRequire) {
+      const token = this.getAccessToken();
+      if (token) {
+        requestHeaders.Authorization = `Bearer ${token}`;
+      }
+    }
 
     return new Promise((resolve, reject) => {
       this.axiosInstance({
         method,
         url,
-        headers,
-        data: body,
+        headers: requestHeaders,
         ...config,
+        data: requestData,
         cancelToken: new axios.CancelToken((c) => {
           this.cancelToken = c;
         }),
@@ -287,7 +302,7 @@ class HttpService {
     });
   }
 
-  public async post<T, D = Record<string, unknown>>(
+  public async post<T, D = Record<string, unknown> | FormData>(
     url: string,
     data?: D,
     queryParams: Record<string, string | number | boolean> = {},
@@ -301,14 +316,14 @@ class HttpService {
     });
   }
 
-  public async put<T, D = Record<string, unknown>>(
+  public async put<T, D = Record<string, unknown> | FormData>(
     url: string,
     data?: D,
     config: AxiosRequestConfig = {}
   ): Promise<T> {
     return this.commonAxios<T>({
       method: "PUT",
-      url,
+      url: url + "/",
       data,
       config,
     });
@@ -321,20 +336,20 @@ class HttpService {
   ): Promise<T> {
     return this.commonAxios<T>({
       method: "DELETE",
-      url,
+      url: url + "/",
       data,
       config,
     });
   }
 
-  public async patch<T, D = Record<string, unknown>>(
+  public async patch<T, D = Record<string, unknown> | FormData>(
     url: string,
     data?: D,
     config: AxiosRequestConfig = {}
   ): Promise<T> {
     return this.commonAxios<T>({
       method: "PATCH",
-      url,
+      url: url + "/",
       data,
       config,
     });

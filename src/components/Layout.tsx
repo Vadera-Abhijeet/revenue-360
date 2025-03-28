@@ -19,8 +19,12 @@ import { CurrencyCode, useCurrency } from "../contexts/CurrencyContext";
 import { useNotifications } from "../contexts/NotificationContext";
 import Notifications from "../features/Notifications";
 import { useAuth } from "../hooks/useAuth";
-import { IMerchant } from "../interfaces";
-import { CURRENCIES_OPTIONS, LANGUAGES_OPTIONS } from "../shared/constants";
+import { IMerchant, Role } from "../interfaces";
+import {
+  CURRENCIES_OPTIONS,
+  DEFAULT_AVATAR,
+  LANGUAGES_OPTIONS,
+} from "../shared/constants";
 import AnimatedModal from "./AnimatedModal";
 import NotificationDot from "./NotificationDot";
 import { Sidebar, SidebarBody, SidebarLink } from "./Sidebar";
@@ -115,10 +119,7 @@ const RenderSideBar = (props: IRenderSideBarProps) => {
                 icon: (
                   <Avatar
                     alt="User profile"
-                    img={
-                      user?.photoURL ||
-                      "https://flowbite.com/docs/images/people/profile-picture-5.jpg"
-                    }
+                    img={user?.profile_picture || DEFAULT_AVATAR}
                     rounded
                     size="sm"
                   />
@@ -150,7 +151,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
   const navItems = useMemo(
     () =>
-      getNavItems(user?.role || "sub-admin").map((item) => ({
+      getNavItems(user?.role as Role).map((item) => ({
         label: t(item.label || ""),
         href: item.path,
         icon: item.icon,

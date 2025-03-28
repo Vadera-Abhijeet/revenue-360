@@ -384,18 +384,19 @@
       "title": "Kontoeinstellungen",
       "name": "Name",
       "email": "E-Mail",
-      "company": "Unternehmen",
+      "company": "Firmenname",
       "role": "Rolle",
       "timezone": "Zeitzone",
       "save": "Änderungen speichern",
-      "saving": "Wird gespeichert..."
+      "saving": "Wird gespeichert...",
+      "saved": "Einstellungen erfolgreich gespeichert",
+      "error": "Fehler beim Speichern der Einstellungen"
     },
     "preferences": {
       "title": "Präferenzen",
       "language": "Sprache",
       "currency": "Währung",
       "theme": "Design",
-      "notifications": "Benachrichtigungen",
       "emailNotifications": "E-Mail-Benachrichtigungen",
       "pushNotifications": "Push-Benachrichtigungen",
       "dataRefresh": "Datenaktualisierungsrate"
@@ -477,7 +478,11 @@
       "email": "E-Mail",
       "role": "Rolle",
       "status": "Status",
-      "actions": "Aktionen"
+      "actions": "Aktionen",
+      "permissions": "Berechtigungen",
+      "select_permissions": "Berechtigungen auswählen",
+      "invite_success": "Teammitglied erfolgreich eingeladen",
+      "invite_error": "Fehler beim Einladen des Teammitglieds"
     }
   },
   "merchant": {

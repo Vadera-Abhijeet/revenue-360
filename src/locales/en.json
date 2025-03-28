@@ -391,18 +391,19 @@
       "title": "Account Settings",
       "name": "Name",
       "email": "Email",
-      "company": "Company",
+      "company": "Company Name",
       "role": "Role",
       "timezone": "Timezone",
       "save": "Save Changes",
-      "saving": "Saving..."
+      "saving": "Saving...",
+      "saved": "Settings saved successfully",
+      "error": "Failed to save settings"
     },
     "preferences": {
       "title": "Preferences",
       "language": "Language",
       "currency": "Currency",
       "theme": "Theme",
-      "notifications": "Notifications",
       "emailNotifications": "Email Notifications",
       "pushNotifications": "Push Notifications",
       "dataRefresh": "Data Refresh Rate"
@@ -484,7 +485,11 @@
       "email": "Email",
       "role": "Role",
       "status": "Status",
-      "actions": "Actions"
+      "actions": "Actions",
+      "permissions": "Permissions",
+      "select_permissions": "Select Permissions",
+      "invite_success": "Team member invited successfully",
+      "invite_error": "Failed to invite team member"
     }
   },
   "merchant": {

@@ -9,6 +9,7 @@ import {
 import { useAuth } from "../hooks/useAuth";
 import SignIn from "./SignIn";
 import SignUp from "./SignUp";
+import { getFirstPathByRole } from "../config/routes";
 
 const Auth: React.FC = () => {
   const { t } = useTranslation();
@@ -16,20 +17,19 @@ const Auth: React.FC = () => {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const isSignUpMode = searchParams.get("mode") === "signup";
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
   const [currentFrame, setCurrentFrame] = useState(0);
   const [isSwapped, setIsSwapped] = useState(isSignUpMode);
   const [formMode, setFormMode] = useState<"signin" | "signup">(
     isSignUpMode ? "signup" : "signin"
   );
-  // const [selectedLanguage, setSelectedLanguage] = useState<ILanguageOption>(
-  //   LANGUAGES_OPTIONS[0]
-  // );
+  const roleBasedFirstPath = getFirstPathByRole();
+
   useEffect(() => {
-    if (isAuthenticated) {
-      navigate("/dashboard");
+    if (isAuthenticated && user) {
+      navigate(roleBasedFirstPath[user.role] || "/404");
     }
-  }, [isAuthenticated, navigate]);
+  }, [isAuthenticated, navigate, roleBasedFirstPath, user]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -45,12 +45,6 @@ const Auth: React.FC = () => {
       replace: true,
     });
   };
-
-  // Language switcher function
-  // const changeLanguage = (lng: ILanguageOption) => {
-  //   i18n.changeLanguage(lng.code);
-  //   setSelectedLanguage(lng);
-  // };
 
   return (
     <motion.div
@@ -123,31 +117,6 @@ const Auth: React.FC = () => {
               exit={{ opacity: 0 }}
               transition={{ duration: 0.3 }}
             >
-              {/* Language Switcher - Top Right */}
-              {/* <div className={`absolute top-4 ${formMode === 'signup' ? "left-4" : "right-4"} z-10`}>
-                <Dropdown
-                  label={
-                    <div className="flex items-center gap-2">
-                      <p>{selectedLanguage?.flag}</p>
-                      <div>|</div>
-                      {t("common.language")}
-                    </div>
-                  }
-                  color={"indigo"}
-                  outline
-                  size={"xs"}
-                >
-                  {LANGUAGES_OPTIONS.map((lang) => (
-                    <Dropdown.Item key={lang.code} onClick={() => changeLanguage(lang)}>
-                      <div className="flex items-center gap-2  w-full">
-                        <p>{lang.flag}</p>
-                        <div>|</div>
-                        <p>{lang.name}</p>
-                      </div>
-                    </Dropdown.Item>
-                  ))}
-                </Dropdown>
-              </div> */}
               {/* Sign-up and Sign-in forms */}
               {formMode === "signup" ? (
                 <SignUp handleSwap={handleSwap} />

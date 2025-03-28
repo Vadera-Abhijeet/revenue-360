@@ -1,97 +1,27 @@
-import React, { useState, useEffect, useRef } from "react";
+import { Button, Card, Label, Tabs, TextInput } from "flowbite-react";
+import { Building, Camera, Mail, User } from "lucide-react";
+import React, { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import {
-  Tabs,
-  Card,
-  Button,
-  TextInput,
-  Select,
-  Label,
-  ToggleSwitch,
-} from "flowbite-react";
-import {
-  User,
-  Building,
-  Mail,
-  Clock,
-  Globe,
-  DollarSign,
-  Moon,
-  Sun,
-  RefreshCw,
-  Box,
-  CheckCircle,
-  XCircle,
-  Camera,
-} from "lucide-react";
-import { fetchUserSettings, updateUserSettings } from "../services/api";
-import { IMerchant, IPreferences } from "../interfaces";
-import { CurrencyCode, useCurrency } from "../contexts/CurrencyContext";
-import RazorpayButton from "../components/RazorPayButton";
+import { IMerchant } from "../interfaces";
+import { httpService } from "../services/httpService";
+import { DEFAULT_AVATAR, API_CONFIG } from "../shared/constants";
 import { useAuth } from "../hooks/useAuth";
-import { DEFAULT_AVATAR } from "../shared/constants";
+import toast from "react-hot-toast";
 
-const plans = [
-  {
-    name: "Free",
-    priceDisplay: "₹0/mo",
-    price: 0,
-    features: ["Basic Features", "Limited Support"],
-    unavailable: ["Advanced Analytics", "Priority Support"],
-    buttonText: "Get Started",
-    buttonVariant: "active",
-  },
-  {
-    name: "Basic",
-    priceDisplay: "₹9/mo",
-    price: 9,
-    features: ["All Free Features", "Advanced Analytics"],
-    unavailable: ["Priority Support"],
-    buttonText: "Subscribe",
-    buttonVariant: "default",
-  },
-  {
-    name: "Pro",
-    priceDisplay: "₹19/mo",
-    price: 19,
-    features: ["All Basic Features", "Priority Support", "Customization"],
-    unavailable: [],
-    buttonText: "Go Pro",
-    buttonVariant: "primary",
-  },
-];
 const Settings: React.FC = () => {
-  const { user, setUser } = useAuth();
-  const { setCurrency, currency } = useCurrency();
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const [isLoading, setIsLoading] = useState(true);
+  const { setUser } = useAuth();
   const [isSaving, setIsSaving] = useState(false);
-  const [formData, setFormData] = useState<{
-    account: IMerchant;
-    preferences: IPreferences;
-  }>({
-    account: {
-      name: "",
-      email: "",
-      company: "",
-      role: "admin",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      photoURL: "",
-      id: "",
-      password: "",
-      permissions: [],
-      status: "active",
-      timezone: "America/New_York",
-    },
-    preferences: {
-      language: "",
-      currency,
-      theme: "",
-      emailNotifications: false,
-      pushNotifications: false,
-      dataRefreshRate: "",
-    },
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+
+  const [formData, setFormData] = useState<IMerchant>({
+    name: "",
+    email: "",
+    company_name: "",
+    role: "admin",
+    profile_picture: null,
+    user_permissions: [],
   });
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -99,11 +29,10 @@ const Settings: React.FC = () => {
     const loadSettings = async () => {
       setIsLoading(true);
       try {
-        const data = await fetchUserSettings();
-        setFormData({
-          account: { ...data.account },
-          preferences: { ...data.preferences },
-        });
+        const user = httpService.getUserData();
+        if (user) {
+          setFormData(user);
+        }
       } catch (error) {
         console.error("Error loading settings:", error);
       } finally {
@@ -120,99 +49,101 @@ const Settings: React.FC = () => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      account: {
-        ...prev.account,
-        [name]: value,
-      },
+      [name]: value,
     }));
   };
 
-  const handlePreferencesChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      preferences: {
-        ...prev.preferences,
-        [name]: value,
-      },
-    }));
-  };
+  // const handleToggleChange = (name: string, checked: boolean) => {
+  //   setFormData((prev) => ({
+  //     ...prev,
+  //     preferences: {
+  //       ...prev.preferences,
+  //       [name]: checked,
+  //     },
+  //   }));
+  // };
 
-  const handleToggleChange = (name: string, checked: boolean) => {
-    setFormData((prev) => ({
-      ...prev,
-      preferences: {
-        ...prev.preferences,
-        [name]: checked,
-      },
-    }));
-  };
+  // const handleLanguageChange = (language: string) => {
+  //   i18n.changeLanguage(language);
+  //   setFormData((prev) => ({
+  //     ...prev,
+  //     preferences: {
+  //       ...prev.preferences,
+  //       language,
+  //     },
+  //   }));
+  // };
 
-  const handleLanguageChange = (language: string) => {
-    i18n.changeLanguage(language);
-    setFormData((prev) => ({
-      ...prev,
-      preferences: {
-        ...prev.preferences,
-        language,
-      },
-    }));
-  };
-
-  const handleCurrencyChange = (currencyCode: CurrencyCode) => {
-    setFormData((prev) => ({
-      ...prev,
-      preferences: {
-        ...prev.preferences,
-        currency: currencyCode,
-      },
-    }));
-  };
+  // const handleCurrencyChange = (currencyCode: CurrencyCode) => {
+  //   setFormData((prev) => ({
+  //     ...prev,
+  //     preferences: {
+  //       ...prev.preferences,
+  //       currency: currencyCode,
+  //     },
+  //   }));
+  // };
 
   const handleSaveChanges = async () => {
     setIsSaving(true);
     try {
-      await updateUserSettings({
-        account: formData.account,
-        preferences: formData.preferences,
-      });
-      setCurrency(formData.preferences.currency);
+      const formDataToSend = new FormData();
 
-      if (
-        user &&
-        (formData.account.name !== user.name ||
-          formData.account.email !== user.email ||
-          formData.account.photoURL !== user.photoURL)
-      ) {
-        setUser({
-          ...user,
-          name: formData.account.name,
-          email: formData.account.email,
-          photoURL: formData.account.photoURL || DEFAULT_AVATAR,
-        });
+      // Add name with null check
+      if (formData.name) {
+        formDataToSend.append("name", formData.name);
       }
+
+      // Add email with null check
+      if (formData.email) {
+        formDataToSend.append("email", formData.email);
+      }
+
+      // Add company_name with null check
+      if (formData.company_name) {
+        formDataToSend.append("company_name", formData.company_name);
+      }
+
+      // Handle profile picture
+      if (imagePreview && formData.profile_picture) {
+        formDataToSend.append("profile_picture", formData.profile_picture);
+      }
+
+      formDataToSend.append("is_active", "true");
+
+      // Call the API with the form data
+      httpService
+        .put(`${API_CONFIG.path.users}/${formData.id}`, formDataToSend)
+        .then((res) => {
+          setUser(res as IMerchant);
+          httpService.setUserData(res as IMerchant);
+          setIsSaving(false);
+          toast.success(t("settings.account.saved"));
+        })
+        .catch((error) => {
+          console.error("Error saving settings:", error);
+          setIsSaving(false);
+          toast.error(t("settings.account.error"));
+        });
     } catch (error) {
       console.error("Error saving settings:", error);
-    } finally {
       setIsSaving(false);
+      toast.error(t("settings.account.error"));
     }
   };
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
+      setFormData((prev) => ({
+        ...prev,
+        profile_picture: file,
+      }));
       const reader = new FileReader();
       reader.onloadend = () => {
-        setFormData((prev) => ({
-          ...prev,
-          account: {
-            ...prev.account,
-            photoURL: reader.result as string,
-          },
-        }));
+        setImagePreview(reader.result as string);
       };
+
       reader.readAsDataURL(file);
     }
   };
@@ -240,7 +171,11 @@ const Settings: React.FC = () => {
                   className="relative cursor-pointer group"
                 >
                   <img
-                    src={formData.account.photoURL || DEFAULT_AVATAR}
+                    src={
+                      imagePreview ||
+                      (formData.profile_picture as string) ||
+                      DEFAULT_AVATAR
+                    }
                     className="w-32 h-32 rounded-full border-4 border-gray-300 object-cover"
                   />
                   <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
@@ -263,8 +198,9 @@ const Settings: React.FC = () => {
                 <TextInput
                   id="name"
                   name="name"
+                  disabled={isSaving}
                   icon={User}
-                  value={formData.account.name}
+                  value={formData.name || ""}
                   onChange={handleAccountChange}
                 />
               </div>
@@ -276,27 +212,29 @@ const Settings: React.FC = () => {
                   id="email"
                   name="email"
                   type="email"
+                  disabled={isSaving}
                   icon={Mail}
-                  value={formData.account.email}
+                  value={formData.email}
                   onChange={handleAccountChange}
                 />
               </div>
               <div>
                 <div className="mb-2 block">
                   <Label
-                    htmlFor="company"
+                    htmlFor="companyName"
                     value={t("settings.account.company")}
                   />
                 </div>
                 <TextInput
-                  id="company"
-                  name="company"
+                  id="companyName"
+                  name="company_name"
+                  disabled={isSaving}
                   icon={Building}
-                  value={formData.account.company}
+                  value={formData.company_name || ""}
                   onChange={handleAccountChange}
                 />
               </div>
-              <div>
+              {/* <div>
                 <div className="mb-2 block">
                   <Label htmlFor="role" value={t("settings.account.role")} />
                 </div>
@@ -304,15 +242,15 @@ const Settings: React.FC = () => {
                   id="role"
                   name="role"
                   icon={User}
-                  value={formData.account.role}
+                  value={formData.role}
                   onChange={handleAccountChange}
                 >
                   <option value="Administrator">Administrator</option>
                   <option value="Editor">Editor</option>
                   <option value="Viewer">Viewer</option>
                 </Select>
-              </div>
-              <div>
+              </div> */}
+              {/* <div>
                 <div className="mb-2 block">
                   <Label
                     htmlFor="timezone"
@@ -323,7 +261,7 @@ const Settings: React.FC = () => {
                   id="timezone"
                   name="timezone"
                   icon={Clock}
-                  value={formData.account.timezone}
+                  value={formData.timezone}
                   onChange={handleAccountChange}
                 >
                   <option value="America/New_York">Eastern Time (ET)</option>
@@ -338,7 +276,7 @@ const Settings: React.FC = () => {
                   </option>
                   <option value="Asia/Tokyo">Japan Standard Time (JST)</option>
                 </Select>
-              </div>
+              </div> */}
               <Button
                 color="indigo"
                 onClick={handleSaveChanges}
@@ -357,7 +295,7 @@ const Settings: React.FC = () => {
           </Card>
         </Tabs.Item>
 
-        <Tabs.Item title={t("settings.preferences.title")} icon={Globe}>
+        {/* <Tabs.Item title={t("settings.preferences.title")} icon={Globe}>
           <Card>
             <h2 className="text-xl font-semibold mb-4">
               {t("settings.preferences.title")}
@@ -498,8 +436,8 @@ const Settings: React.FC = () => {
               </Button>
             </div>
           </Card>
-        </Tabs.Item>
-        <Tabs.Item title={"Subscription"} icon={Box}>
+        </Tabs.Item> */}
+        {/* <Tabs.Item title={"Subscription"} icon={Box}>
           <Card>
             <h2 className="text-xl font-semibold mb-4">Subscription</h2>
             <div className="flex flex-col items-center py-10 bg-gray-100">
@@ -508,10 +446,11 @@ const Settings: React.FC = () => {
                 {plans.map((plan) => (
                   <Card
                     key={plan.name}
-                    className={`p-6 w-80 shadow-lg ${plan.buttonVariant === "active"
-                      ? "border-2 border-blue-600"
-                      : ""
-                      }`}
+                    className={`p-6 w-80 shadow-lg ${
+                      plan.buttonVariant === "active"
+                        ? "border-2 border-blue-600"
+                        : ""
+                    }`}
                     theme={{
                       root: {
                         children:
@@ -551,7 +490,7 @@ const Settings: React.FC = () => {
               </div>
             </div>
           </Card>
-        </Tabs.Item>
+        </Tabs.Item> */}
       </Tabs>
     </div>
   );

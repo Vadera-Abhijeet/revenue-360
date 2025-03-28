@@ -75,22 +75,22 @@ export interface ChartGroup {
 }
 
 export interface IMerchant {
-  id: number;
-  roles: string[];
+  id?: number;
+  role: Role;
   user_permissions: string[];
-  is_active: boolean;
-  created_at: string;
-  updated_at: string;
-  is_deleted: boolean;
+  is_active?: boolean;
+  created_at?: string;
+  updated_at?: string;
+  is_deleted?: boolean;
   email: string;
-  schema: string;
-  name: string | null;
-  slug: string;
-  is_team_admin: boolean;
-  both_social_account_connected_at: string | null;
-  last_sync_at: string | null;
-  profile_picture: string | null;
-  company_name: string | null;
+  schema?: string;
+  name?: string | null;
+  slug?: string;
+  is_team_admin?: boolean;
+  both_social_account_connected_at?: string | null;
+  last_sync_at?: string | null;
+  profile_picture?: string | File | null;
+  company_name?: string | null;
 }
 
 export interface IPermission {
@@ -106,7 +106,7 @@ export interface ILanguageOption {
   flag: string;
 }
 
-export type Role = "super-admin" | "admin" | "sub-admin";
+export type Role = "super_admin" | "admin" | "sub_admin";
 
 export interface ResponseObj<T> {
   data: T;

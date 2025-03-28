@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import Loading from "../components/Loading";
 import {
   getFirstPathByRole,
   RouteConfig,
   routesConfig,
 } from "../config/routes";
 import { useAuth } from "../hooks/useAuth";
-import Loading from "../components/Loading";
-import { Role } from "../interfaces";
+import { httpService } from "../services/httpService";
 
 const RouteInspector: React.FC = () => {
   const { user, isLoading } = useAuth();
@@ -18,49 +18,62 @@ const RouteInspector: React.FC = () => {
 
   useEffect(() => {
     if (isLoading) return;
+
+    const accessToken = httpService.getAccessToken();
     const currentRoute = routesConfig.find(
       (route) => location.pathname.startsWith(route.path) && route.protected
     );
+
+    // If route is not protected, allow access
     if (!currentRoute?.protected) {
       setHasChecked(true);
       return;
-    } else {
-      if (!user) {
-        if (location.pathname !== "/auth") {
-          navigate("/auth");
-        }
-        setHasChecked(true);
-      } else {
-        let submenuRoute: RouteConfig | undefined = undefined;
+    }
 
-        if (currentRoute?.submenu) {
-          submenuRoute = currentRoute.submenu.find(
-            (route) => route.path === location.pathname
-          );
-        }
+    // If no access token, redirect to auth
+    if (!accessToken) {
+      if (location.pathname !== "/auth") {
+        navigate("/auth");
+      }
+      setHasChecked(true);
+      return;
+    }
 
-        const allowedRoles =
-          currentRoute?.allowedRoles || submenuRoute?.allowedRoles;
+    // If we have an access token but no user data, something is wrong
+    if (!user) {
+      httpService.clearAllData(); // Clear invalid data
+      navigate("/auth");
+      setHasChecked(true);
+      return;
+    }
 
-        if (!currentRoute && !submenuRoute) {
-          navigate("/404");
-          return;
-        }
-        const isUserRoleAllowed =
-          user && allowedRoles
-            ? allowedRoles?.includes(user.roles[0] as Role)
-            : false;
+    // Check route permissions
+    let submenuRoute: RouteConfig | undefined = undefined;
+    if (currentRoute?.submenu) {
+      submenuRoute = currentRoute.submenu.find(
+        (route) => route.path === location.pathname
+      );
+    }
 
-        if (!hasChecked) {
-          setHasChecked(true); // Prevent multiple redirects
-          if (!user) {
-            navigate("/auth");
-          } else if (!isUserRoleAllowed) {
-            const firstPath = roleBasedFirstPath[user.roles[0]] || "/404";
-            if (location.pathname !== firstPath) {
-              navigate(firstPath);
-            }
-          }
+    const allowedRoles =
+      currentRoute?.allowedRoles || submenuRoute?.allowedRoles;
+
+    if (!currentRoute && !submenuRoute) {
+      navigate("/404");
+      setHasChecked(true);
+      return;
+    }
+
+    const isUserRoleAllowed = allowedRoles
+      ? allowedRoles.includes(user.role)
+      : false;
+
+    if (!hasChecked) {
+      setHasChecked(true);
+      if (!isUserRoleAllowed) {
+        const firstPath = roleBasedFirstPath[user.role] || "/404";
+        if (location.pathname !== firstPath) {
+          navigate(firstPath);
         }
       }
     }

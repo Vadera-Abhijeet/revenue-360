@@ -381,22 +381,23 @@
   "settings": {
     "title": "Configuración",
     "account": {
-      "title": "Configuración de la cuenta",
+      "title": "Configuración de cuenta",
       "name": "Nombre",
       "email": "Correo electrónico",
-      "company": "Empresa",
+      "company": "Nombre de la empresa",
       "role": "Rol",
       "timezone": "Zona horaria",
       "save": "Guardar cambios",
-      "saving": "Guardando..."
+      "saving": "Guardando...",
+      "saved": "Configuración guardada exitosamente",
+      "error": "Error al guardar la configuración"
     },
     "preferences": {
       "title": "Preferencias",
       "language": "Idioma",
       "currency": "Moneda",
       "theme": "Tema",
-      "notifications": "Notificaciones",
-      "emailNotifications": "Notificaciones por correo electrónico",
+      "emailNotifications": "Notificaciones por correo",
       "pushNotifications": "Notificaciones push",
       "dataRefresh": "Tasa de actualización de datos"
     }
@@ -477,7 +478,11 @@
       "email": "Correo electrónico",
       "role": "Rol",
       "status": "Estado",
-      "actions": "Acciones"
+      "actions": "Acciones",
+      "permissions": "Permisos",
+      "select_permissions": "Seleccionar permisos",
+      "invite_success": "Miembro del equipo invitado con éxito",
+      "invite_error": "Error al invitar al miembro del equipo"
     }
   },
   "merchant": {

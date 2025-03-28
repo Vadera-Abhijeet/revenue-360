@@ -9,7 +9,7 @@ import {
 } from "@phosphor-icons/react";
 import { Button, Navbar } from "flowbite-react";
 import { LayoutDashboard } from "lucide-react";
-import React, { useEffect } from "react";
+import React from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import {
@@ -17,27 +17,10 @@ import {
   IllustrationDataChart,
 } from "../assets/Illustrations";
 import brandLogo from "../assets/images/Logo.png";
-import { useAuth } from "../hooks/useAuth";
-import { allRoleDemoUsers } from "../services/api";
 
 const Landing: React.FC = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { logout } = useAuth();
-  useEffect(() => {
-    const existingUsers = localStorage.getItem("users");
-    const existingUsersReviewed = localStorage.getItem("usersReviewed");
-    if (existingUsersReviewed !== "true") {
-      if (existingUsers) {
-        localStorage.removeItem("users")
-      }
-      setTimeout(() => {
-        logout()
-        localStorage.setItem("users", JSON.stringify(allRoleDemoUsers));
-        localStorage.setItem("usersReviewed", "true");
-      }, 100);
-    }
-  }, [logout]);
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -89,11 +72,7 @@ const Landing: React.FC = () => {
               >
                 {t("landing.hero.cta")}
               </Button>
-              <Button
-                size="lg"
-                color="light"
-                onClick={() => navigate("/auth")}
-              >
+              <Button size="lg" color="light" onClick={() => navigate("/auth")}>
                 {t("landing.hero.login")}
               </Button>
             </div>

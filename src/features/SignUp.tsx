@@ -1,7 +1,7 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Button, Card, Label, Spinner, TextInput } from "flowbite-react";
 import { Check } from "lucide-react";
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
@@ -10,12 +10,12 @@ import * as yup from "yup";
 import brandLogo from "../assets/images/Logo.png";
 import { ISignUpPayload } from "../contexts/AuthContext";
 import { useAuth } from "../hooks/useAuth";
-import { IMerchant } from "../interfaces";
 
 const SignUp: React.FC<{ handleSwap: () => void }> = ({ handleSwap }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { isLoading, signup } = useAuth();
+  const { signup } = useAuth();
+  const [isLoading, setIsLoading] = useState(false);
 
   const validationSchema = yup.object().shape({
     email: yup
@@ -48,29 +48,18 @@ const SignUp: React.FC<{ handleSwap: () => void }> = ({ handleSwap }) => {
 
   const onSubmit = async (data: ISignUpPayload) => {
     try {
-      // Check if user already exists
-      const users = JSON.parse(localStorage.getItem("users") || "[]");
-      const existingUser = users.find(
-        (user: IMerchant) => user.email === data.email
-      );
-
-      if (existingUser) {
-        toast.error(t("auth.signup.errors.emailExists"));
-        return;
-      }
-
-      const mockUser = {
-        email: data.email,
-        password: data.password,
-        confirmPassword: data.confirmPassword,
-      };
-
-      toast.promise(signup(mockUser), {
-        loading: t("auth.signup.signingUp"),
-        success: t("auth.signup.success"),
-        error: t("auth.signup.error"),
-      });
+      setIsLoading(true);
+      signup(data)
+        .then(() => {
+          setIsLoading(false);
+          toast.success(t("auth.signup.success"));
+        })
+        .catch(() => {
+          setIsLoading(false);
+          toast.error(t("auth.signup.error"));
+        });
     } catch (error) {
+      setIsLoading(false);
       console.error("Signup error:", error);
       toast.error(t("auth.signup.error"));
     }

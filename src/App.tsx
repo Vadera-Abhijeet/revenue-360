@@ -1,6 +1,6 @@
 import { Flowbite } from "flowbite-react";
 import { lazy, Suspense } from "react";
-import { Toaster } from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import { Route, Routes } from "react-router-dom";
 import Loading from "./components/Loading";
@@ -41,7 +41,7 @@ function AppContent() {
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>
-      <Toaster position="bottom-right" reverseOrder={false} />
+      <Toaster position="bottom-center" reverseOrder={false} />
     </div>
   );
 }

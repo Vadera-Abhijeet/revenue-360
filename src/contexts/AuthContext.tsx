@@ -42,17 +42,19 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const roleBasedFirstPath = getFirstPathByRole();
 
   useEffect(() => {
-    // Check if user is already logged in
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
+    // Check if user is already logged in by checking access token
+    const accessToken = httpService.getAccessToken();
+    if (accessToken) {
+      const storedUser = httpService.getUserData();
+      if (storedUser) {
+        setUser(storedUser);
+      }
     }
     setIsLoading(false);
   }, []);
 
   const login = async (credentials: ILoginPayload) => {
     try {
-      setIsLoading(true);
       const response = await httpService.post<ILoginResponse>(
         API_CONFIG.path.login,
         credentials,
@@ -62,8 +64,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
       const { user, access, refresh } = response;
 
-      if (!user.roles || user.roles.length === 0) {
-        setIsLoading(false);
+      if (!user.role) {
         throw new Error("User roles not found");
       }
 
@@ -73,11 +74,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
       // Set user in state and navigate
       setUser(user);
-      setIsLoading(false);
-      navigate(roleBasedFirstPath[user.roles[0]] || "/dashboard");
+      navigate(roleBasedFirstPath[user.role] || "/dashboard");
     } catch (error) {
       console.error("Login error:", error);
-      setIsLoading(false);
       throw error;
     }
   };
@@ -90,7 +89,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const signup = async (userData: ISignUpPayload) => {
     try {
-      setIsLoading(true);
       const response = await httpService.post<SignupResponse>(
         API_CONFIG.path.register,
         userData,
@@ -100,8 +98,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
       const { user, access, refresh } = response;
 
-      if (!user.roles || user.roles.length === 0) {
-        setIsLoading(false);
+      if (!user.role) {
         throw new Error("User roles not found");
       }
 
@@ -111,10 +108,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
       // Set user in state and navigate
       setUser(user);
-      setIsLoading(false);
-      navigate(roleBasedFirstPath[user.roles[0]] || "/dashboard");
+      navigate(roleBasedFirstPath[user.role] || "/dashboard");
     } catch (error) {
-      setIsLoading(false);
       console.error("Signup error:", error);
       throw error;
     }
@@ -122,7 +117,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const value = {
     user,
-    isAuthenticated: !!user,
+    isAuthenticated: !!httpService.getAccessToken(), // Check access token instead of user state
     isLoading,
     login,
     logout,

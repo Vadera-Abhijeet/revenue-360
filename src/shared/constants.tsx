@@ -10,6 +10,8 @@ export const API_CONFIG = {
     login: "login",
     logout: "logout",
     register: "register",
+    users: "users",
+    refreshToken: "token/refresh",
   },
 };
 
@@ -48,4 +50,34 @@ export const LANGUAGES_OPTIONS = [
   { code: "ja", name: "日本語", flag: "🇯🇵" },
 ];
 
-export const ROLES: Role[] = ["super-admin", "admin", "sub-admin"];
+export const PLANS = [
+  {
+    name: "Free",
+    priceDisplay: "₹0/mo",
+    price: 0,
+    features: ["Basic Features", "Limited Support"],
+    unavailable: ["Advanced Analytics", "Priority Support"],
+    buttonText: "Get Started",
+    buttonVariant: "active",
+  },
+  {
+    name: "Basic",
+    priceDisplay: "₹9/mo",
+    price: 9,
+    features: ["All Free Features", "Advanced Analytics"],
+    unavailable: ["Priority Support"],
+    buttonText: "Subscribe",
+    buttonVariant: "default",
+  },
+  {
+    name: "Pro",
+    priceDisplay: "₹19/mo",
+    price: 19,
+    features: ["All Basic Features", "Priority Support", "Customization"],
+    unavailable: [],
+    buttonText: "Go Pro",
+    buttonVariant: "primary",
+  },
+];
+
+export const ROLES: Role[] = ["super_admin", "admin", "sub_admin"];
