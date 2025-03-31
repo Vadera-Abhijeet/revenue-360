@@ -1,12 +1,14 @@
+import { PuzzlePiece } from "@phosphor-icons/react";
 import { Button, Table, TextInput } from "flowbite-react";
-import { Eye, Search, } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import { Eye } from "lucide-react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
+import Pagination from "../../../../components/Pagination";
+import ListSkeleton from "../../../../components/SkeletonLoaders/ListSkeleton";
 import { useCurrency } from "../../../../contexts/CurrencyContext";
 import { fetchApps } from "../../../../services/api";
-import { PuzzlePiece } from "@phosphor-icons/react";
-import ListSkeleton from "../../../../components/SkeletonLoaders/ListSkeleton";
+import { DEFAULT_ITEMS_PER_PAGE } from "../../../../shared/constants";
 
 interface App {
   id: string;
@@ -28,7 +30,8 @@ const AppList: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [apps, setApps] = useState<App[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
-  // const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(DEFAULT_ITEMS_PER_PAGE);
 
   useEffect(() => {
     const loadApps = async () => {
@@ -48,85 +51,44 @@ const AppList: React.FC = () => {
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
+    setCurrentPage(1); // Reset to first page when searching
   };
 
-  // const handleConnectApp = (appData: AppFormData) => {
-  //   // In a real app, this would send the data to the server
-  //   const newApp: App = {
-  //     id: `app-${Date.now()}`,
-  //     name: appData.name,
-  //     platform: appData.platform,
-  //     estimateRevenueUSD: 0,
-  //     estimateRevenue: formatCurrency(0), // Default formatted revenue
-  //     totalCostUSD: 0,
-  //     totalCostINR: formatCurrency(0),
-  //     netUSD: 0,
-  //     percentage: 0,
-  //     icon: "/default-app-icon.png", // Default icon if not provided
-  //   };
+  // Filter apps based on search term
+  const filteredApps = useMemo(() => {
+    return apps.filter((app) =>
+      app.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  }, [apps, searchTerm]);
 
-  //   setApps([...apps, newApp]);
-  //   setIsModalOpen(false);
-  // };
-
-  const filteredApps = apps.filter((app) => {
-    const matchesSearch = app.name
-      .toLowerCase()
-      .includes(searchTerm.toLowerCase());
-    return matchesSearch;
-  });
+  // Calculate pagination
+  const totalPages = Math.ceil(filteredApps.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const paginatedApps = filteredApps.slice(
+    startIndex,
+    startIndex + itemsPerPage
+  );
 
   return (
-    <div className="space-y-5">
-
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
           <PuzzlePiece size={20} className="text-gray-700" />
           <h1 className="text-2xl font-bold text-gray-700">
             {t("apps.title")}
           </h1>
         </div>
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-          <div className="w-full">
-            <TextInput
-              id="search"
-              type="text"
-              color={"gray"}
-              icon={Search}
-              placeholder={t("apps.search")}
-              value={searchTerm}
-              onChange={handleSearch}
-            />
-          </div>
-          {/* <div className="flex gap-2">
-                <Dropdown
-                  label={
-                    <div className="flex items-center">
-                      <Filter className="mr-2 h-5 w-5" />
-                      {t("apps.filter")}
-                    </div>
-                  }
-                  color="light"
-                >
-                  <Dropdown.Header>
-                    <span className="block text-sm font-medium">Platform</span>
-                  </Dropdown.Header>
-                  <Dropdown.Item onClick={() => setPlatformFilter(null)}>
-                    All
-                  </Dropdown.Item>
-                  <Dropdown.Item onClick={() => setPlatformFilter("android")}>
-                    Android
-                  </Dropdown.Item>
-                  <Dropdown.Item onClick={() => setPlatformFilter("ios")}>
-                    iOS
-                  </Dropdown.Item>
-                  <Dropdown.Item onClick={() => setPlatformFilter("web")}>
-                    Web
-                  </Dropdown.Item>
-                </Dropdown>
-              </div> */}
+        <div className="flex items-center gap-4">
+          <TextInput
+            type="text"
+            placeholder={t("common.search")}
+            value={searchTerm}
+            onChange={handleSearch}
+            className="w-64"
+          />
         </div>
       </div>
+
       {isLoading ? (
         <ListSkeleton />
       ) : (
@@ -151,7 +113,7 @@ const AppList: React.FC = () => {
                 <Table.HeadCell>{t("apps.columns.actions")}</Table.HeadCell>
               </Table.Head>
               <Table.Body className="divide-y">
-                {filteredApps.map((app) => (
+                {paginatedApps.map((app) => (
                   <Table.Row
                     key={app.id}
                     className="bg-white dark:border-gray-700 dark:bg-gray-800"
@@ -170,7 +132,9 @@ const AppList: React.FC = () => {
                         </div>
                         <div>
                           <p>{app.name}</p>
-                          <p className="text-gray-400 text-xs">{app.platform}</p>
+                          <p className="text-gray-400 text-xs">
+                            {app.platform}
+                          </p>
                         </div>
                       </div>
                     </Table.Cell>
@@ -180,12 +144,13 @@ const AppList: React.FC = () => {
                     <Table.Cell>{app.totalCostINR}</Table.Cell>
                     <Table.Cell>{formatCurrency(app.netUSD)}</Table.Cell>
                     <Table.Cell
-                      className={`${app.percentage <= 0.25
-                        ? "text-red-500"
-                        : app.percentage <= 0.5
+                      className={`${
+                        app.percentage <= 0.25
+                          ? "text-red-500"
+                          : app.percentage <= 0.5
                           ? "text-yellow-500"
                           : "text-green-500"
-                        }`}
+                      }`}
                     >
                       {app.percentage.toFixed(2)}%
                     </Table.Cell>
@@ -203,6 +168,17 @@ const AppList: React.FC = () => {
               </Table.Body>
             </Table>
           </div>
+
+          {totalPages > 0 && (
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              totalItems={filteredApps.length}
+              onPageChange={setCurrentPage}
+              onItemsPerPageChange={setItemsPerPage}
+              itemsPerPage={itemsPerPage}
+            />
+          )}
 
           {/* <ConnectAppModal
             isOpen={isModalOpen}

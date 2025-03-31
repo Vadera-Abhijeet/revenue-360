@@ -5,11 +5,13 @@ import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
 import DateRangePicker from "../../../../components/DateRangePicker";
+import Pagination from "../../../../components/Pagination";
+import ListSkeleton from "../../../../components/SkeletonLoaders/ListSkeleton";
 import { useCurrency } from "../../../../contexts/CurrencyContext";
 import { fetchCampaigns } from "../../../../services/api";
+import { DEFAULT_ITEMS_PER_PAGE } from "../../../../shared/constants";
 import CampaignsDataTable from "../../component/CampaignListModal";
 import { ICampaignData } from "../../interface";
-import ListSkeleton from "../../../../components/SkeletonLoaders/ListSkeleton";
 
 const Campaigns: React.FC = () => {
   const { t } = useTranslation();
@@ -21,6 +23,8 @@ const Campaigns: React.FC = () => {
   const [selectedCampaign, setSelectedCampaign] = useState<ICampaignData>();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [actionType, setActionType] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(DEFAULT_ITEMS_PER_PAGE);
 
   const [startDate, setStartDate] = useState<Date>(
     new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
@@ -53,16 +57,17 @@ const Campaigns: React.FC = () => {
     // In a real app, we would refetch data with the new date range
   };
 
-  const filteredCampaigns = useMemo(
-    () =>
-      campaigns.filter((campaign) => {
-        const search = searchTerm.toLowerCase();
+  const filteredCampaigns = useMemo(() => {
+    return campaigns.filter((campaign) =>
+      campaign.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  }, [campaigns, searchTerm]);
 
-        return Object.values(campaign).some((value) =>
-          String(value).toLowerCase().includes(search)
-        );
-      }),
-    [campaigns, searchTerm]
+  const totalPages = Math.ceil(filteredCampaigns.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const paginatedCampaigns = filteredCampaigns.slice(
+    startIndex,
+    startIndex + itemsPerPage
   );
 
   const getPercentageBadgeColor = (percentage: number) => {
@@ -124,7 +129,7 @@ const Campaigns: React.FC = () => {
               <Table.HeadCell>{t("apps.columns.actions")}</Table.HeadCell>
             </Table.Head>
             <Table.Body className="divide-y">
-              {filteredCampaigns.map((campaign) => (
+              {paginatedCampaigns.map((campaign) => (
                 <Table.Row
                   key={campaign.id}
                   className="bg-white dark:border-gray-700 dark:bg-gray-800"
@@ -193,6 +198,14 @@ const Campaigns: React.FC = () => {
               ))}
             </Table.Body>
           </Table>
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={(page) => setCurrentPage(page)}
+            totalItems={campaigns.length}
+            onItemsPerPageChange={setItemsPerPage}
+            itemsPerPage={itemsPerPage}
+          />
           <CampaignsDataTable
             actionType={actionType}
             isModalOpen={isModalOpen}

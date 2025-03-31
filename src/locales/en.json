@@ -489,7 +489,10 @@
       "permissions": "Permissions",
       "select_permissions": "Select Permissions",
       "invite_success": "Team member invited successfully",
-      "invite_error": "Failed to invite team member"
+      "invite_error": "Failed to invite team member",
+      "emailRequired": "Email is required",
+      "invalidEmail": "Please enter a valid email address",
+      "minPermissionsRequired": "Please select at least one permission"
     }
   },
   "merchant": {

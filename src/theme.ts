@@ -189,10 +189,35 @@ export const flowbiteTheme: CustomFlowbiteTheme = {
     item: {
       link: {
         active: {
-          "off": "hover:bg-gray-100 hover:text-indigo-700 dark:border-gray-600 dark:hover:bg-gray-600 dark:hover:text-white",
-          "on": "bg-indigo-700 text-white dark:bg-gray-800"
-        }
-      }
-    }
-  }
+          off: "hover:bg-gray-100 hover:text-indigo-700 dark:border-gray-600 dark:hover:bg-gray-600 dark:hover:text-white",
+          on: "bg-indigo-700 text-white dark:bg-gray-800",
+        },
+      },
+    },
+  },
+  checkbox: {
+    root: {
+      base: "h-4 w-4 appearance-none rounded bg-gray-100 bg-[length:0.55em_0.55em] bg-center bg-no-repeat checked:bg-current checked:bg-check-icon focus:outline-none focus:ring-0 dark:bg-gray-700 dark:checked:bg-current",
+      color: {
+        default: "text-primary-600",
+        dark: "text-gray-800 ",
+        failure: "text-red-900 ",
+        gray: "text-gray-900 ",
+        info: "text-cyan-800 ",
+        light: "text-gray-900 ",
+        purple: "text-purple-600 ",
+        success: "text-green-800 ",
+        warning: "text-yellow-400 ",
+        blue: "text-blue-700 ",
+        cyan: "text-cyan-600 ",
+        green: "text-green-600 ",
+        indigo: "text-indigo-700",
+        lime: "text-lime-700",
+        pink: "text-pink-600 ",
+        red: "text-red-600 ",
+        teal: "text-teal-600 ",
+        yellow: "text-yellow-400 ",
+      },
+    },
+  },
 };

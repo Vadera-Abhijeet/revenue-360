@@ -127,33 +127,33 @@ const Configurations: React.FC = () => {
 
   return (
     <div className="space-y-6">
+      <div className="flex items-center gap-4 justify-between">
+        <div className="flex items-center gap-4">
+          <PuzzlePiece size={20} className="text-gray-700" />
+          <h1 className="text-2xl font-bold text-gray-700">
+            {t("configurations.integrations.title")}
+          </h1>
+        </div>
+        <Button
+          size="sm"
+          color="indigo"
+          onClick={() => {
+            setIsModalOpen(true);
+            setActionType("addNewIntegration");
+          }}
+        >
+          <div className="flex items-center gap-1">
+            <PackagePlus className="mr-2 h-4 w-4" />
+            {t("configurations.integrations.addNew")}
+          </div>
+        </Button>
+      </div>
       {isLoading ? (
         <div className="flex items-center justify-center h-64">
           <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary-600"></div>
         </div>
       ) : (
         <>
-          <div className="flex items-center gap-4 justify-between">
-            <div className="flex items-center gap-4">
-              <PuzzlePiece size={20} className="text-gray-700" />
-              <h1 className="text-2xl font-bold text-gray-700">
-                {t("configurations.integrations.title")}
-              </h1>
-            </div>
-            <Button
-              size="sm"
-              color="indigo"
-              onClick={() => {
-                setIsModalOpen(true);
-                setActionType("addNewIntegration");
-              }}
-            >
-              <div className="flex items-center gap-1">
-                <PackagePlus className="mr-2 h-4 w-4" />
-                {t("configurations.integrations.addNew")}
-              </div>
-            </Button>
-          </div>
           <div>
             <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-1 xl:grid-cols-1 2xl:grid-cols-2 gap-6">
               {settings?.integrations.map((integrationSet, index) => (
@@ -280,8 +280,8 @@ const Configurations: React.FC = () => {
                   {confirmModal.type === "updateEmail"
                     ? t("configurations.integrations.confirmEmailUpdate")
                     : confirmModal.type === "connect"
-                      ? t("configurations.integrations.confirmConnect")
-                      : t("configurations.integrations.confirmDisconnect")}
+                    ? t("configurations.integrations.confirmConnect")
+                    : t("configurations.integrations.confirmDisconnect")}
                 </p>
               </Modal.Body>
               <Modal.Footer className="justify-center">
@@ -353,7 +353,9 @@ const Configurations: React.FC = () => {
                 <Button
                   color={"indigo"}
                   onClick={() => {
-                    handleDeleteIntegration(confirmDeleteIntegrationModal.index);
+                    handleDeleteIntegration(
+                      confirmDeleteIntegrationModal.index
+                    );
                     setConfirmDeleteIntegrationModal({
                       ...confirmDeleteIntegrationModal,
                       open: false,

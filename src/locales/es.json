@@ -482,7 +482,10 @@
       "permissions": "Permisos",
       "select_permissions": "Seleccionar permisos",
       "invite_success": "Miembro del equipo invitado con éxito",
-      "invite_error": "Error al invitar al miembro del equipo"
+      "invite_error": "Error al invitar al miembro del equipo",
+      "emailRequired": "El correo electrónico es obligatorio",
+      "invalidEmail": "Por favor, ingrese una dirección de correo electrónico válida",
+      "minPermissionsRequired": "Por favor, seleccione al menos un permiso"
     }
   },
   "merchant": {

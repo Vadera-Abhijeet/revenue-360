@@ -11,6 +11,7 @@ import {
 import { Button } from "flowbite-react";
 import { fetchUserSettings } from "../../../../services/api";
 import InviteTeamMemberModal from "../components/InviteTeamMemberModal";
+import ListSkeleton from "../../../../components/SkeletonLoaders/ListSkeleton";
 
 const TeamManagement: React.FC = () => {
   const { t } = useTranslation();
@@ -73,9 +74,7 @@ const TeamManagement: React.FC = () => {
       </div>
       {/* Add your team management content here */}
       {isLoading ? (
-        <div className="flex items-center justify-center h-64">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary-600"></div>
-        </div>
+        <ListSkeleton />
       ) : (
         <table className="w-full text-sm text-left text-gray-500">
           <thead className="text-xs text-gray-700 uppercase bg-gray-50">
@@ -135,7 +134,6 @@ const TeamManagement: React.FC = () => {
         open={isInviteModalOpen}
         onClose={() => setIsInviteModalOpen(false)}
         onInvite={handleInviteTeamMember}
-        integrations={settings?.integrations || []}
       />
     </div>
   );

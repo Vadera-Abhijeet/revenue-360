@@ -1,6 +1,6 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Button, Card, Label, Spinner, TextInput } from "flowbite-react";
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
@@ -8,15 +8,13 @@ import { useNavigate } from "react-router-dom";
 import * as yup from "yup";
 import brandLogo from "../assets/images/Logo.png";
 import { useAuth } from "../hooks/useAuth";
-interface SignInFormInputs {
-  email: string;
-  password: string;
-}
+import { ILoginPayload } from "../contexts/AuthContext";
 
 const SignIn: React.FC<{ handleSwap: () => void }> = ({ handleSwap }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { login, isLoading } = useAuth();
+  const { login } = useAuth();
+  const [isLoading, setIsLoading] = useState(false);
 
   // Add Yup Schema
   const schema = yup
@@ -36,16 +34,27 @@ const SignIn: React.FC<{ handleSwap: () => void }> = ({ handleSwap }) => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<SignInFormInputs>({
+  } = useForm<ILoginPayload>({
     resolver: yupResolver(schema),
   });
 
-  const onSubmit = async (data: SignInFormInputs) => {
-    toast.promise(login(data), {
-      loading: t("auth.login.loggingIn"),
-      success: t("auth.login.success"),
-      error: t("auth.login.error"),
-    });
+  const onSubmit = async (data: ILoginPayload) => {
+    try {
+      setIsLoading(true);
+      login(data)
+        .then(() => {
+          setIsLoading(false);
+          toast.success(t("auth.login.success"));
+        })
+        .catch(() => {
+          setIsLoading(false);
+          toast.error(t("auth.login.error"));
+        });
+    } catch (error) {
+      setIsLoading(false);
+      console.error("Login error:", error);
+      toast.error(t("auth.login.error"));
+    }
   };
 
   return (

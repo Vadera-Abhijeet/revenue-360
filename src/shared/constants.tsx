@@ -12,8 +12,13 @@ export const API_CONFIG = {
     register: "register",
     users: "users",
     refreshToken: "token/refresh",
+    me: "users/me",
+    permissions: "permissions",
+    categorizedPermissions: "permissions/category",
   },
 };
+
+export const DEFAULT_ITEMS_PER_PAGE = 10;
 
 export const PLATFORM_ICON_MAP: Record<string, string> = {
   googleAds: "https://www.gstatic.com/images/branding/product/2x/ads_48dp.png",

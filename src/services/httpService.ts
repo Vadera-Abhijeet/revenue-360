@@ -164,11 +164,6 @@ class HttpService {
     localStorage.setItem("user", encryptData(user));
   }
 
-  public getUserData(): IMerchant | null {
-    const encryptedUser = localStorage.getItem("user");
-    return encryptedUser ? decryptData<IMerchant>(encryptedUser) : null;
-  }
-
   public clearUserData(): void {
     localStorage.removeItem("user");
   }
@@ -177,6 +172,11 @@ class HttpService {
     this.clearTokens();
     this.clearUserData();
     localStorage.removeItem("tempProfilePic");
+  }
+
+  public async getCurrentUser(): Promise<IMerchant> {
+    const response = await this.get<IMerchant>(API_CONFIG.path.me);
+    return response;
   }
 
   private getUrl(

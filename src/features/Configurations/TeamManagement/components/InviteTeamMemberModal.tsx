@@ -1,69 +1,177 @@
-import React, { useState } from "react";
-import { TextInput, Button, Checkbox, Label } from "flowbite-react";
+import { Button, Checkbox, Label, TextInput } from "flowbite-react";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { IIntegrations } from "../../../../interfaces";
 import AnimatedModal from "../../../../components/AnimatedModal";
+import { httpService } from "../../../../services/httpService";
+import { API_CONFIG } from "../../../../shared/constants";
+import { motion, AnimatePresence } from "framer-motion";
+import { ChevronDownIcon } from "lucide-react";
+import Loading from "../../../../components/Loading";
 
 interface InviteTeamMemberModalProps {
   open: boolean;
   onClose: () => void;
   onInvite: (email: string, permissions: string[]) => void;
-  integrations: IIntegrations[];
+}
+
+interface Permission {
+  id: number;
+  name: string;
+  codename: string;
+  category: string;
+  description: string;
+}
+
+interface ApiResponse {
+  permissions: IPermissionCategories;
+}
+
+interface IPermissionCategories {
+  account: Permission[];
+  application: Permission[];
+  module: Permission[];
 }
 
 const InviteTeamMemberModal: React.FC<InviteTeamMemberModalProps> = ({
   open,
   onClose,
   onInvite,
-  integrations,
 }) => {
   const { t } = useTranslation();
   const [email, setEmail] = useState("");
   const [selectedPermissions, setSelectedPermissions] = useState<{
-    [key: string]: { [key: string]: boolean };
+    [key: string]: boolean;
+  }>({});
+  const [isLoading, setIsLoading] = useState(true);
+  const [permissions, setPermissions] = useState<IPermissionCategories>({
+    account: [],
+    application: [],
+    module: [],
+  });
+  const [expandedCategories, setExpandedCategories] = useState<string[]>([]);
+  const [errors, setErrors] = useState<{
+    email?: string;
+    permissions?: string;
   }>({});
 
-  const handlePermissionChange = (
-    integrationIndex: number,
-    direction: "inward" | "outward",
-    checked: boolean
-  ) => {
+  useEffect(() => {
+    setIsLoading(true);
+    httpService
+      .get<ApiResponse>(API_CONFIG.path.categorizedPermissions)
+      .then((res) => {
+        setPermissions(res.permissions);
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching permissions:", error);
+        setPermissions({
+          account: [],
+          application: [],
+          module: [],
+        });
+        setIsLoading(false);
+      });
+  }, []);
+
+  const validateEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const validateForm = () => {
+    const newErrors: { email?: string; permissions?: string } = {};
+
+    if (!email) {
+      newErrors.email = t("configurations.team.emailRequired");
+    } else if (!validateEmail(email)) {
+      newErrors.email = t("configurations.team.invalidEmail");
+    }
+
+    const selectedCount =
+      Object.values(selectedPermissions).filter(Boolean).length;
+    if (selectedCount === 0) {
+      newErrors.permissions = t("configurations.team.minPermissionsRequired");
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handlePermissionChange = (codename: string, checked: boolean) => {
     setSelectedPermissions((prev) => ({
       ...prev,
-      [integrationIndex]: {
-        ...prev[integrationIndex],
-        [`${direction}_${integrationIndex}`]: checked,
-      },
+      [codename]: checked,
     }));
+    // Clear permissions error when a permission is selected
+    if (checked) {
+      setErrors((prev) => ({ ...prev, permissions: undefined }));
+    }
+  };
+
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value);
+    // Clear email error when user types
+    setErrors((prev) => ({ ...prev, email: undefined }));
+  };
+
+  const handleCategoryChange = (category: string, checked: boolean) => {
+    const categoryPermissions =
+      permissions[category as keyof IPermissionCategories];
+    const newSelectedPermissions = { ...selectedPermissions };
+
+    categoryPermissions.forEach((permission) => {
+      newSelectedPermissions[permission.codename] = checked;
+    });
+
+    setSelectedPermissions(newSelectedPermissions);
+    // Clear permissions error when a category is selected
+    if (checked) {
+      setErrors((prev) => ({ ...prev, permissions: undefined }));
+    }
+  };
+
+  const isCategoryFullySelected = (category: string) => {
+    const categoryPermissions =
+      permissions[category as keyof IPermissionCategories];
+    return (
+      categoryPermissions.length > 0 &&
+      categoryPermissions.every((p) => selectedPermissions[p.codename])
+    );
+  };
+
+  const isCategoryPartiallySelected = (category: string) => {
+    const categoryPermissions =
+      permissions[category as keyof IPermissionCategories];
+    return (
+      categoryPermissions.some((p) => selectedPermissions[p.codename]) &&
+      !isCategoryFullySelected(category)
+    );
+  };
+
+  const toggleCategory = (category: string) => {
+    setExpandedCategories((prev) =>
+      prev.includes(category)
+        ? prev.filter((c) => c !== category)
+        : [...prev, category]
+    );
   };
 
   const handleSubmit = () => {
-    const permissions: string[] = [];
-    Object.entries(selectedPermissions).forEach(([integrationIndex, perms]) => {
-      Object.entries(perms).forEach(([key, value]) => {
-        if (value) {
-          const [direction, index] = key.split("_");
-          const integration = integrations[parseInt(index)];
-          const account =
-            direction === "inward" ? integration.inward : integration.outward;
-          permissions.push(`${account.platform}_${account.accountId}`);
-        }
-      });
-    });
-    onInvite(email, permissions);
-    onClose();
+    if (validateForm()) {
+      const selectedPermissionCodenames = Object.entries(selectedPermissions)
+        .filter(([, value]) => value)
+        .map(([codename]) => codename);
+
+      onInvite(email, selectedPermissionCodenames);
+      onClose();
+    }
   };
 
-  const modalFooter = (
-    <div className="flex justify-end gap-3">
-      <Button color="light" onClick={onClose}>
-        {t("common.cancel")}
-      </Button>
-      <Button color="primary" onClick={handleSubmit} disabled={!email}>
-        {t("configurations.team.invite")}
-      </Button>
-    </div>
-  );
+  const categories = [
+    { key: "account", label: "Account Management" },
+    { key: "application", label: "Application Access" },
+    { key: "module", label: "Module Access" },
+  ];
 
   return (
     <AnimatedModal
@@ -71,7 +179,6 @@ const InviteTeamMemberModal: React.FC<InviteTeamMemberModalProps> = ({
       onClose={onClose}
       title={t("configurations.team.invite")}
       size="xl"
-      footer={modalFooter}
     >
       <div className="space-y-4">
         <div>
@@ -80,58 +187,145 @@ const InviteTeamMemberModal: React.FC<InviteTeamMemberModalProps> = ({
             id="email"
             type="email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="team.member@example.com"
+            onChange={handleEmailChange}
+            placeholder="name@company.com"
             required
+            color={errors.email ? "failure" : undefined}
+            helperText={errors.email}
           />
         </div>
 
         <div className="space-y-4">
-          <h3 className="text-lg font-medium text-gray-900">
-            {t("configurations.team.permissions")}
-          </h3>
-          {integrations.map((integration, index) => (
-            <div key={index} className="space-y-2 border rounded-lg p-4">
-              <h4 className="font-medium text-gray-700">
-                {t(
-                  `configurations.integrations.${integration.inward.platform}`
-                )}
-              </h4>
-              <div className="space-y-2">
-                <div className="flex items-center">
-                  <Checkbox
-                    id={`inward_${index}`}
-                    checked={
-                      selectedPermissions[index]?.[`inward_${index}`] || false
-                    }
-                    onChange={(e) =>
-                      handlePermissionChange(index, "inward", e.target.checked)
-                    }
-                  />
-                  <Label htmlFor={`inward_${index}`} className="ml-2">
-                    {t("configurations.integrations.inward")} -{" "}
-                    {integration.inward.accountEmail}
-                  </Label>
-                </div>
-                <div className="flex items-center">
-                  <Checkbox
-                    id={`outward_${index}`}
-                    checked={
-                      selectedPermissions[index]?.[`outward_${index}`] || false
-                    }
-                    onChange={(e) =>
-                      handlePermissionChange(index, "outward", e.target.checked)
-                    }
-                  />
-                  <Label htmlFor={`outward_${index}`} className="ml-2">
-                    {t("configurations.integrations.outward")} -{" "}
-                    {integration.outward.accountEmail}
-                  </Label>
-                </div>
-              </div>
+          <div className="flex items-center justify-between">
+            <h3 className="text-lg font-medium text-gray-900">
+              {t("configurations.team.permissions")}
+            </h3>
+            {errors.permissions && (
+              <span className="text-sm text-red-500">{errors.permissions}</span>
+            )}
+          </div>
+          {isLoading ? (
+            <div className="flex justify-center py-4">
+              <Loading className="h-72" />
             </div>
-          ))}
+          ) : (
+            <div className="space-y-2 max-h-[calc(100vh-380px)] overflow-y-auto">
+              {categories.map(({ key, label }) => (
+                <div key={key} className="border rounded-lg overflow-hidden">
+                  <button
+                    onClick={() => toggleCategory(key)}
+                    className="w-full px-4 py-2 flex items-center justify-between bg-gray-50 hover:bg-gray-100 transition-colors"
+                  >
+                    <div className="flex items-center space-x-2">
+                      <div
+                        className="flex items-center space-x-2 cursor-pointer"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleCategoryChange(
+                            key,
+                            !isCategoryFullySelected(key)
+                          );
+                        }}
+                      >
+                        <Checkbox
+                          color={"indigo"}
+                          id={`category-${key}`}
+                          checked={isCategoryFullySelected(key)}
+                          ref={(input) => {
+                            if (input) {
+                              input.indeterminate =
+                                isCategoryPartiallySelected(key);
+                            }
+                          }}
+                          onChange={(e) =>
+                            handleCategoryChange(key, e.target.checked)
+                          }
+                          className="mr-2"
+                          onClick={(e) => e.stopPropagation()}
+                        />
+                        <span className="font-medium capitalize select-none">
+                          {label}
+                        </span>
+                      </div>
+                    </div>
+                    <motion.div
+                      animate={{
+                        rotate: expandedCategories.includes(key) ? 180 : 0,
+                      }}
+                      transition={{ duration: 0.2 }}
+                      className="cursor-pointer"
+                    >
+                      <ChevronDownIcon className="w-4 h-4" />
+                    </motion.div>
+                  </button>
+                  <AnimatePresence>
+                    {expandedCategories.includes(key) && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.2 }}
+                        className="overflow-hidden"
+                      >
+                        <div className="p-4">
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            {permissions[
+                              key as keyof IPermissionCategories
+                            ].map((permission) => (
+                              <motion.div
+                                key={permission.id}
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.2 }}
+                                className="flex items-start space-x-3 p-2 rounded-lg hover:bg-gray-50 transition-colors"
+                              >
+                                <Checkbox
+                                  color={"indigo"}
+                                  id={permission.codename}
+                                  checked={
+                                    selectedPermissions[permission.codename] ||
+                                    false
+                                  }
+                                  onChange={(e) =>
+                                    handlePermissionChange(
+                                      permission.codename,
+                                      e.target.checked
+                                    )
+                                  }
+                                  className="mt-1"
+                                />
+                                <div>
+                                  <Label
+                                    htmlFor={permission.codename}
+                                    className="font-medium text-gray-900 select-none cursor-pointer"
+                                  >
+                                    {permission.name}
+                                  </Label>
+                                  <p className="text-sm text-gray-500">
+                                    {permission.description}
+                                  </p>
+                                </div>
+                              </motion.div>
+                            ))}
+                          </div>
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
+      </div>
+
+      <div className="flex justify-end space-x-2 mt-6">
+        <Button color="light" onClick={onClose}>
+          {t("common.cancel")}
+        </Button>
+        <Button onClick={handleSubmit} disabled={isLoading} color={"indigo"}>
+          {t("configurations.team.invite")}
+        </Button>
       </div>
     </AnimatedModal>
   );

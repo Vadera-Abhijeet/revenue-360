@@ -482,7 +482,10 @@
       "permissions": "Berechtigungen",
       "select_permissions": "Berechtigungen auswählen",
       "invite_success": "Teammitglied erfolgreich eingeladen",
-      "invite_error": "Fehler beim Einladen des Teammitglieds"
+      "invite_error": "Fehler beim Einladen des Teammitglieds",
+      "emailRequired": "E-Mail ist erforderlich",
+      "invalidEmail": "Bitte geben Sie eine gültige E-Mail-Adresse ein",
+      "minPermissionsRequired": "Bitte wählen Sie mindestens eine Berechtigung aus"
     }
   },
   "merchant": {

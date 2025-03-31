@@ -44,14 +44,26 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   useEffect(() => {
     // Check if user is already logged in by checking access token
     const accessToken = httpService.getAccessToken();
-    if (accessToken) {
-      const storedUser = httpService.getUserData();
-      if (storedUser) {
-        setUser(storedUser);
-      }
+    if (accessToken && !user) {
+      // Fetch user data from API instead of local storage
+      httpService
+        .getCurrentUser()
+        .then((userData) => {
+          setUser(userData);
+          setIsLoading(false);
+        })
+        .catch((error) => {
+          console.error("Failed to fetch user data:", error);
+          // If we can't fetch user data, clear everything and redirect to login
+          httpService.clearAllData();
+          setUser(null);
+          setIsLoading(false);
+          navigate("/auth");
+        });
+    } else {
+      setIsLoading(false);
     }
-    setIsLoading(false);
-  }, []);
+  }, [navigate, user]);
 
   const login = async (credentials: ILoginPayload) => {
     try {
