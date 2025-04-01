@@ -21,7 +21,12 @@ import {
   NotFound,
   Settings,
   TeamManagement,
+  AcceptInvite,
+  OnboardingFlow,
+  OAuthCallback,
 } from "../routes/asyncComponents";
+import ForgotPasswordPage from "../features/Auth/pages/ForgotPasswordPage";
+import ResetPasswordPage from "../features/Auth/pages/ResetPasswordPage";
 
 export interface RouteConfig {
   path: string;
@@ -43,6 +48,31 @@ export const routesConfig: RouteConfig[] = [
   {
     path: "/auth",
     element: <Auth />,
+    protected: false,
+  },
+  {
+    path: "/accept-invite",
+    element: <AcceptInvite />,
+    protected: false,
+  },
+  {
+    path: "/onboarding",
+    element: <OnboardingFlow />,
+    protected: false,
+  },
+  {
+    path: "/oauth/callback",
+    element: <OAuthCallback />,
+    protected: false,
+  },
+  {
+    path: "/forgot-password",
+    element: <ForgotPasswordPage />,
+    protected: false,
+  },
+  {
+    path: "/reset-password",
+    element: <ResetPasswordPage />,
     protected: false,
   },
   // Protected Routes

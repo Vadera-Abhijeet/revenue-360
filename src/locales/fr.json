@@ -138,7 +138,9 @@
     "last30Days": "30 derniers jours",
     "confirm_logout": "Confirmer la déconnexion",
     "logout_confirmation_message": "Êtes-vous sûr de vouloir vous déconnecter ? Vous devrez vous reconnecter pour accéder à votre compte.",
-    "merchants": "Marchandes"
+    "merchants": "Marchandes",
+    "email": "E-mail",
+    "processing": "Traitement"
   },
   "landing": {
     "hero": {
@@ -191,7 +193,9 @@
       "wrongPassword": "Mot de passe incorrect",
       "createNewAccountTitle": "Vous n'avez pas de compte ?",
       "createNewAccountSubtitle": "Inscrivez-vous ici.",
-      "success": "Connexion réussie !"
+      "success": "Connexion réussie !",
+      "forgotPasswordTitle": "Mot de passe oublié? ",
+      "forgotPasswordSubtitle": "Cliquez ici pour réinitialiser."
     },
     "features": {
       "trackPerformance": {
@@ -514,5 +518,18 @@
     "description": "La page que vous recherchez a peut-être été supprimée, renommée ou est temporairement indisponible.",
     "goHome": "Aller à l'accueil",
     "goBack": "Retour"
+  },
+  "onboarding": {
+    "connectPlatforms": "Connecter les plateformes",
+    "admobDescription": "Connectez votre compte ADMOB pour suivre les revenus publicitaires des applications",
+    "googleAdsDescription": "Connectez votre compte Google Ads pour suivre les performances de la campagne",
+    "connected": "Connecté",
+    "connect": "Connecter",
+    "pleaseWait": "S'il vous plaît, attendez...",
+    "error": "Erreur",
+    "oauthError": "Une erreur s'est produite pendant l'authentification OAuth",
+    "invalidCallback": "Rappel non valide",
+    "callbackError": "Une erreur s'est produite lors du traitement du rappel",
+    "backToOnboarding": "Retour à l'intégration"
   }
 }

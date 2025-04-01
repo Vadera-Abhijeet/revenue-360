@@ -46,9 +46,9 @@ const SignIn: React.FC<{ handleSwap: () => void }> = ({ handleSwap }) => {
           setIsLoading(false);
           toast.success(t("auth.login.success"));
         })
-        .catch(() => {
+        .catch((err) => {
           setIsLoading(false);
-          toast.error(t("auth.login.error"));
+          toast.error(err.message);
         });
     } catch (error) {
       setIsLoading(false);
@@ -156,6 +156,17 @@ const SignIn: React.FC<{ handleSwap: () => void }> = ({ handleSwap }) => {
                   className="text-primary-600 hover:underline cursor-pointer"
                 >
                   {t("auth.login.createNewAccountSubtitle")}
+                </span>
+              </p>
+            </div>
+            <div className="text-center text-sm text-gray-600">
+              <p>
+                {t("auth.login.forgotPasswordTitle")}{" "}
+                <span
+                  onClick={() => navigate("/forgot-password")}
+                  className="text-primary-600 hover:underline cursor-pointer"
+                >
+                  {t("auth.login.forgotPasswordSubtitle")}
                 </span>
               </p>
             </div>

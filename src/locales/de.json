@@ -138,7 +138,9 @@
     "last30Days": "Letzte 30 Tage",
     "confirm_logout": "Abmeldung bestätigen",
     "logout_confirmation_message": "Sind Sie sicher, dass Sie sich abmelden möchten? Sie müssen sich erneut anmelden, um auf Ihr Konto zugreifen zu können.",
-    "merchants": "Händler"
+    "merchants": "Händler",
+    "email": "E-Mail",
+    "processing": "Verarbeitung"
   },
   "landing": {
     "hero": {
@@ -191,7 +193,9 @@
       "wrongPassword": "Falsches Passwort",
       "createNewAccountTitle": "Noch kein Konto?",
       "createNewAccountSubtitle": "Hier registrieren.",
-      "success": "Anmeldung erfolgreich!"
+      "success": "Anmeldung erfolgreich!",
+      "forgotPasswordTitle": "Passwort vergessen?",
+      "forgotPasswordSubtitle": "Klicken Sie hier, um zurückzusetzen."
     },
     "features": {
       "trackPerformance": {
@@ -514,5 +518,18 @@
     "description": "Die gesuchte Seite wurde möglicherweise entfernt, umbenannt oder ist vorübergehend nicht verfügbar.",
     "goHome": "Zur Startseite",
     "goBack": "Zurück"
+  },
+  "onboarding": {
+    "connectPlatforms": "Plattformen verbinden",
+    "admobDescription": "Schließen Sie Ihr ADMOB -Konto an, um App -Anzeigeneinnahmen zu verfolgen",
+    "googleAdsDescription": "Schließen Sie Ihr Google -Anzeigenkonto an, um die Kampagnenleistung zu verfolgen",
+    "connected": "Verbunden",
+    "connect": "Verbinden",
+    "pleaseWait": "Bitte warten...",
+    "error": "Fehler",
+    "oauthError": "Während der OAuth -Authentifizierung trat ein Fehler auf",
+    "invalidCallback": "Ungültiger Rückruf",
+    "callbackError": "Bei der Verarbeitung des Rückrufs trat ein Fehler auf",
+    "backToOnboarding": "Zurück zum Onboarding"
   }
 }

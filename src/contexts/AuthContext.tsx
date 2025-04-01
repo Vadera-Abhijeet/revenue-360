@@ -88,8 +88,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       setUser(user);
       navigate(roleBasedFirstPath[user.role] || "/dashboard");
     } catch (error) {
-      console.error("Login error:", error);
-      throw error;
+      throw new Error((error as Error).message || "");
     }
   };
 

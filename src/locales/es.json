@@ -138,7 +138,9 @@
     "last30Days": "Últimos 30 días",
     "confirm_logout": "Confirmar cierre de sesión",
     "logout_confirmation_message": "¿Está seguro de que desea cerrar sesión? Necesitará iniciar sesión nuevamente para acceder a su cuenta.",
-    "merchants": "Comerciantes"
+    "merchants": "Comerciantes",
+    "email": "Correo electrónico",
+    "processing": "Tratamiento"
   },
   "landing": {
     "hero": {
@@ -191,7 +193,9 @@
       "wrongPassword": "Contraseña incorrecta",
       "createNewAccountTitle": "¿No tienes una cuenta?",
       "createNewAccountSubtitle": "Regístrate aquí.",
-      "success": "Inicio de sesión exitoso!"
+      "success": "Inicio de sesión exitoso!",
+      "forgotPasswordTitle": "¿Has olvidado tu contraseña?",
+      "forgotPasswordSubtitle": "Haga clic aquí para reiniciar."
     },
     "features": {
       "trackPerformance": {
@@ -514,5 +518,18 @@
     "description": "La página que estás buscando podría haber sido eliminada, haber cambiado su nombre o estar temporalmente no disponible.",
     "goHome": "Ir al inicio",
     "goBack": "Volver"
+  },
+  "onboarding": {
+    "connectPlatforms": "Conectar plataformas",
+    "admobDescription": "Conecte su cuenta de ADMOB para rastrear los ingresos por anuncios de la aplicación",
+    "googleAdsDescription": "Conecte su cuenta de Google ADS para rastrear el rendimiento de la campaña",
+    "connected": "Conectada",
+    "connect": "Conectar",
+    "pleaseWait": "Espere por favor...",
+    "error": "error",
+    "oauthError": "Se produjo un error durante la autenticación de OAuth",
+    "invalidCallback": "Devolución de llamada no válida",
+    "callbackError": "Se produjo un error al procesar la devolución de llamada",
+    "backToOnboarding": "Volver a la incorporación"
   }
 }

@@ -11,7 +11,7 @@ import Loading from "../../../../components/Loading";
 interface InviteTeamMemberModalProps {
   open: boolean;
   onClose: () => void;
-  onInvite: (email: string, permissions: string[]) => void;
+  onInvite: (email: string, permissions: string[], isOwner: boolean) => void;
 }
 
 interface Permission {
@@ -39,6 +39,7 @@ const InviteTeamMemberModal: React.FC<InviteTeamMemberModalProps> = ({
 }) => {
   const { t } = useTranslation();
   const [email, setEmail] = useState("");
+  const [isOwner, setIsOwner] = useState(false);
   const [selectedPermissions, setSelectedPermissions] = useState<{
     [key: string]: boolean;
   }>({});
@@ -87,10 +88,13 @@ const InviteTeamMemberModal: React.FC<InviteTeamMemberModalProps> = ({
       newErrors.email = t("configurations.team.invalidEmail");
     }
 
-    const selectedCount =
-      Object.values(selectedPermissions).filter(Boolean).length;
-    if (selectedCount === 0) {
-      newErrors.permissions = t("configurations.team.minPermissionsRequired");
+    // Only validate permissions if not an owner
+    if (!isOwner) {
+      const selectedCount =
+        Object.values(selectedPermissions).filter(Boolean).length;
+      if (selectedCount === 0) {
+        newErrors.permissions = t("configurations.team.minPermissionsRequired");
+      }
     }
 
     setErrors(newErrors);
@@ -162,7 +166,7 @@ const InviteTeamMemberModal: React.FC<InviteTeamMemberModalProps> = ({
         .filter(([, value]) => value)
         .map(([codename]) => codename);
 
-      onInvite(email, selectedPermissionCodenames);
+      onInvite(email, selectedPermissionCodenames, isOwner);
       onClose();
     }
   };
@@ -195,128 +199,145 @@ const InviteTeamMemberModal: React.FC<InviteTeamMemberModalProps> = ({
           />
         </div>
 
-        <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <h3 className="text-lg font-medium text-gray-900">
-              {t("configurations.team.permissions")}
-            </h3>
-            {errors.permissions && (
-              <span className="text-sm text-red-500">{errors.permissions}</span>
+        <div className="flex items-center space-x-2">
+          <Checkbox
+            id="isOwner"
+            checked={isOwner}
+            onChange={(e) => setIsOwner(e.target.checked)}
+            color="indigo"
+          />
+          <Label htmlFor="isOwner" className="text-gray-900">
+            Is Owner
+          </Label>
+        </div>
+
+        {!isOwner && (
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <h3 className="text-lg font-medium text-gray-900">
+                {t("configurations.team.permissions")}
+              </h3>
+              {errors.permissions && (
+                <span className="text-sm text-red-500">
+                  {errors.permissions}
+                </span>
+              )}
+            </div>
+            {isLoading ? (
+              <div className="flex justify-center py-4">
+                <Loading className="h-[200px]" />
+              </div>
+            ) : (
+              <div className="space-y-2 max-h-[calc(100vh-380px)] overflow-y-auto">
+                {categories.map(({ key, label }) => (
+                  <div key={key} className="border rounded-lg overflow-hidden">
+                    <button
+                      onClick={() => toggleCategory(key)}
+                      className="w-full px-4 py-2 flex items-center justify-between bg-gray-50 hover:bg-gray-100 transition-colors"
+                    >
+                      <div className="flex items-center space-x-2">
+                        <div
+                          className="flex items-center space-x-2 cursor-pointer"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleCategoryChange(
+                              key,
+                              !isCategoryFullySelected(key)
+                            );
+                          }}
+                        >
+                          <Checkbox
+                            color={"indigo"}
+                            id={`category-${key}`}
+                            checked={isCategoryFullySelected(key)}
+                            ref={(input) => {
+                              if (input) {
+                                input.indeterminate =
+                                  isCategoryPartiallySelected(key);
+                              }
+                            }}
+                            onChange={(e) =>
+                              handleCategoryChange(key, e.target.checked)
+                            }
+                            className="mr-2"
+                            onClick={(e) => e.stopPropagation()}
+                          />
+                          <span className="font-medium capitalize select-none">
+                            {label}
+                          </span>
+                        </div>
+                      </div>
+                      <motion.div
+                        animate={{
+                          rotate: expandedCategories.includes(key) ? 180 : 0,
+                        }}
+                        transition={{ duration: 0.2 }}
+                        className="cursor-pointer"
+                      >
+                        <ChevronDownIcon className="w-4 h-4" />
+                      </motion.div>
+                    </button>
+                    <AnimatePresence>
+                      {expandedCategories.includes(key) && (
+                        <motion.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: "auto", opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{ duration: 0.2 }}
+                          className="overflow-hidden"
+                        >
+                          <div className="p-4">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                              {permissions[
+                                key as keyof IPermissionCategories
+                              ].map((permission) => (
+                                <motion.div
+                                  key={permission.id}
+                                  initial={{ opacity: 0, y: 10 }}
+                                  animate={{ opacity: 1, y: 0 }}
+                                  transition={{ duration: 0.2 }}
+                                  className="flex items-start space-x-3 p-2 rounded-lg hover:bg-gray-50 transition-colors"
+                                >
+                                  <Checkbox
+                                    color={"indigo"}
+                                    id={permission.codename}
+                                    checked={
+                                      selectedPermissions[
+                                        permission.codename
+                                      ] || false
+                                    }
+                                    onChange={(e) =>
+                                      handlePermissionChange(
+                                        permission.codename,
+                                        e.target.checked
+                                      )
+                                    }
+                                    className="mt-1"
+                                  />
+                                  <div>
+                                    <Label
+                                      htmlFor={permission.codename}
+                                      className="font-medium text-gray-900 select-none cursor-pointer"
+                                    >
+                                      {permission.name}
+                                    </Label>
+                                    <p className="text-sm text-gray-500">
+                                      {permission.description}
+                                    </p>
+                                  </div>
+                                </motion.div>
+                              ))}
+                            </div>
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                ))}
+              </div>
             )}
           </div>
-          {isLoading ? (
-            <div className="flex justify-center py-4">
-              <Loading className="h-72" />
-            </div>
-          ) : (
-            <div className="space-y-2 max-h-[calc(100vh-380px)] overflow-y-auto">
-              {categories.map(({ key, label }) => (
-                <div key={key} className="border rounded-lg overflow-hidden">
-                  <button
-                    onClick={() => toggleCategory(key)}
-                    className="w-full px-4 py-2 flex items-center justify-between bg-gray-50 hover:bg-gray-100 transition-colors"
-                  >
-                    <div className="flex items-center space-x-2">
-                      <div
-                        className="flex items-center space-x-2 cursor-pointer"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleCategoryChange(
-                            key,
-                            !isCategoryFullySelected(key)
-                          );
-                        }}
-                      >
-                        <Checkbox
-                          color={"indigo"}
-                          id={`category-${key}`}
-                          checked={isCategoryFullySelected(key)}
-                          ref={(input) => {
-                            if (input) {
-                              input.indeterminate =
-                                isCategoryPartiallySelected(key);
-                            }
-                          }}
-                          onChange={(e) =>
-                            handleCategoryChange(key, e.target.checked)
-                          }
-                          className="mr-2"
-                          onClick={(e) => e.stopPropagation()}
-                        />
-                        <span className="font-medium capitalize select-none">
-                          {label}
-                        </span>
-                      </div>
-                    </div>
-                    <motion.div
-                      animate={{
-                        rotate: expandedCategories.includes(key) ? 180 : 0,
-                      }}
-                      transition={{ duration: 0.2 }}
-                      className="cursor-pointer"
-                    >
-                      <ChevronDownIcon className="w-4 h-4" />
-                    </motion.div>
-                  </button>
-                  <AnimatePresence>
-                    {expandedCategories.includes(key) && (
-                      <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: "auto", opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.2 }}
-                        className="overflow-hidden"
-                      >
-                        <div className="p-4">
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            {permissions[
-                              key as keyof IPermissionCategories
-                            ].map((permission) => (
-                              <motion.div
-                                key={permission.id}
-                                initial={{ opacity: 0, y: 10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.2 }}
-                                className="flex items-start space-x-3 p-2 rounded-lg hover:bg-gray-50 transition-colors"
-                              >
-                                <Checkbox
-                                  color={"indigo"}
-                                  id={permission.codename}
-                                  checked={
-                                    selectedPermissions[permission.codename] ||
-                                    false
-                                  }
-                                  onChange={(e) =>
-                                    handlePermissionChange(
-                                      permission.codename,
-                                      e.target.checked
-                                    )
-                                  }
-                                  className="mt-1"
-                                />
-                                <div>
-                                  <Label
-                                    htmlFor={permission.codename}
-                                    className="font-medium text-gray-900 select-none cursor-pointer"
-                                  >
-                                    {permission.name}
-                                  </Label>
-                                  <p className="text-sm text-gray-500">
-                                    {permission.description}
-                                  </p>
-                                </div>
-                              </motion.div>
-                            ))}
-                          </div>
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
+        )}
       </div>
 
       <div className="flex justify-end space-x-2 mt-6">

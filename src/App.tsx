@@ -1,6 +1,6 @@
 import { Flowbite } from "flowbite-react";
 import { lazy, Suspense } from "react";
-import toast, { Toaster } from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import { Route, Routes } from "react-router-dom";
 import Loading from "./components/Loading";

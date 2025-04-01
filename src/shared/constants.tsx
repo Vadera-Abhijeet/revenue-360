@@ -15,6 +15,23 @@ export const API_CONFIG = {
     me: "users/me",
     permissions: "permissions",
     categorizedPermissions: "permissions/category",
+    validateInvite: "validate-invite",
+    onboarding: "onboarding",
+    oauthCallback: "oauth/callback",
+    acceptInvite: "accept-invite",
+    changePassword: "change-password",
+    forgotPassword: "forgot-password",
+    resetPassword: "password-reset-confirm",
+    oauth: {
+      admob: {
+        authorize: "oauth/admob/authorize",
+        callback: "oauth/admob/callback",
+      },
+      googleads: {
+        authorize: "oauth/googleads/authorize",
+        callback: "oauth/googleads/callback",
+      },
+    },
   },
 };
 

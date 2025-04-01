@@ -142,7 +142,9 @@
       "active": "Active",
       "inactive": "Inactive"
     },
-    "merchants": "Merchants"
+    "merchants": "Merchants",
+    "email": "Email",
+    "processing": "Processing"
   },
   "landing": {
     "hero": {
@@ -195,7 +197,9 @@
       "emailRequired": "Email is required",
       "passwordRequired": "Password is required",
       "passwordMinLength": "Password must be at least 6 characters",
-      "success": "Login successful!"
+      "success": "Login successful!",
+      "forgotPasswordTitle": "Forgot password?",
+      "forgotPasswordSubtitle": "Click here to reset."
     },
     "signup": {
       "title": "Create a New Account",
@@ -262,7 +266,39 @@
         "title": "Grow Your Revenue",
         "description": "Identify opportunities and increase your app monetization."
       }
-    }
+    },
+    "firstNameRequired": "First name is required",
+    "lastNameRequired": "Last name is required",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "completeProfile": "Complete Profile",
+    "invalidInvite": "Invalid Invite",
+    "inviteExpiredOrInvalid": "The invite link has expired or is invalid",
+    "passwordsDoNotMatch": "Passwords do not match",
+    "changePassword": "Change Password",
+    "currentPassword": "Current Password",
+    "currentPasswordRequired": "Current password is required",
+    "newPassword": "New Password",
+    "newPasswordRequired": "New password is required",
+    "confirmPassword": "Confirm Password",
+    "confirmPasswordRequired": "Please confirm your password",
+    "passwordMinLength": "Password must be at least 8 characters long",
+    "passwordChangeSuccess": "Password changed successfully",
+    "passwordChangeError": "Failed to change password",
+    "forgotPassword": "Forgot Password",
+    "forgotPasswordDescription": "Enter your email address and we'll send you a link to reset your password",
+    "resetPasswordEmailSent": "We've sent you an email with instructions to reset your password",
+    "forgotPasswordError": "Failed to send reset password email",
+    "sendResetPasswordLink": "Send Reset Link",
+    "backToLogin": "Back to Login",
+    "rememberPassword": "Remember your password?",
+    "resetPassword": "Reset Password",
+    "resetPasswordDescription": "Enter your new password below",
+    "invalidResetToken": "Invalid Reset Link",
+    "resetTokenExpired": "This password reset link has expired or is invalid",
+    "requestNewResetLink": "Request New Reset Link",
+    "passwordResetSuccess": "Password reset successfully",
+    "passwordResetError": "Failed to reset password"
   },
   "dashboard": {
     "title": "Dashboard",
@@ -521,5 +557,18 @@
     "description": "The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.",
     "goHome": "Go to Home",
     "goBack": "Go Back"
+  },
+  "onboarding": {
+    "connectPlatforms": "Connect Platforms",
+    "admobDescription": "Connect your AdMob account to track app ad revenue",
+    "googleAdsDescription": "Connect your Google Ads account to track campaign performance",
+    "connected": "Connected",
+    "connect": "Connect",
+    "pleaseWait": "Please wait...",
+    "error": "Error",
+    "oauthError": "An error occurred during OAuth authentication",
+    "invalidCallback": "Invalid callback",
+    "callbackError": "An error occurred while processing the callback",
+    "backToOnboarding": "Back to Onboarding"
   }
 }

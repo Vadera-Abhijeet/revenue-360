@@ -138,7 +138,9 @@
     "last30Days": "過去 30 日間",
     "confirm_logout": "ログアウトの確認",
     "logout_confirmation_message": "ログアウトしてもよろしいですか？アカウントにアクセスするには再度ログインする必要があります。",
-    "merchants": "商人"
+    "merchants": "商人",
+    "email": "メール",
+    "processing": "処理中"
   },
   "landing": {
     "hero": {
@@ -191,7 +193,9 @@
       "wrongPassword": "パスワードが正しくありません",
       "createNewAccountTitle": "アカウントをお持ちでない方",
       "createNewAccountSubtitle": "こちらで登録",
-      "success": "ログイン成功！"
+      "success": "ログイン成功！",
+      "forgotPasswordTitle": "パスワードをお忘れですか？",
+      "forgotPasswordSubtitle": "ここをクリックしてリセットしてください。"
     },
     "features": {
       "trackPerformance": {
@@ -255,7 +259,15 @@
         "imageProcessingError": "画像の処理中にエラーが発生しました。もう一度お試しください。",
         "emailExists": "このメールアドレスのアカウントは既に存在します"
       }
-    }
+    },
+    "firstNameRequired": "名は必須です",
+    "lastNameRequired": "姓は必須です",
+    "firstName": "名",
+    "lastName": "姓",
+    "completeProfile": "プロフィールを完了",
+    "invalidInvite": "無効な招待",
+    "inviteExpiredOrInvalid": "招待リンクが期限切れまたは無効です",
+    "passwordsDoNotMatch": "パスワードが一致しません"
   },
   "dashboard": {
     "title": "ダッシュボード",
@@ -511,5 +523,18 @@
     "description": "お探しのページは削除されたか、名前が変更されたか、一時的に利用できない状態の可能性があります。",
     "goHome": "ホームに戻る",
     "goBack": "戻る"
+  },
+  "onboarding": {
+    "connectPlatforms": "プラットフォームを接続",
+    "admobDescription": "AdMobアカウントを接続して、アプリの広告収益を追跡",
+    "googleAdsDescription": "Google広告アカウントを接続して、キャンペーンのパフォーマンスを追跡",
+    "connected": "接続済み",
+    "connect": "接続",
+    "pleaseWait": "しばらくお待ちください...",
+    "error": "エラー",
+    "oauthError": "OAuth認証中にエラーが発生しました",
+    "invalidCallback": "無効なコールバック",
+    "callbackError": "コールバックの処理中にエラーが発生しました",
+    "backToOnboarding": "オンボーディングに戻る"
   }
 }
