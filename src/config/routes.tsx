@@ -24,6 +24,7 @@ import {
   AcceptInvite,
   OnboardingFlow,
   OAuthCallback,
+  AcceptInvitation,
 } from "../routes/asyncComponents";
 import ForgotPasswordPage from "../features/Auth/pages/ForgotPasswordPage";
 import ResetPasswordPage from "../features/Auth/pages/ResetPasswordPage";
@@ -73,6 +74,11 @@ export const routesConfig: RouteConfig[] = [
   {
     path: "/reset-password",
     element: <ResetPasswordPage />,
+    protected: false,
+  },
+  {
+    path: "/accept-invitation",
+    element: <AcceptInvitation />,
     protected: false,
   },
   // Protected Routes

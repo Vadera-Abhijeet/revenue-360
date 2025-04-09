@@ -1,3 +1,4 @@
+import { Spinner } from "flowbite-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { X, LucideIcon } from "lucide-react";
 import { ReactNode, useEffect } from "react";
@@ -13,8 +14,24 @@ interface AnimatedModalProps {
   isConfirmation?: boolean;
   onConfirm?: () => void;
   confirmText?: string;
+  isConfirming?: boolean;
   cancelText?: string;
-  confirmButtonColor?: "red" | "blue" | "green";
+  confirmButtonColor?:
+    | "red"
+    | "blue"
+    | "green"
+    | "indigo"
+    | "purple"
+    | "yellow"
+    | "orange"
+    | "pink"
+    | "gray"
+    | "teal"
+    | "lime"
+    | "fuchsia"
+    | "violet"
+    | "cyan"
+    | "emerald";
   size?: "sm" | "md" | "lg" | "xl" | "full" | "half";
   disableBackdropClick?: boolean;
 }
@@ -34,6 +51,7 @@ const AnimatedModal = ({
   confirmButtonColor = "blue",
   size = "md",
   disableBackdropClick = false,
+  isConfirming = false,
 }: AnimatedModalProps) => {
   const getConfirmButtonColor = () => {
     switch (confirmButtonColor) {
@@ -41,6 +59,30 @@ const AnimatedModal = ({
         return "bg-red-600 hover:bg-red-700 focus:ring-red-300";
       case "green":
         return "bg-green-600 hover:bg-green-700 focus:ring-green-300";
+      case "indigo":
+        return "bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-300";
+      case "purple":
+        return "bg-purple-600 hover:bg-purple-700 focus:ring-purple-300";
+      case "yellow":
+        return "bg-yellow-600 hover:bg-yellow-700 focus:ring-yellow-300";
+      case "orange":
+        return "bg-orange-600 hover:bg-orange-700 focus:ring-orange-300";
+      case "pink":
+        return "bg-pink-600 hover:bg-pink-700 focus:ring-pink-300";
+      case "gray":
+        return "bg-gray-600 hover:bg-gray-700 focus:ring-gray-300";
+      case "teal":
+        return "bg-teal-600 hover:bg-teal-700 focus:ring-teal-300";
+      case "lime":
+        return "bg-lime-600 hover:bg-lime-700 focus:ring-lime-300";
+      case "fuchsia":
+        return "bg-fuchsia-600 hover:bg-fuchsia-700 focus:ring-fuchsia-300";
+      case "violet":
+        return "bg-violet-600 hover:bg-violet-700 focus:ring-violet-300";
+      case "cyan":
+        return "bg-cyan-600 hover:bg-cyan-700 focus:ring-cyan-300";
+      case "emerald":
+        return "bg-emerald-600 hover:bg-emerald-700 focus:ring-emerald-300";
       default:
         return "bg-blue-600 hover:bg-blue-700 focus:ring-blue-300";
     }
@@ -95,7 +137,7 @@ const AnimatedModal = ({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
+            transition={{ duration: 0.15 }}
             className="fixed inset-0 bg-gray-900/40"
           />
 
@@ -104,14 +146,19 @@ const AnimatedModal = ({
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
-            transition={{ duration: 0.2, type: "spring", damping: 20 }}
+            transition={{
+              duration: 0.15,
+              type: "spring",
+              damping: 25,
+              stiffness: 300,
+            }}
             className="fixed inset-0 overflow-y-auto flex items-center justify-center p-4"
           >
             <motion.div
               initial={{ y: 20 }}
               animate={{ y: 0 }}
               exit={{ y: 20 }}
-              transition={{ duration: 0.2 }}
+              transition={{ duration: 0.15 }}
               className={`relative transform overflow-hidden rounded-xl bg-white shadow-2xl transition-all sm:w-full ${getModalSize()}`}
               onClick={(e) => e.stopPropagation()}
             >
@@ -142,13 +189,16 @@ const AnimatedModal = ({
 
               {/* Footer */}
               {isConfirmation ? (
-                <div className="px-6 py-4 bg-gray-50 border-t border-gray-100 sm:flex sm:flex-row-reverse sm:gap-3">
+                <div className="px-6 py-4 bg-gray-50 border-t border-gray-100 sm:flex sm:flex-row-reverse sm:gap-3 justify-center">
                   <button
                     type="button"
                     className={`inline-flex w-full justify-center rounded-lg px-4 py-2.5 text-sm font-medium text-white shadow-sm transition-colors sm:w-auto ${getConfirmButtonColor()}`}
                     onClick={onConfirm}
                   >
-                    {confirmText}
+                    <div className="flex items-center gap-2">
+                      {isConfirming && <Spinner size="sm" color="red" />}
+                      {confirmText}
+                    </div>
                   </button>
                   <button
                     type="button"

@@ -116,7 +116,7 @@ export const MobileSidebar = ({
     <>
       <div
         className={cn(
-          "h-10 px-4 py-4 flex flex-row md:hidden  items-center justify-between bg-white dark:bg-neutral-800 w-full"
+          "h-9 p-4 flex flex-row md:hidden  items-center justify-between bg-white dark:bg-neutral-800 w-full"
         )}
         {...props}
       >
@@ -179,7 +179,10 @@ export const SidebarLink = ({
     }
   };
 
-  const isActive = active || (link.submenu && link.submenu.some(sub => sub.href === window.location.pathname));
+  const isActive =
+    active ||
+    (link.submenu &&
+      link.submenu.some((sub) => sub.href === window.location.pathname));
   return (
     <div className="flex flex-col">
       <div
@@ -192,16 +195,18 @@ export const SidebarLink = ({
         {!open && animate ? (
           <Tooltip content={link.label} placement="right">
             <div
-              className={`text-${isActive ? "indigo" : "gray"}-700 dark:text-${isActive ? "indigo" : "gray"
-                }-200`}
+              className={`text-${isActive ? "indigo" : "gray"}-700 dark:text-${
+                isActive ? "indigo" : "gray"
+              }-200`}
             >
               {link.icon}
             </div>
           </Tooltip>
         ) : (
           <div
-            className={`text-${isActive ? "indigo" : "gray"}-700 dark:text-${isActive ? "indigo" : "gray"
-              }-200`}
+            className={`text-${isActive ? "indigo" : "gray"}-700 dark:text-${
+              isActive ? "indigo" : "gray"
+            }-200`}
           >
             {link.icon}
           </div>
@@ -209,11 +214,16 @@ export const SidebarLink = ({
 
         <motion.span
           animate={{
-            display: animate ? (open ? "inline-block" : "none") : "inline-block",
+            display: animate
+              ? open
+                ? "inline-block"
+                : "none"
+              : "inline-block",
             opacity: animate ? (open ? 1 : 0) : 1,
           }}
-          className={`text-${isActive ? "indigo" : "gray"}-700 dark:text-${isActive ? "indigo" : "gray"
-            }-200 text-sm group-hover/sidebar:translate-x-1 transition duration-150 whitespace-pre inline-block !p-0 !m-0`}
+          className={`text-${isActive ? "indigo" : "gray"}-700 dark:text-${
+            isActive ? "indigo" : "gray"
+          }-200 text-sm group-hover/sidebar:translate-x-1 transition duration-150 whitespace-pre inline-block !p-0 !m-0 truncate max-w-full`}
         >
           {link.label}
         </motion.span>

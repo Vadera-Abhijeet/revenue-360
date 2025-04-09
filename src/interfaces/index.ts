@@ -2,10 +2,7 @@ import { CurrencyCode } from "../contexts/CurrencyContext";
 import { TDataKeyTypes } from "../features/Campaigns/interface";
 
 export interface ISettings {
-  account: IMerchant;
   integrations: IIntegrations[];
-  preferences: IPreferences;
-  team?: ITeamEntity[] | null;
 }
 // export interface IAccount {
 //   name: string;
@@ -21,10 +18,12 @@ export interface IIntegrations {
   outward: IIntegrationsSet;
 }
 export interface IIntegrationsSet {
-  platform: "googleAds" | "adMob" | "facebook";
+  platform: "google_ads" | "ad_mob" | "facebook";
   connected: boolean;
   accountEmail: string;
   accountId: string;
+  selectedAccounts?: string[];
+  selectedSubAccounts?: string[];
 }
 export interface IPreferences {
   language: string;
@@ -51,7 +50,7 @@ export interface ITeamEntity {
   inviteStatus: TInviteStatus;
 }
 
-export type TPlatformsType = "googleAds" | "adMob" | "facebook";
+export type TPlatformsType = "google_ads" | "ad_mob" | "facebook";
 export type TStatusType = "active" | "inactive";
 
 export type ChartType = "line" | "bar" | "pie" | "area";
@@ -74,6 +73,40 @@ export interface ChartGroup {
   charts: ChartConfig[];
 }
 
+export type TCurrency =
+  | "USD"
+  | "INR"
+  | "EUR"
+  | "GBP"
+  | "CAD"
+  | "AUD"
+  | "NZD"
+  | "JPY"
+  | "CNY"
+  | "RUB"
+  | "MXN"
+  | "BRL"
+  | "ARS"
+  | "CLP"
+  | "COP"
+  | "EGP"
+  | "HKD"
+  | "IDR"
+  | "ILS"
+  | "KRW"
+  | "NGN"
+  | "PHP"
+  | "PLN"
+  | "SAR"
+  | "SEK"
+  | "SGD"
+  | "THB"
+  | "TRY"
+  | "TWD"
+  | "UAH"
+  | "VND"
+  | "ZAR";
+
 export interface IMerchant {
   id?: number;
   role: Role;
@@ -91,6 +124,8 @@ export interface IMerchant {
   last_sync_at?: string | null;
   profile_picture?: string | File | null;
   company_name?: string | null;
+  currency?: TCurrency | null;
+  tax_percentage?: number;
 }
 
 export interface IPermission {

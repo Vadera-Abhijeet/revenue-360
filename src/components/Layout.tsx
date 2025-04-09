@@ -119,9 +119,10 @@ const RenderSideBar = (props: IRenderSideBarProps) => {
                 icon: (
                   <Avatar
                     alt="User profile"
-                    img={user?.profile_picture || DEFAULT_AVATAR}
+                    img={(user?.profile_picture as string) || DEFAULT_AVATAR}
                     rounded
                     size="sm"
+                    className="min-w-[32px] min-h-[32px]"
                   />
                 ),
               }}
@@ -193,179 +194,181 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   };
 
   return (
-    <motion.div
-      className="flex min-h-screen gap-2 p-2 overflow-hidden"
-      initial={{ opacity: 0 }} // Initial state: transparent and slightly smaller
-      animate={{ opacity: 1 }} // Final state: fully opaque and normal size
-      transition={{ duration: 0.5, easings: "ease-in-out" }} // Animation duration
-    >
+    <AnimatePresence>
       <motion.div
-        className="hidden md:block"
-        initial={{ x: "-20%", opacity: 0 }} // Start off-screen to the left and transparent
-        animate={{ x: 0, opacity: 1 }} // End at its original position and fully opaque
+        className="flex min-h-screen gap-2 p-2"
+        initial={{ opacity: 0 }} // Initial state: transparent and slightly smaller
+        animate={{ opacity: 1 }} // Final state: fully opaque and normal size
         transition={{ duration: 0.5, easings: "ease-in-out" }} // Animation duration
       >
-        <RenderSideBar
-          user={user}
-          t={t}
-          animateSidebar={animateSidebar}
-          open={open}
-          setOpen={setOpen}
-          logout={() => setShowLogoutModal(true)}
-          navItems={navItems}
-          location={location}
-        />
-      </motion.div>
-
-      {/* Main Content with Sidebar */}
-      <motion.div
-        className="flex flex-col flex-1 gap-2"
-        initial={{ x: "5%", opacity: 0 }} // Start off-screen to the left and transparent
-        animate={{ x: 0, opacity: 1 }} // End at its original position and fully opaque
-        transition={{ duration: 0.5, easings: "ease-in-out" }} // Animation duration
-      >
-        {/* Top Navbar */}
-        <Navbar
-          fluid
-          className="border border-gray-200 bg-white rounded-lg shadow-sm "
-          theme={{
-            root: {
-              base: "bg-white px-2 py-2.5 dark:border-gray-700 dark:bg-gray-800 sm:px-6",
-            },
-          }}
+        <motion.div
+          className="hidden md:block"
+          initial={{ x: "-20%", opacity: 0 }} // Start off-screen to the left and transparent
+          animate={{ x: 0, opacity: 1 }} // End at its original position and fully opaque
+          transition={{ duration: 0.5, easings: "ease-in-out" }} // Animation duration
         >
-          <div className="items-center hidden md:flex gap-3">
-            <AnimatePresence>
-              <Tooltip
-                placement="bottom-start"
-                content={animateSidebar ? "Open Sidebar" : "Close Sidebar"}
-              >
-                <motion.button
-                  whileTap={{ scale: 0.5 }}
-                  whileHover={{ scale: 1.2 }}
-                  transition={{ type: "spring", stiffness: 300, damping: 15 }}
-                  className="border border-gray-300 bg-white text-gray-900 px-2 py-1 rounded-md text-xs 
+          <RenderSideBar
+            user={user}
+            t={t}
+            animateSidebar={animateSidebar}
+            open={open}
+            setOpen={setOpen}
+            logout={() => setShowLogoutModal(true)}
+            navItems={navItems}
+            location={location}
+          />
+        </motion.div>
+
+        {/* Main Content with Sidebar */}
+        <motion.div
+          className="flex flex-col flex-1 gap-2 max-w-full overflow-x-auto"
+          initial={{ opacity: 0 }} // Start off-screen to the left and transparent
+          animate={{ opacity: 1 }} // End at its original position and fully opaque
+          transition={{ duration: 0.5, easings: "ease-in-out" }} // Animation duration
+        >
+          {/* Top Navbar */}
+          <Navbar
+            fluid
+            className="border border-gray-200 bg-white rounded-lg shadow-sm "
+            theme={{
+              root: {
+                base: "bg-white px-2 py-2.5 dark:border-gray-700 dark:bg-gray-800 sm:px-6",
+              },
+            }}
+          >
+            <div className="items-center hidden md:flex gap-3">
+              <AnimatePresence>
+                <Tooltip
+                  placement="bottom-start"
+                  content={animateSidebar ? "Open Sidebar" : "Close Sidebar"}
+                >
+                  <motion.button
+                    whileTap={{ scale: 0.5 }}
+                    whileHover={{ scale: 1.2 }}
+                    transition={{ type: "spring", stiffness: 300, damping: 15 }}
+                    className="border border-gray-300 bg-white text-gray-900 px-2 py-1 rounded-md text-xs 
                   enabled:hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-600 dark:text-white 
                   dark:enabled:hover:border-gray-700 dark:enabled:hover:bg-gray-700"
-                  onClick={toggleSidebar}
-                >
-                  {animateSidebar ? (
-                    <PanelLeftOpen size={20} />
-                  ) : (
-                    <PanelLeftClose size={20} />
-                  )}
-                </motion.button>
-              </Tooltip>
-            </AnimatePresence>
-            <h1 className="text-2xl font-bold text-gray-700">
-              {activeMenuLabel}
-            </h1>
-          </div>
-          <div className="bg-white block md:hidden">
-            <RenderSideBar
-              user={user}
-              t={t}
-              animateSidebar={animateSidebar}
-              open={open}
-              setOpen={setOpen}
-              logout={() => setShowLogoutModal(true)}
-              navItems={navItems}
-              location={location}
-            />
-          </div>
-          <div className="flex items-center gap-2 md:gap-4">
-            <Dropdown
-              arrowIcon={false}
-              inline
-              label={<Languages size={20} />}
-              theme={{
-                inlineWrapper:
-                  "flex items-center py-2 px-1 text-gray-700 hover:text-gray-900",
-              }}
-            >
-              <Dropdown.Header>
-                <span className="block text-sm">{t("common.language")}</span>
-              </Dropdown.Header>
-              {LANGUAGES_OPTIONS.map((lang) => (
-                <Dropdown.Item
-                  key={lang.code}
-                  onClick={() => changeLanguage(lang.code)}
-                  className={i18n.language === lang.code ? "bg-gray-100" : ""}
-                >
-                  {lang.name}
-                </Dropdown.Item>
-              ))}
-            </Dropdown>
-            <Popover
-              aria-labelledby="area-popover"
-              open={openNotification}
-              onOpenChange={setOpenNotification}
-              content={<Notifications />}
-              theme={{
-                content: "z-10 overflow-hidden rounded-[7px] shadow-sm",
-              }}
-            >
-              <div>
-                <NotificationDot
-                  dotColor="bg-indigo-700"
-                  dotSize="w-2 h-2"
-                  show={unreadCount > 0}
-                  className="relative py-2 px-1 cursor-pointer"
-                >
-                  <Bell
-                    size={20}
-                    className="text-gray-700 hover:text-gray-900"
-                  />
-                </NotificationDot>
-              </div>
-            </Popover>
-            <Dropdown
-              arrowIcon={false}
-              inline
-              label={<DollarSign size={20} />}
-              theme={{
-                inlineWrapper:
-                  "flex items-center py-2 px-1 text-gray-700 hover:text-gray-900",
-              }}
-            >
-              <Dropdown.Header>
-                <span className="block text-sm">{t("common.currency")}</span>
-              </Dropdown.Header>
-              {CURRENCIES_OPTIONS.map((curr) => (
-                <Dropdown.Item
-                  key={curr.code}
-                  onClick={() => setCurrency(curr.code as CurrencyCode)}
-                  className={currency === curr.code ? "bg-gray-100" : ""}
-                >
-                  {curr.symbol} - {curr.name}
-                </Dropdown.Item>
-              ))}
-            </Dropdown>
-          </div>
-        </Navbar>
+                    onClick={toggleSidebar}
+                  >
+                    {animateSidebar ? (
+                      <PanelLeftOpen size={20} />
+                    ) : (
+                      <PanelLeftClose size={20} />
+                    )}
+                  </motion.button>
+                </Tooltip>
+              </AnimatePresence>
+              <h1 className="text-2xl font-bold text-gray-700">
+                {activeMenuLabel}
+              </h1>
+            </div>
+            <div className="bg-white block md:hidden">
+              <RenderSideBar
+                user={user}
+                t={t}
+                animateSidebar={animateSidebar}
+                open={open}
+                setOpen={setOpen}
+                logout={() => setShowLogoutModal(true)}
+                navItems={navItems}
+                location={location}
+              />
+            </div>
+            <div className="flex items-center gap-2 md:gap-4">
+              <Dropdown
+                arrowIcon={false}
+                inline
+                label={<Languages size={20} />}
+                theme={{
+                  inlineWrapper:
+                    "flex items-center py-2 px-1 text-gray-700 hover:text-gray-900",
+                }}
+              >
+                <Dropdown.Header>
+                  <span className="block text-sm">{t("common.language")}</span>
+                </Dropdown.Header>
+                {LANGUAGES_OPTIONS.map((lang) => (
+                  <Dropdown.Item
+                    key={lang.code}
+                    onClick={() => changeLanguage(lang.code)}
+                    className={i18n.language === lang.code ? "bg-gray-100" : ""}
+                  >
+                    {lang.name}
+                  </Dropdown.Item>
+                ))}
+              </Dropdown>
+              <Popover
+                aria-labelledby="area-popover"
+                open={openNotification}
+                onOpenChange={setOpenNotification}
+                content={<Notifications />}
+                theme={{
+                  content: "z-10 overflow-hidden rounded-[7px] shadow-sm",
+                }}
+              >
+                <div>
+                  <NotificationDot
+                    dotColor="bg-indigo-700"
+                    dotSize="w-2 h-2"
+                    show={unreadCount > 0}
+                    className="relative py-2 px-1 cursor-pointer"
+                  >
+                    <Bell
+                      size={20}
+                      className="text-gray-700 hover:text-gray-900"
+                    />
+                  </NotificationDot>
+                </div>
+              </Popover>
+              <Dropdown
+                arrowIcon={false}
+                inline
+                label={<DollarSign size={20} />}
+                theme={{
+                  inlineWrapper:
+                    "flex items-center py-2 px-1 text-gray-700 hover:text-gray-900",
+                }}
+              >
+                <Dropdown.Header>
+                  <span className="block text-sm">{t("common.currency")}</span>
+                </Dropdown.Header>
+                {CURRENCIES_OPTIONS.map((curr) => (
+                  <Dropdown.Item
+                    key={curr.code}
+                    onClick={() => setCurrency(curr.code as CurrencyCode)}
+                    className={currency === curr.code ? "bg-gray-100" : ""}
+                  >
+                    {curr.symbol} - {curr.name}
+                  </Dropdown.Item>
+                ))}
+              </Dropdown>
+            </div>
+          </Navbar>
 
-        {/* Main Content */}
-        <div className="flex-1 overflow-auto p-2 md:p-6 bg-white max-h-[calc(100vh-82px)] overflow-y-auto border border-gray-200 rounded-lg shadow-lg">
-          {children}
-        </div>
+          {/* Main Content */}
+          <div className="flex-1 overflow-auto p-2 md:p-6 bg-white max-h-[calc(100vh-82px)] overflow-y-auto border border-gray-200 rounded-lg shadow-lg">
+            {children}
+          </div>
+        </motion.div>
+
+        {/* Logout Confirmation Modal */}
+        <AnimatedModal
+          isConfirmation
+          show={showLogoutModal}
+          onClose={() => setShowLogoutModal(false)}
+          onConfirm={handleLogout}
+          title={t("common.confirm_logout")}
+          children={
+            <div className="text-gray-700 text-center">
+              {t("common.logout_confirmation_message")}
+            </div>
+          }
+          confirmText={t("common.logout")}
+          confirmButtonColor="red"
+        />
       </motion.div>
-
-      {/* Logout Confirmation Modal */}
-      <AnimatedModal
-        isConfirmation
-        show={showLogoutModal}
-        onClose={() => setShowLogoutModal(false)}
-        onConfirm={handleLogout}
-        title={t("common.confirm_logout")}
-        children={
-          <div className="text-gray-700">
-            {t("common.logout_confirmation_message")}
-          </div>
-        }
-        confirmText={t("common.logout")}
-        confirmButtonColor="red"
-      />
-    </motion.div>
+    </AnimatePresence>
   );
 };
 

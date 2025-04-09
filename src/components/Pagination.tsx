@@ -59,7 +59,7 @@ const Pagination: React.FC<PaginationProps> = ({
   const visiblePages = getVisiblePages();
 
   return (
-    <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
+    <div className="flex flex-col sm:flex-row items-center justify-between gap-4  bg-white dark:bg-gray-800 rounded-lg shadow-sm">
       <div className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
         <span>{totalItems}</span>
         <span>items</span>

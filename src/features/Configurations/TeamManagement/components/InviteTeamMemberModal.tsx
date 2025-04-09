@@ -1,4 +1,4 @@
-import { Button, Checkbox, Label, TextInput } from "flowbite-react";
+import { Button, Checkbox, Label, Spinner, TextInput } from "flowbite-react";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import AnimatedModal from "../../../../components/AnimatedModal";
@@ -7,65 +7,151 @@ import { API_CONFIG } from "../../../../shared/constants";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDownIcon } from "lucide-react";
 import Loading from "../../../../components/Loading";
+import {
+  ApiResponse,
+  InviteTeamMemberModalProps,
+  IPermissionCategories,
+  Permission,
+} from "../interface";
+import { useAuth } from "../../../../hooks/useAuth";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 
-interface InviteTeamMemberModalProps {
-  open: boolean;
-  onClose: () => void;
-  onInvite: (email: string, permissions: string[], isOwner: boolean) => void;
-}
-
-interface Permission {
-  id: number;
-  name: string;
-  codename: string;
-  category: string;
-  description: string;
-}
-
-interface ApiResponse {
+interface FormData {
+  email: string;
+  isOwner: boolean;
   permissions: IPermissionCategories;
-}
-
-interface IPermissionCategories {
-  account: Permission[];
-  application: Permission[];
-  module: Permission[];
 }
 
 const InviteTeamMemberModal: React.FC<InviteTeamMemberModalProps> = ({
   open,
   onClose,
   onInvite,
+  selectedMember,
+  isInviting,
+  existingMembers = [],
 }) => {
+  const { user } = useAuth();
   const { t } = useTranslation();
-  const [email, setEmail] = useState("");
-  const [isOwner, setIsOwner] = useState(false);
-  const [selectedPermissions, setSelectedPermissions] = useState<{
-    [key: string]: boolean;
-  }>({});
   const [isLoading, setIsLoading] = useState(true);
-  const [permissions, setPermissions] = useState<IPermissionCategories>({
-    account: [],
-    application: [],
-    module: [],
-  });
+  const [availablePermissions, setAvailablePermissions] =
+    useState<IPermissionCategories>({
+      account: [],
+      application: [],
+      module: [],
+    });
   const [expandedCategories, setExpandedCategories] = useState<string[]>([]);
-  const [errors, setErrors] = useState<{
-    email?: string;
-    permissions?: string;
-  }>({});
+
+  const permissionSchema = yup.object().shape({
+    id: yup.number().required(),
+    codename: yup.string().required(),
+    name: yup.string().required(),
+    description: yup.string().required(),
+    category: yup.string().required(),
+    enabled: yup.boolean().required(),
+  });
+
+  const schema = yup.object().shape({
+    email: yup
+      .string()
+      .required(t("configurations.team.emailRequired"))
+      .email(t("configurations.team.invalidEmail"))
+      .test(
+        "not-self",
+        t("configurations.team.cannotInviteYourself"),
+        (value) => {
+          if (!value || !user?.email) return true;
+          return value.toLowerCase() !== user.email.toLowerCase();
+        }
+      )
+      .test(
+        "not-existing",
+        t("configurations.team.emailAlreadyInvited"),
+        (value) => {
+          if (!value) return true;
+          return !existingMembers.some(
+            (member) =>
+              member.email.toLowerCase() === value.toLowerCase() &&
+              (!selectedMember ||
+                member.email.toLowerCase() !==
+                  selectedMember.email.toLowerCase())
+          );
+        }
+      ),
+    isOwner: yup.boolean().required(),
+    permissions: yup
+      .object()
+      .shape({
+        account: yup.array().of(permissionSchema).required(),
+        application: yup.array().of(permissionSchema).required(),
+        module: yup.array().of(permissionSchema).required(),
+      })
+      .test(
+        "min-permissions",
+        t("configurations.team.minPermissionsRequired"),
+        function (value: IPermissionCategories) {
+          const isOwner = this.parent.isOwner;
+          if (isOwner) return true;
+
+          const totalEnabledPermissions = Object.values(value || {}).reduce(
+            (count, category) =>
+              count + category.filter((p: Permission) => p.enabled).length,
+            0
+          );
+          return totalEnabledPermissions > 0;
+        }
+      ),
+  });
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    setValue,
+    watch,
+    formState: { errors },
+  } = useForm<FormData>({
+    resolver: yupResolver<FormData>(schema),
+    defaultValues: {
+      email: selectedMember?.email || "",
+      isOwner: selectedMember?.is_owner || false,
+      permissions: {
+        account: [],
+        application: [],
+        module: [],
+      },
+    },
+    mode: "onChange",
+  });
+
+  const isOwner = watch("isOwner");
+  const formPermissions = watch("permissions");
 
   useEffect(() => {
     setIsLoading(true);
     httpService
       .get<ApiResponse>(API_CONFIG.path.categorizedPermissions)
       .then((res) => {
-        setPermissions(res.permissions);
+        setAvailablePermissions(res.permissions);
+        // Initialize form permissions with the available permissions
+        const initialPermissions = {
+          account: res.permissions.account.map((p) => ({
+            ...p,
+            enabled: false,
+          })),
+          application: res.permissions.application.map((p) => ({
+            ...p,
+            enabled: false,
+          })),
+          module: res.permissions.module.map((p) => ({ ...p, enabled: false })),
+        };
+        setValue("permissions", initialPermissions);
         setIsLoading(false);
       })
       .catch((error) => {
         console.error("Error fetching permissions:", error);
-        setPermissions({
+        setAvailablePermissions({
           account: [],
           application: [],
           module: [],
@@ -74,80 +160,86 @@ const InviteTeamMemberModal: React.FC<InviteTeamMemberModalProps> = ({
       });
   }, []);
 
-  const validateEmail = (email: string) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
-
-  const validateForm = () => {
-    const newErrors: { email?: string; permissions?: string } = {};
-
-    if (!email) {
-      newErrors.email = t("configurations.team.emailRequired");
-    } else if (!validateEmail(email)) {
-      newErrors.email = t("configurations.team.invalidEmail");
+  useEffect(() => {
+    if (!open) {
+      reset();
     }
+  }, [open, reset]);
 
-    // Only validate permissions if not an owner
-    if (!isOwner) {
-      const selectedCount =
-        Object.values(selectedPermissions).filter(Boolean).length;
-      if (selectedCount === 0) {
-        newErrors.permissions = t("configurations.team.minPermissionsRequired");
-      }
+  // Initialize permissions from member if editing
+  useEffect(() => {
+    if (selectedMember?.permissions) {
+      // Ensure all permissions from the selected member are properly initialized
+      const memberPermissions = {
+        account: availablePermissions.account.map((p) => ({
+          ...p,
+          enabled: selectedMember.permissions.account.some(
+            (mp) => mp.id === p.id && mp.enabled
+          ),
+        })),
+        application: availablePermissions.application.map((p) => ({
+          ...p,
+          enabled: selectedMember.permissions.application.some(
+            (mp) => mp.id === p.id && mp.enabled
+          ),
+        })),
+        module: availablePermissions.module.map((p) => ({
+          ...p,
+          enabled: selectedMember.permissions.module.some(
+            (mp) => mp.id === p.id && mp.enabled
+          ),
+        })),
+      };
+      setValue("permissions", memberPermissions);
     }
+    setValue("isOwner", selectedMember?.is_owner || false);
+  }, [selectedMember, setValue, availablePermissions]);
 
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
+  const handlePermissionChange = (
+    category: keyof IPermissionCategories,
+    permissionId: number,
+    checked: boolean
+  ) => {
+    const updatedPermissions = { ...formPermissions };
+    const permissionIndex = updatedPermissions[category].findIndex(
+      (p) => p.id === permissionId
+    );
 
-  const handlePermissionChange = (codename: string, checked: boolean) => {
-    setSelectedPermissions((prev) => ({
-      ...prev,
-      [codename]: checked,
-    }));
-    // Clear permissions error when a permission is selected
-    if (checked) {
-      setErrors((prev) => ({ ...prev, permissions: undefined }));
-    }
-  };
-
-  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(e.target.value);
-    // Clear email error when user types
-    setErrors((prev) => ({ ...prev, email: undefined }));
-  };
-
-  const handleCategoryChange = (category: string, checked: boolean) => {
-    const categoryPermissions =
-      permissions[category as keyof IPermissionCategories];
-    const newSelectedPermissions = { ...selectedPermissions };
-
-    categoryPermissions.forEach((permission) => {
-      newSelectedPermissions[permission.codename] = checked;
-    });
-
-    setSelectedPermissions(newSelectedPermissions);
-    // Clear permissions error when a category is selected
-    if (checked) {
-      setErrors((prev) => ({ ...prev, permissions: undefined }));
+    if (permissionIndex !== -1) {
+      updatedPermissions[category][permissionIndex] = {
+        ...updatedPermissions[category][permissionIndex],
+        enabled: checked,
+      };
+      setValue("permissions", updatedPermissions);
     }
   };
 
-  const isCategoryFullySelected = (category: string) => {
-    const categoryPermissions =
-      permissions[category as keyof IPermissionCategories];
+  const handleCategoryChange = (
+    category: keyof IPermissionCategories,
+    checked: boolean
+  ) => {
+    const updatedPermissions = { ...formPermissions };
+    updatedPermissions[category] = updatedPermissions[category].map(
+      (permission) => ({
+        ...permission,
+        enabled: checked,
+      })
+    );
+    setValue("permissions", updatedPermissions);
+  };
+
+  const isCategoryFullySelected = (category: keyof IPermissionCategories) => {
     return (
-      categoryPermissions.length > 0 &&
-      categoryPermissions.every((p) => selectedPermissions[p.codename])
+      formPermissions[category].length > 0 &&
+      formPermissions[category].every((p) => p.enabled)
     );
   };
 
-  const isCategoryPartiallySelected = (category: string) => {
-    const categoryPermissions =
-      permissions[category as keyof IPermissionCategories];
+  const isCategoryPartiallySelected = (
+    category: keyof IPermissionCategories
+  ) => {
     return (
-      categoryPermissions.some((p) => selectedPermissions[p.codename]) &&
+      formPermissions[category].some((p) => p.enabled) &&
       !isCategoryFullySelected(category)
     );
   };
@@ -160,22 +252,15 @@ const InviteTeamMemberModal: React.FC<InviteTeamMemberModalProps> = ({
     );
   };
 
-  const handleSubmit = () => {
-    if (validateForm()) {
-      const selectedPermissionCodenames = Object.entries(selectedPermissions)
-        .filter(([, value]) => value)
-        .map(([codename]) => codename);
-
-      onInvite(email, selectedPermissionCodenames, isOwner);
-      onClose();
-    }
+  const onSubmit = (data: FormData) => {
+    onInvite(data.email, data.isOwner, data.permissions);
   };
 
   const categories = [
     { key: "account", label: "Account Management" },
     { key: "application", label: "Application Access" },
     { key: "module", label: "Module Access" },
-  ];
+  ] as const;
 
   return (
     <AnimatedModal
@@ -184,30 +269,23 @@ const InviteTeamMemberModal: React.FC<InviteTeamMemberModalProps> = ({
       title={t("configurations.team.invite")}
       size="xl"
     >
-      <div className="space-y-4">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div>
           <Label htmlFor="email" value={t("configurations.team.email")} />
           <TextInput
             id="email"
             type="email"
-            value={email}
-            onChange={handleEmailChange}
+            {...register("email")}
             placeholder="name@company.com"
-            required
             color={errors.email ? "failure" : undefined}
-            helperText={errors.email}
+            helperText={errors.email?.message}
           />
         </div>
 
         <div className="flex items-center space-x-2">
-          <Checkbox
-            id="isOwner"
-            checked={isOwner}
-            onChange={(e) => setIsOwner(e.target.checked)}
-            color="indigo"
-          />
+          <Checkbox id="isOwner" {...register("isOwner")} color="indigo" />
           <Label htmlFor="isOwner" className="text-gray-900">
-            Is Owner
+            {t("configurations.team.isOwner")}
           </Label>
         </div>
 
@@ -219,7 +297,7 @@ const InviteTeamMemberModal: React.FC<InviteTeamMemberModalProps> = ({
               </h3>
               {errors.permissions && (
                 <span className="text-sm text-red-500">
-                  {errors.permissions}
+                  {t("configurations.team.minPermissionsRequired")}
                 </span>
               )}
             </div>
@@ -232,6 +310,7 @@ const InviteTeamMemberModal: React.FC<InviteTeamMemberModalProps> = ({
                 {categories.map(({ key, label }) => (
                   <div key={key} className="border rounded-lg overflow-hidden">
                     <button
+                      type="button"
                       onClick={() => toggleCategory(key)}
                       className="w-full px-4 py-2 flex items-center justify-between bg-gray-50 hover:bg-gray-100 transition-colors"
                     >
@@ -288,9 +367,7 @@ const InviteTeamMemberModal: React.FC<InviteTeamMemberModalProps> = ({
                         >
                           <div className="p-4">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                              {permissions[
-                                key as keyof IPermissionCategories
-                              ].map((permission) => (
+                              {availablePermissions[key].map((permission) => (
                                 <motion.div
                                   key={permission.id}
                                   initial={{ opacity: 0, y: 10 }}
@@ -302,13 +379,14 @@ const InviteTeamMemberModal: React.FC<InviteTeamMemberModalProps> = ({
                                     color={"indigo"}
                                     id={permission.codename}
                                     checked={
-                                      selectedPermissions[
-                                        permission.codename
-                                      ] || false
+                                      formPermissions[key].find(
+                                        (p) => p.id === permission.id
+                                      )?.enabled || false
                                     }
                                     onChange={(e) =>
                                       handlePermissionChange(
-                                        permission.codename,
+                                        key,
+                                        permission.id,
                                         e.target.checked
                                       )
                                     }
@@ -338,14 +416,25 @@ const InviteTeamMemberModal: React.FC<InviteTeamMemberModalProps> = ({
             )}
           </div>
         )}
-      </div>
+      </form>
 
       <div className="flex justify-end space-x-2 mt-6">
-        <Button color="light" onClick={onClose}>
+        <Button
+          color="light"
+          onClick={onClose}
+          disabled={isLoading || isInviting}
+        >
           {t("common.cancel")}
         </Button>
-        <Button onClick={handleSubmit} disabled={isLoading} color={"indigo"}>
-          {t("configurations.team.invite")}
+        <Button
+          onClick={handleSubmit(onSubmit)}
+          disabled={isLoading}
+          color={"indigo"}
+        >
+          <div className="flex items-center gap-2">
+            {isInviting && <Spinner color={"purple"} size={"sm"} />}
+            {t("configurations.team.invite")}
+          </div>
         </Button>
       </div>
     </AnimatedModal>

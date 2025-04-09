@@ -1,4 +1,4 @@
-import { Badge, Button, Table, TextInput } from "flowbite-react";
+import { Badge, Button, TextInput } from "flowbite-react";
 import { BarChart2, Eye, Megaphone, Search } from "lucide-react";
 import React, { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -6,12 +6,13 @@ import { useNavigate } from "react-router-dom";
 
 import DateRangePicker from "../../../../components/DateRangePicker";
 import Pagination from "../../../../components/Pagination";
-import ListSkeleton from "../../../../components/SkeletonLoaders/ListSkeleton";
+import { Table } from "../../../../components/Table";
 import { useCurrency } from "../../../../contexts/CurrencyContext";
 import { fetchCampaigns } from "../../../../services/api";
 import { DEFAULT_ITEMS_PER_PAGE } from "../../../../shared/constants";
 import CampaignsDataTable from "../../component/CampaignListModal";
 import { ICampaignData } from "../../interface";
+import { ColumnDef } from "@tanstack/react-table";
 
 const Campaigns: React.FC = () => {
   const { t } = useTranslation();
@@ -64,11 +65,6 @@ const Campaigns: React.FC = () => {
   }, [campaigns, searchTerm]);
 
   const totalPages = Math.ceil(filteredCampaigns.length / itemsPerPage);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const paginatedCampaigns = filteredCampaigns.slice(
-    startIndex,
-    startIndex + itemsPerPage
-  );
 
   const getPercentageBadgeColor = (percentage: number) => {
     if (percentage <= 0.25) return "failure";
@@ -81,6 +77,121 @@ const Campaigns: React.FC = () => {
     setIsModalOpen(true);
     setActionType(actionType);
   };
+
+  // Define columns for the table
+  const columns: ColumnDef<ICampaignData>[] = [
+    {
+      accessorKey: "name",
+      header: t("apps.columns.name"),
+      cell: ({ row }) => {
+        const campaign = row.original;
+        return (
+          <div
+            className="cursor-pointer flex items-center gap-2 hover:text-primary-600"
+            onClick={() => navigate(`/campaigns/${campaign.id}`)}
+          >
+            <div className="w-10 h-10 flex justify-center items-center border border-gray-200 dark:border-gray-700 rounded-md">
+              <img
+                src={campaign.icon || "/default-app-icon.png"}
+                alt={campaign.name}
+                className="w-6 h-6"
+              />
+            </div>
+            <div>
+              <p>{campaign.name}</p>
+              <p className="text-gray-400 text-xs">{campaign.platform}</p>
+            </div>
+          </div>
+        );
+      },
+    },
+    {
+      accessorKey: "country",
+      header: t("common.country"),
+      cell: ({ row }) => {
+        const campaign = row.original;
+        return (
+          <div className="flex items-center gap-2">
+            <img
+              src={campaign.flag}
+              alt={campaign.country}
+              className="w-6 h-4 rounded-sm border"
+            />
+            {campaign.country}
+          </div>
+        );
+      },
+    },
+    {
+      accessorKey: "estimateRevenueUSD",
+      header: `${t("apps.columns.estimateRevenue")} (USD)`,
+      cell: ({ row }) => row.original.estimateRevenueUSD,
+    },
+    {
+      accessorKey: "totalCostUSD",
+      header: `${t("apps.columns.totalCost")} (USD)`,
+      cell: ({ row }) => row.original.totalCostUSD,
+    },
+    {
+      accessorKey: "totalCostINR",
+      header: t("apps.columns.totalCost"),
+      cell: ({ row }) => row.original.totalCostINR,
+    },
+    {
+      accessorKey: "netUSD",
+      header: t("apps.columns.netUSD"),
+      cell: ({ row }) => formatCurrency(row.original.netUSD),
+    },
+    {
+      accessorKey: "percentage",
+      header: t("apps.columns.percentage"),
+      cell: ({ row }) => {
+        const campaign = row.original;
+        return (
+          <Badge
+            color={getPercentageBadgeColor(campaign.percentage)}
+            className="px-3 py-1 w-max text-sm font-semibold"
+          >
+            {campaign.percentage.toFixed(2)}%
+          </Badge>
+        );
+      },
+    },
+    {
+      accessorKey: "lastBidCurrentBid",
+      header: t("apps.columns.lastBidCurrentBid"),
+      cell: ({ row }) => {
+        const campaign = row.original;
+        return `${campaign.lastBidINR} | ${campaign.currentBidINR}`;
+      },
+    },
+    {
+      id: "actions",
+      header: t("apps.columns.actions"),
+      cell: ({ row }) => {
+        const campaign = row.original;
+        return (
+          <div className="flex items-center gap-2">
+            <Button
+              color="light"
+              size="xs"
+              onClick={() => navigate(`/campaigns/${campaign.id}`)}
+            >
+              <Eye className="h-4 w-4" />
+            </Button>
+
+            <Button
+              color="green"
+              size="xs"
+              onClick={() => handleOpenModal(campaign, "setActionType")}
+            >
+              <BarChart2 className="h-4 w-4" />
+            </Button>
+          </div>
+        );
+      },
+    },
+  ];
 
   return (
     <div className="space-y-6">
@@ -105,119 +216,35 @@ const Campaigns: React.FC = () => {
         </div>
       </div>
 
-      {isLoading ? (
-        <ListSkeleton />
-      ) : (
-        <div className="overflow-x-auto border border-gray-200 dark:border-gray-700 rounded-md">
-          <Table>
-            <Table.Head className="border-b h-[50px] border-gray-200 dark:border-gray-700">
-              <Table.HeadCell>{t("apps.columns.name")}</Table.HeadCell>
-              <Table.HeadCell>{t("common.country")}</Table.HeadCell>
+      <Table
+        data={filteredCampaigns}
+        columns={columns}
+        isLoading={isLoading}
+        showPagination={false}
+        showSearch={false}
+      />
 
-              <Table.HeadCell>
-                {`${t("apps.columns.estimateRevenue")} (USD)`}
-              </Table.HeadCell>
-              <Table.HeadCell>
-                {`${t("apps.columns.totalCost")} (USD)`}
-              </Table.HeadCell>
-              <Table.HeadCell>{t("apps.columns.totalCost")}</Table.HeadCell>
-              <Table.HeadCell>{t("apps.columns.netUSD")}</Table.HeadCell>
-              <Table.HeadCell>{t("apps.columns.percentage")}</Table.HeadCell>
-              <Table.HeadCell>
-                {t("apps.columns.lastBidCurrentBid")}
-              </Table.HeadCell>
-              <Table.HeadCell>{t("apps.columns.actions")}</Table.HeadCell>
-            </Table.Head>
-            <Table.Body className="divide-y">
-              {paginatedCampaigns.map((campaign) => (
-                <Table.Row
-                  key={campaign.id}
-                  className="bg-white dark:border-gray-700 dark:bg-gray-800"
-                >
-                  <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                    <div
-                      className="cursor-pointer flex items-center gap-2 hover:text-primary-600"
-                      onClick={() => navigate(`/campaigns/${campaign.id}`)}
-                    >
-                      <div className="w-10 h-10 flex justify-center items-center border border-gray-200 dark:border-gray-700 rounded-md">
-                        <img
-                          src={campaign.icon || "/default-app-icon.png"} // Default icon if none provided
-                          alt={campaign.name}
-                          className="w-6 h-6"
-                        />
-                      </div>
-                      <div>
-                        <p>{campaign.name}</p>
-                        <p className="text-gray-400 text-xs">
-                          {campaign.platform}
-                        </p>
-                      </div>
-                    </div>
-                  </Table.Cell>
-                  <Table.Cell className="flex items-center gap-2">
-                    <img
-                      src={campaign.flag}
-                      alt={campaign.country}
-                      className="w-6 h-4 rounded-sm border"
-                    />
-                    {campaign.country}
-                  </Table.Cell>
-                  <Table.Cell>{campaign.estimateRevenueUSD}</Table.Cell>
-                  <Table.Cell>{campaign.totalCostUSD}</Table.Cell>
-                  <Table.Cell>{campaign.totalCostINR}</Table.Cell>
-                  <Table.Cell>{formatCurrency(campaign.netUSD)}</Table.Cell>
-                  <Table.Cell>
-                    <Badge
-                      color={getPercentageBadgeColor(campaign.percentage)}
-                      className="px-3 py-1 w-max text-sm font-semibold"
-                    >
-                      {campaign.percentage.toFixed(2)}%
-                    </Badge>
-                  </Table.Cell>
-                  <Table.Cell>
-                    {campaign.lastBidINR} | {campaign.currentBidINR}
-                  </Table.Cell>
-                  <Table.Cell className="flex items-center gap-2">
-                    <Button
-                      color="light"
-                      size="xs"
-                      onClick={() => navigate(`/campaigns/${campaign.id}`)}
-                    >
-                      <Eye className="h-4 w-4" />
-                    </Button>
-
-                    <Button
-                      color="green"
-                      size="xs"
-                      onClick={() => handleOpenModal(campaign, "setActionType")}
-                    >
-                      <BarChart2 className="h-4 w-4" />
-                    </Button>
-                  </Table.Cell>
-                </Table.Row>
-              ))}
-            </Table.Body>
-          </Table>
-          <Pagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={(page) => setCurrentPage(page)}
-            totalItems={campaigns.length}
-            onItemsPerPageChange={setItemsPerPage}
-            itemsPerPage={itemsPerPage}
-          />
-          <CampaignsDataTable
-            actionType={actionType}
-            isModalOpen={isModalOpen}
-            selectedCampaign={selectedCampaign}
-            closeModal={() => {
-              setIsModalOpen(false);
-              setSelectedCampaign(undefined);
-              setActionType("");
-            }}
-          />
-        </div>
+      {totalPages > 0 && (
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          totalItems={filteredCampaigns.length}
+          onPageChange={setCurrentPage}
+          onItemsPerPageChange={setItemsPerPage}
+          itemsPerPage={itemsPerPage}
+        />
       )}
+
+      <CampaignsDataTable
+        actionType={actionType}
+        isModalOpen={isModalOpen}
+        selectedCampaign={selectedCampaign}
+        closeModal={() => {
+          setIsModalOpen(false);
+          setSelectedCampaign(undefined);
+          setActionType("");
+        }}
+      />
     </div>
   );
 };

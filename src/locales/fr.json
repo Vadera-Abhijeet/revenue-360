@@ -388,13 +388,26 @@
       "title": "Paramètres du compte",
       "name": "Nom",
       "email": "E-mail",
-      "company": "Nom de l'entreprise",
+      "company": "Entreprise",
       "role": "Rôle",
       "timezone": "Fuseau horaire",
       "save": "Enregistrer les modifications",
       "saving": "Enregistrement...",
       "saved": "Paramètres enregistrés avec succès",
-      "error": "Échec de l'enregistrement des paramètres"
+      "error": "Erreur lors de l'enregistrement des paramètres"
+    },
+    "profile": {
+      "title": "Paramètres du profil"
+    },
+    "password": {
+      "title": "Changer le mot de passe",
+      "current": "Mot de passe actuel",
+      "new": "Nouveau mot de passe",
+      "confirm": "Confirmer le nouveau mot de passe",
+      "change": "Changer le mot de passe",
+      "saving": "Changement du mot de passe...",
+      "success": "Mot de passe changé avec succès",
+      "error": "Erreur lors du changement du mot de passe"
     },
     "preferences": {
       "title": "Préférences",
@@ -403,7 +416,11 @@
       "theme": "Thème",
       "emailNotifications": "Notifications par e-mail",
       "pushNotifications": "Notifications push",
-      "dataRefresh": "Taux de rafraîchissement des données"
+      "dataRefresh": "Taux de rafraîchissement des données",
+      "tax_percentage": "Pourcentage de taxe",
+      "tax_percentage_placeholder": "Entrez le pourcentage de taxe (0-100)",
+      "tax_percentage_help": "Entrez le pourcentage de taxe qui sera appliqué aux transactions. La valeur doit être comprise entre 0 et 100.",
+      "tax_percentage_range_error": "Le pourcentage de taxe doit être compris entre 0 et 100"
     }
   },
   "charts": {
@@ -444,11 +461,8 @@
     "title": "Configurations",
     "integrations": {
       "title": "Intégrations",
-      "googleAds": "Google Ads",
-      "adMob": "AdMob",
-      "firebase": "Firebase",
-      "playStore": "Play Store",
-      "appStore": "App Store",
+      "google_ads": "Google Ads",
+      "ad_mob": "AdMob",
       "facebook": "Facebook Ads",
       "appsFlyer": "AppsFlyer",
       "adjust": "Adjust",
@@ -472,7 +486,8 @@
       "add_new_integration": "Ajouter une nouvelle intégration",
       "select_platform": "Sélectionner une plateforme",
       "email": "E-mail",
-      "connection_status": "Statut de connexion"
+      "connection_status": "Statut de connexion",
+      "noIntegrations": "Aucune intégration trouvée"
     },
     "team": {
       "title": "Gestion d'équipe",
@@ -531,5 +546,22 @@
     "invalidCallback": "Rappel non valide",
     "callbackError": "Une erreur s'est produite lors du traitement du rappel",
     "backToOnboarding": "Retour à l'intégration"
+  },
+  "validation": {
+    "required": "Ce champ est obligatoire",
+    "email": "Veuillez entrer une adresse e-mail valide",
+    "number": "Veuillez entrer un nombre valide",
+    "min": "La valeur doit être au moins {{min}}",
+    "max": "La valeur doit être au maximum {{max}}",
+    "password": {
+      "min": "Le mot de passe doit contenir au moins 8 caractères",
+      "match": "Les mots de passe ne correspondent pas"
+    },
+    "tax_percentage": {
+      "required": "Le pourcentage de taxe est obligatoire",
+      "number": "Le pourcentage de taxe doit être un nombre",
+      "min": "Le pourcentage de taxe doit être au moins 0",
+      "max": "Le pourcentage de taxe doit être au maximum 100"
+    }
   }
 }

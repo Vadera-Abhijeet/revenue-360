@@ -193,7 +193,7 @@ class HttpService {
         (key) => `${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`
       )
       .join("&");
-    return queryString ? `${url}?${queryString}/` : url + "/";
+    return queryString ? `${url}/?${queryString}` : url + "/";
   }
 
   private toSnakeCase(str: string): string {

@@ -9,6 +9,24 @@ export const flowbiteTheme: CustomFlowbiteTheme = {
         "border border-transparent bg-indigo-700 text-white enabled:hover:bg-indigo-800 dark:bg-indigo-600 dark:hover:bg-indigo-700",
       light:
         "border border-gray-300 bg-white text-gray-900 enabled:hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-600 dark:text-white dark:enabled:hover:border-gray-700 dark:enabled:hover:bg-gray-700",
+      default:
+        "bg-primary-700 text-white hover:bg-primary-800 dark:bg-primary-600 dark:hover:bg-primary-700",
+      alternative:
+        "border border-gray-200 bg-white text-gray-900 hover:bg-gray-100 hover:text-primary-700 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white",
+      blue: "bg-blue-700 text-white hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-700",
+      cyan: "bg-cyan-700 text-white hover:bg-cyan-800 dark:bg-cyan-600 dark:hover:bg-cyan-700",
+      dark: "bg-gray-800 text-white hover:bg-gray-900 dark:bg-gray-800 dark:hover:bg-gray-700",
+      gray: "bg-gray-700 text-white hover:bg-gray-800 dark:bg-gray-600 dark:hover:bg-gray-700",
+      green:
+        "bg-green-700 text-white hover:bg-green-800 dark:bg-green-600 dark:hover:bg-green-700",
+      lime: "bg-lime-700 text-white hover:bg-lime-800 dark:bg-lime-600 dark:hover:bg-lime-700",
+      pink: "bg-pink-700 text-white hover:bg-pink-800 dark:bg-pink-600 dark:hover:bg-pink-700",
+      purple:
+        "bg-purple-700 text-white hover:bg-purple-800 dark:bg-purple-600 dark:hover:bg-purple-700",
+      red: "bg-red-700 text-white hover:bg-red-800 dark:bg-red-600 dark:hover:bg-red-700",
+      teal: "bg-teal-700 text-white hover:bg-teal-800 dark:bg-teal-600 dark:hover:bg-teal-700",
+      yellow:
+        "bg-yellow-400 text-white hover:bg-yellow-500 dark:bg-yellow-600 dark:hover:bg-yellow-400",
     },
   },
   navbar: {
@@ -156,21 +174,21 @@ export const flowbiteTheme: CustomFlowbiteTheme = {
     field: {
       input: {
         colors: {
-          gray: "border-gray-300 bg-gray-50 text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400",
+          gray: "border-gray-300 bg-gray-50 text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 focus:border-gray-400 focus:ring-gray-400",
         },
       },
     },
   },
   textarea: {
     colors: {
-      gray: "border-gray-300 bg-gray-50 text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400",
+      gray: "border-gray-300 bg-gray-50 text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 focus:border-gray-400 focus:ring-gray-400",
     },
   },
   fileInput: {
     field: {
       input: {
         colors: {
-          gray: "border-gray-300 bg-gray-50 text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400",
+          gray: "border-gray-300 bg-gray-50 text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 focus:border-gray-400 focus:ring-gray-400",
         },
       },
     },
@@ -180,7 +198,7 @@ export const flowbiteTheme: CustomFlowbiteTheme = {
       select: {
         base: "block w-full border disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer",
         colors: {
-          gray: "border-gray-300 bg-gray-50 text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400",
+          gray: "border-gray-300 bg-gray-50 text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 focus:border-gray-400 focus:ring-gray-400",
         },
       },
     },
@@ -189,8 +207,8 @@ export const flowbiteTheme: CustomFlowbiteTheme = {
     item: {
       link: {
         active: {
-          off: "hover:bg-gray-100 hover:text-indigo-700 dark:border-gray-600 dark:hover:bg-gray-600 dark:hover:text-white",
-          on: "bg-indigo-700 text-white dark:bg-gray-800",
+          off: "hover:bg-gray-100 hover:text-gray-400 dark:border-gray-600 dark:hover:bg-gray-600 dark:hover:text-white",
+          on: "bg-gray-400 text-white dark:bg-gray-800",
         },
       },
     },

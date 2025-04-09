@@ -10,10 +10,10 @@ interface NotificationDotProps {
 }
 
 const positionClasses = {
-  "top-left": "top-0 left-0",
-  "top-right": "top-0 right-0",
-  "bottom-left": "bottom-0 left-0",
-  "bottom-right": "bottom-0 right-0",
+  "top-left": "top-1 left-1",
+  "top-right": "top-1 right-1",
+  "bottom-left": "bottom-1 left-1",
+  "bottom-right": "bottom-1 right-1",
 };
 
 const NotificationDot: React.FC<NotificationDotProps> = ({

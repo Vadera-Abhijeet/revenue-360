@@ -388,13 +388,26 @@
       "title": "Kontoeinstellungen",
       "name": "Name",
       "email": "E-Mail",
-      "company": "Firmenname",
+      "company": "Firma",
       "role": "Rolle",
       "timezone": "Zeitzone",
       "save": "Änderungen speichern",
       "saving": "Wird gespeichert...",
       "saved": "Einstellungen erfolgreich gespeichert",
       "error": "Fehler beim Speichern der Einstellungen"
+    },
+    "profile": {
+      "title": "Profil-Einstellungen"
+    },
+    "password": {
+      "title": "Passwort ändern",
+      "current": "Aktuelles Passwort",
+      "new": "Neues Passwort",
+      "confirm": "Neues Passwort bestätigen",
+      "change": "Passwort ändern",
+      "saving": "Passwort wird geändert...",
+      "success": "Passwort erfolgreich geändert",
+      "error": "Fehler beim Ändern des Passworts"
     },
     "preferences": {
       "title": "Präferenzen",
@@ -403,7 +416,8 @@
       "theme": "Design",
       "emailNotifications": "E-Mail-Benachrichtigungen",
       "pushNotifications": "Push-Benachrichtigungen",
-      "dataRefresh": "Datenaktualisierungsrate"
+      "dataRefresh": "Datenaktualisierungsrate",
+      "tax_percentage": "Steuersatz"
     }
   },
   "charts": {
@@ -444,8 +458,8 @@
     "title": "Konfigurationen",
     "integrations": {
       "title": "Integrationen",
-      "googleAds": "Google Ads",
-      "adMob": "AdMob",
+      "google_ads": "Google Ads",
+      "ad_mob": "AdMob",
       "firebase": "Firebase",
       "playStore": "Play Store",
       "appStore": "App Store",
@@ -472,7 +486,8 @@
       "add_new_integration": "Neue Integration hinzufügen",
       "select_platform": "Plattform auswählen",
       "email": "E-Mail",
-      "connection_status": "Verbindungsstatus"
+      "connection_status": "Verbindungsstatus",
+      "noIntegrations": "Keine Integrationen gefunden"
     },
     "team": {
       "title": "Team-Verwaltung",
@@ -531,5 +546,22 @@
     "invalidCallback": "Ungültiger Rückruf",
     "callbackError": "Bei der Verarbeitung des Rückrufs trat ein Fehler auf",
     "backToOnboarding": "Zurück zum Onboarding"
+  },
+  "validation": {
+    "required": "Dieses Feld ist erforderlich",
+    "email": "Bitte geben Sie eine gültige E-Mail-Adresse ein",
+    "number": "Bitte geben Sie eine gültige Zahl ein",
+    "min": "Der Wert muss mindestens {{min}} sein",
+    "max": "Der Wert darf maximal {{max}} sein",
+    "password": {
+      "min": "Das Passwort muss mindestens 8 Zeichen lang sein",
+      "match": "Die Passwörter stimmen nicht überein"
+    },
+    "tax_percentage": {
+      "required": "Der Steuersatz ist erforderlich",
+      "number": "Der Steuersatz muss eine Zahl sein",
+      "min": "Der Steuersatz muss mindestens 0 sein",
+      "max": "Der Steuersatz darf maximal 100 sein"
+    }
   }
 }

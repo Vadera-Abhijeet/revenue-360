@@ -14,7 +14,7 @@ import NotFound from "../features/NotFound";
 import AcceptInvite from "../features/Auth/AcceptInvite";
 import OnboardingFlow from "../features/Onboarding/OnboardingFlow";
 import OAuthCallback from "../features/Onboarding/OAuthCallback";
-
+import AcceptInvitation from "../features/Configurations/TeamManagement/components/AcceptInvite";
 export {
   Landing,
   Auth,
@@ -32,4 +32,5 @@ export {
   AcceptInvite,
   OnboardingFlow,
   OAuthCallback,
+  AcceptInvitation,
 };

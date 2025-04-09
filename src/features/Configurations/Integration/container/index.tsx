@@ -7,11 +7,13 @@ import { IIntegrations, ISettings } from "../../../../interfaces";
 import { fetchUserSettings } from "../../../../services/api";
 import NewIntegrationModal from "../components/AddIntegrationModal";
 import IntegrationBlock from "../components/IntegrationBlock";
+import IntegrationBlockSkeleton from "../../../../components/SkeletonLoaders/IntegrationBlockSkeleton";
 import {
   IInitialConfirmationPopUpInterface,
   IInitialModalStateInterface,
   TDirection,
 } from "../interface";
+import { useLocation } from "react-router-dom";
 
 const initialModalState: IInitialModalStateInterface = {
   index: -1,
@@ -28,6 +30,7 @@ const initialConfirmationPopUpState: IInitialConfirmationPopUpInterface = {
 
 const Configurations: React.FC = () => {
   const { t } = useTranslation();
+  const location = useLocation();
   const [editModal, setEditModal] = useState(initialModalState);
   const [isLoading, setIsLoading] = useState(true);
   const [settings, setSettings] = useState<ISettings | null>(null);
@@ -66,6 +69,15 @@ const Configurations: React.FC = () => {
 
     loadSettings();
   }, []);
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const code = searchParams.get("code");
+    if (code && !isModalOpen) {
+      setIsModalOpen(true);
+      setActionType("addNewIntegration");
+    }
+  }, [isModalOpen, location.search]);
 
   const handleUpdateIntegration = (
     index: number,
@@ -149,80 +161,85 @@ const Configurations: React.FC = () => {
         </Button>
       </div>
       {isLoading ? (
-        <div className="flex items-center justify-center h-64">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary-600"></div>
-        </div>
+        <IntegrationBlockSkeleton count={2} />
       ) : (
         <>
           <div>
-            <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-1 xl:grid-cols-1 2xl:grid-cols-2 gap-6">
-              {settings?.integrations.map((integrationSet, index) => (
-                <Card
-                  key={index}
-                  className="shadow-md border border-gray-200 relative"
-                >
-                  <div
-                    className="bg-red-500 hover:bg-red-600 cursor-pointer hover:rotate-180 transition delay-100 duration-300 ease-in-out  absolute top-[-8px] right-[-8px] h-8 w-8 flex items-center justify-center rounded-full"
-                    onClick={() =>
-                      setConfirmDeleteIntegrationModal({ open: true, index })
-                    }
+            {settings?.integrations?.length === 0 ? (
+              <div className="flex items-center justify-center h-[calc(100vh-200px)]">
+                <p className="text-gray-500">
+                  {t("configurations.integrations.noIntegrations")}
+                </p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-1 xl:grid-cols-1 2xl:grid-cols-2 gap-6">
+                {settings?.integrations.map((integrationSet, index) => (
+                  <Card
+                    key={index}
+                    className="shadow-md border border-gray-200 relative"
                   >
-                    <X color="white" />
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="border-r pr-4">
-                      <IntegrationBlock
-                        integration={integrationSet.inward}
-                        t={t}
-                        onEditEmail={(email) =>
-                          setEditModal({
-                            open: true,
-                            index,
-                            email,
-                            direction: "inward",
-                          })
-                        }
-                        onToggleConnection={() =>
-                          setConfirmModal({
-                            open: true,
-                            index,
-                            direction: "inward",
-                            type: integrationSet.inward.connected
-                              ? "disconnect"
-                              : "connect",
-                          })
-                        }
-                      />
+                    <div
+                      className="bg-red-500 hover:bg-red-600 cursor-pointer hover:rotate-180 transition delay-100 duration-300 ease-in-out  absolute top-[-8px] right-[-8px] h-8 w-8 flex items-center justify-center rounded-full"
+                      onClick={() =>
+                        setConfirmDeleteIntegrationModal({ open: true, index })
+                      }
+                    >
+                      <X color="white" />
                     </div>
-                    <div>
-                      <IntegrationBlock
-                        integration={integrationSet.outward}
-                        t={t}
-                        onEditEmail={(email) =>
-                          setEditModal({
-                            open: true,
-                            index,
-                            email,
-                            direction: "outward",
-                          })
-                        }
-                        onToggleConnection={() =>
-                          setConfirmModal({
-                            open: true,
-                            index,
-                            direction: "outward",
-                            type: integrationSet.outward.connected
-                              ? "disconnect"
-                              : "connect",
-                          })
-                        }
-                      />
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="border-r pr-4">
+                        <IntegrationBlock
+                          integration={integrationSet.inward}
+                          t={t}
+                          onEditEmail={(email) =>
+                            setEditModal({
+                              open: true,
+                              index,
+                              email,
+                              direction: "inward",
+                            })
+                          }
+                          onToggleConnection={() =>
+                            setConfirmModal({
+                              open: true,
+                              index,
+                              direction: "inward",
+                              type: integrationSet.inward.connected
+                                ? "disconnect"
+                                : "connect",
+                            })
+                          }
+                        />
+                      </div>
+                      <div>
+                        <IntegrationBlock
+                          integration={integrationSet.outward}
+                          t={t}
+                          onEditEmail={(email) =>
+                            setEditModal({
+                              open: true,
+                              index,
+                              email,
+                              direction: "outward",
+                            })
+                          }
+                          onToggleConnection={() =>
+                            setConfirmModal({
+                              open: true,
+                              index,
+                              direction: "outward",
+                              type: integrationSet.outward.connected
+                                ? "disconnect"
+                                : "connect",
+                            })
+                          }
+                        />
+                      </div>
                     </div>
-                  </div>
-                </Card>
-              ))}
-            </div>
-
+                  </Card>
+                ))}
+              </div>
+            )}
             <Modal
               size={"md"}
               show={editModal.open}

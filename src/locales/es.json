@@ -388,13 +388,26 @@
       "title": "Configuración de cuenta",
       "name": "Nombre",
       "email": "Correo electrónico",
-      "company": "Nombre de la empresa",
+      "company": "Empresa",
       "role": "Rol",
       "timezone": "Zona horaria",
       "save": "Guardar cambios",
       "saving": "Guardando...",
       "saved": "Configuración guardada exitosamente",
       "error": "Error al guardar la configuración"
+    },
+    "profile": {
+      "title": "Configuración de perfil"
+    },
+    "password": {
+      "title": "Cambiar contraseña",
+      "current": "Contraseña actual",
+      "new": "Nueva contraseña",
+      "confirm": "Confirmar nueva contraseña",
+      "change": "Cambiar contraseña",
+      "saving": "Cambiando contraseña...",
+      "success": "Contraseña cambiada exitosamente",
+      "error": "Error al cambiar la contraseña"
     },
     "preferences": {
       "title": "Preferencias",
@@ -403,7 +416,11 @@
       "theme": "Tema",
       "emailNotifications": "Notificaciones por correo",
       "pushNotifications": "Notificaciones push",
-      "dataRefresh": "Tasa de actualización de datos"
+      "dataRefresh": "Tasa de actualización de datos",
+      "tax_percentage": "Porcentaje de impuestos",
+      "tax_percentage_placeholder": "Ingrese el porcentaje de impuestos (0-100)",
+      "tax_percentage_help": "Ingrese el porcentaje de impuestos que se aplicará a las transacciones. El valor debe estar entre 0 y 100.",
+      "tax_percentage_range_error": "El porcentaje de impuestos debe estar entre 0 y 100"
     }
   },
   "charts": {
@@ -444,11 +461,8 @@
     "title": "Configuración",
     "integrations": {
       "title": "Integraciones",
-      "googleAds": "Google Ads",
-      "adMob": "AdMob",
-      "firebase": "Firebase",
-      "playStore": "Play Store",
-      "appStore": "App Store",
+      "google_ads": "Google Ads",
+      "ad_mob": "AdMob",
       "facebook": "Facebook Ads",
       "appsFlyer": "AppsFlyer",
       "adjust": "Adjust",
@@ -472,7 +486,8 @@
       "add_new_integration": "Agregar nueva integración",
       "select_platform": "Seleccionar plataforma",
       "email": "Correo electrónico",
-      "connection_status": "Estado de conexión"
+      "connection_status": "Estado de conexión",
+      "noIntegrations": "No se encontraron integraciones"
     },
     "team": {
       "title": "Gestión de equipo",
@@ -531,5 +546,22 @@
     "invalidCallback": "Devolución de llamada no válida",
     "callbackError": "Se produjo un error al procesar la devolución de llamada",
     "backToOnboarding": "Volver a la incorporación"
+  },
+  "validation": {
+    "required": "Este campo es obligatorio",
+    "email": "Por favor, ingrese un correo electrónico válido",
+    "number": "Por favor, ingrese un número válido",
+    "min": "El valor debe ser al menos {{min}}",
+    "max": "El valor debe ser como máximo {{max}}",
+    "password": {
+      "min": "La contraseña debe tener al menos 8 caracteres",
+      "match": "Las contraseñas no coinciden"
+    },
+    "tax_percentage": {
+      "required": "El porcentaje de impuestos es obligatorio",
+      "number": "El porcentaje de impuestos debe ser un número",
+      "min": "El porcentaje de impuestos debe ser al menos 0",
+      "max": "El porcentaje de impuestos debe ser como máximo 100"
+    }
   }
 }

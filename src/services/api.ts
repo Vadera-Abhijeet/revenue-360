@@ -19,66 +19,42 @@ const randomFloat = (min: number, max: number, decimals: number = 2) => {
 
 export const allRoleDemoUsers: IMerchant[] = [
   {
-    id: "a08f1321-f046-40fe-ae73-0a0b57d7e568",
+    id: 1,
     email: "superadmin@gmail.com",
-    role: "super-admin",
-    password: "Admin@123",
-    permissions: [],
-    photoURL:
+    role: "super_admin",
+    profile_picture:
       "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541",
     name: "Super Admin",
-    status: "active",
-    company: "Demo Company",
-    createdAt: new Date("2025-03-25T08:43:47.510Z"),
-    updatedAt: new Date("2025-03-25T08:43:47.510Z"),
-    timezone: "America/New_York",
+    is_active: true,
+    company_name: "Demo Company",
+    created_at: "2025-03-25T08:43:47.510Z",
+    updated_at: "2025-03-25T08:43:47.510Z",
+    user_permissions: [],
   },
   {
-    id: "149a0132-9fa3-49bd-bc9e-e5a33aad517f",
+    id: 2,
     email: "admin@gmail.com",
     role: "admin",
-    password: "Admin@123",
-    permissions: [],
-    company: "Demo Company",
-    photoURL:
+    profile_picture:
       "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541",
     name: "Admin",
-    status: "active",
-    createdAt: new Date("2025-03-25T13:54:57.978Z"),
-    updatedAt: new Date("2025-03-25T13:54:57.978Z"),
-    timezone: "America/New_York",
-    teamMembers: [
-      {
-        id: "149a0132-9fa3-49bd-bc9e-e5a33aad519d",
-        email: "subadmin@gmail.com",
-        role: "sub-admin",
-        password: "Admin@123",
-        permissions: [],
-        photoURL:
-          "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541",
-        name: "Sub Admin",
-        status: "active",
-        createdAt: new Date("2025-03-25T13:54:57.978Z"),
-        updatedAt: new Date("2025-03-25T13:54:57.978Z"),
-        timezone: "America/New_York",
-        inviteStatus: "accepted",
-      },
-    ],
+    is_active: true,
+    company_name: "Demo Company",
+    created_at: "2025-03-25T13:54:57.978Z",
+    updated_at: "2025-03-25T13:54:57.978Z",
+    user_permissions: [],
   },
   {
-    id: "149a0132-9fa3-49bd-bc9e-e5a33aad519d",
+    id: 3,
     email: "subadmin@gmail.com",
-    role: "sub-admin",
-    password: "Admin@123",
-    permissions: [],
-    company: "Demo Company",
-    photoURL:
+    role: "sub_admin",
+    profile_picture:
       "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541",
     name: "Sub Admin",
-    status: "active",
-    createdAt: new Date("2025-03-25T13:54:57.978Z"),
-    updatedAt: new Date("2025-03-25T13:54:57.978Z"),
-    timezone: "America/New_York",
+    is_active: true,
+    created_at: "2025-03-25T13:54:57.978Z",
+    updated_at: "2025-03-25T13:54:57.978Z",
+    user_permissions: [],
   },
 ];
 
@@ -612,119 +588,9 @@ export const fetchUserSettings = async () => {
   // Simulate API call delay
   await new Promise((resolve) => setTimeout(resolve, 600));
   // Get current user from localStorage
-  const currentUser: IMerchant = JSON.parse(
-    localStorage.getItem("user") || "{}"
-  );
+
   return {
-    account: {
-      name: currentUser.name || "Demo User",
-      email: currentUser.email || "demo@example.com",
-      company: currentUser.company || "Demo Company",
-      role: currentUser.role || "admin",
-      timezone: currentUser.timezone || "America/New_York",
-      photoURL: currentUser.photoURL || "https://via.placeholder.com/150",
-      id: currentUser.id || "1234567890",
-      password: currentUser.password || "password",
-      permissions: currentUser.permissions || [],
-      status: currentUser.status || "active",
-      createdAt: currentUser.createdAt || new Date(),
-      updatedAt: currentUser.updatedAt || new Date(),
-      teamMembers: currentUser.teamMembers || [],
-      isNewMerchant: currentUser.isNewMerchant || false,
-    },
-    integrations: [
-      {
-        inward: {
-          platform: "googleAds",
-          connected: true,
-          accountEmail: "user1@example.com",
-          accountId: "123-456-7890",
-        },
-        outward: {
-          platform: "adMob",
-          connected: true,
-          accountEmail: "user2@example.com",
-          accountId: "987-654-3210",
-        },
-      },
-      {
-        inward: {
-          platform: "facebook",
-          connected: true,
-          accountEmail: "user3@example.com",
-          accountId: "FB-123456",
-        },
-        outward: {
-          platform: "adMob",
-          connected: false,
-          accountEmail: "user4@example.com",
-          accountId: "987-654-3210",
-        },
-      },
-      {
-        inward: {
-          platform: "facebook",
-          connected: false,
-          accountEmail: "user5@example.com",
-          accountId: "FB-789101",
-        },
-        outward: {
-          platform: "googleAds",
-          connected: true,
-          accountEmail: "user6@example.com",
-          accountId: "456-789-0123",
-        },
-      },
-    ],
-    preferences: {
-      language: "en",
-      currency: "USD",
-      theme: "light",
-      emailNotifications: true,
-      pushNotifications: true,
-      dataRefreshRate: "1h",
-    },
-    team: [
-      {
-        id: "user1",
-        name: "Demo User",
-        email: "demo@example.com",
-        role: "sub-admin",
-        status: "active",
-        password: "password",
-        timezone: "America/New_York",
-        permissions: [],
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        inviteStatus: "pending",
-      },
-      {
-        id: "user2",
-        name: "John Doe",
-        email: "john@example.com",
-        role: "sub-admin",
-        status: "active",
-        password: "password",
-        timezone: "America/New_York",
-        permissions: [],
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        inviteStatus: "pending",
-      },
-      {
-        id: "user3",
-        name: "Jane Smith",
-        email: "jane@example.com",
-        role: "sub-admin",
-        status: "pending",
-        password: "password",
-        timezone: "America/New_York",
-        permissions: [],
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        inviteStatus: "pending",
-      },
-    ],
+    integrations: [],
   } as ISettings;
 };
 
@@ -791,7 +657,7 @@ export const updateUserSettings = async (settings: {
 
       // Convert to Base64
       const base64String = await convertToBase64(settings.profilePic);
-      settings.account.photoURL = base64String;
+      settings.account.profile_picture = base64String;
 
       // Store in localStorage as a backup
       localStorage.setItem("tempProfilePic", base64String);
@@ -808,13 +674,13 @@ export const updateUserSettings = async (settings: {
   if (
     settings.account.name !== currentUser.name ||
     settings.account.email !== currentUser.email ||
-    settings.account.photoURL !== currentUser.photoURL
+    settings.account.profile_picture !== currentUser.profile_picture
   ) {
     const updatedUser = {
       ...currentUser,
       name: settings.account.name,
       email: settings.account.email,
-      photoURL: settings.account.photoURL,
+      profile_picture: settings.account.profile_picture,
     };
     localStorage.setItem("user", JSON.stringify(updatedUser));
   }

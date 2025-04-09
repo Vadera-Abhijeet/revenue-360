@@ -401,8 +401,21 @@
       "timezone": "タイムゾーン",
       "save": "変更を保存",
       "saving": "保存中...",
-      "saved": "設定を保存しました",
-      "error": "設定の保存に失敗しました"
+      "saved": "設定が正常に保存されました",
+      "error": "設定の保存中にエラーが発生しました"
+    },
+    "profile": {
+      "title": "プロフィール設定"
+    },
+    "password": {
+      "title": "パスワード変更",
+      "current": "現在のパスワード",
+      "new": "新しいパスワード",
+      "confirm": "新しいパスワードの確認",
+      "change": "パスワードを変更",
+      "saving": "パスワードを変更中...",
+      "success": "パスワードが正常に変更されました",
+      "error": "パスワードの変更中にエラーが発生しました"
     },
     "preferences": {
       "title": "設定",
@@ -411,7 +424,11 @@
       "theme": "テーマ",
       "emailNotifications": "メール通知",
       "pushNotifications": "プッシュ通知",
-      "dataRefresh": "データ更新頻度"
+      "dataRefresh": "データ更新頻度",
+      "tax_percentage": "税率",
+      "tax_percentage_placeholder": "税率を入力（0-100）",
+      "tax_percentage_help": "取引に適用される税率を入力してください。値は0から100の間である必要があります。",
+      "tax_percentage_range_error": "税率は0から100の間である必要があります"
     }
   },
   "charts": {
@@ -452,11 +469,8 @@
     "title": "構成",
     "integrations": {
       "title": "連携",
-      "googleAds": "Google広告",
-      "adMob": "AdMob",
-      "firebase": "Firebase",
-      "playStore": "Play Store",
-      "appStore": "App Store",
+      "google_ads": "Google広告",
+      "ad_mob": "AdMob",
       "facebook": "Facebook広告",
       "appsFlyer": "AppsFlyer",
       "adjust": "Adjust",
@@ -480,7 +494,8 @@
       "add_new_integration": "新しい統合を追加",
       "select_platform": "プラットフォームを選択",
       "email": "メール",
-      "connection_status": "接続状況"
+      "connection_status": "接続状況",
+      "noIntegrations": "統合はありません"
     },
     "team": {
       "title": "チーム管理",
@@ -536,5 +551,22 @@
     "invalidCallback": "無効なコールバック",
     "callbackError": "コールバックの処理中にエラーが発生しました",
     "backToOnboarding": "オンボーディングに戻る"
+  },
+  "validation": {
+    "required": "この項目は必須です",
+    "email": "有効なメールアドレスを入力してください",
+    "number": "有効な数値を入力してください",
+    "min": "値は{{min}}以上である必要があります",
+    "max": "値は{{max}}以下である必要があります",
+    "password": {
+      "min": "パスワードは8文字以上である必要があります",
+      "match": "パスワードが一致しません"
+    },
+    "tax_percentage": {
+      "required": "税率は必須です",
+      "number": "税率は数値である必要があります",
+      "min": "税率は0以上である必要があります",
+      "max": "税率は100以下である必要があります"
+    }
   }
 }

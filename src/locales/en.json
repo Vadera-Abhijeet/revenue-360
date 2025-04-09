@@ -8,8 +8,9 @@
     "cancel": "Cancel",
     "delete": "Delete",
     "edit": "Edit",
+    "resend": "Resend",
     "view": "View",
-    "search": "Search",
+    "search": "Search...",
     "filter": "Filter",
     "export": "Export",
     "import": "Import",
@@ -144,7 +145,8 @@
     },
     "merchants": "Merchants",
     "email": "Email",
-    "processing": "Processing"
+    "processing": "Processing",
+    "page": "Page"
   },
   "landing": {
     "hero": {
@@ -427,13 +429,26 @@
       "title": "Account Settings",
       "name": "Name",
       "email": "Email",
-      "company": "Company Name",
+      "company": "Company",
       "role": "Role",
       "timezone": "Timezone",
       "save": "Save Changes",
       "saving": "Saving...",
       "saved": "Settings saved successfully",
-      "error": "Failed to save settings"
+      "error": "Error saving settings"
+    },
+    "profile": {
+      "title": "Profile Settings"
+    },
+    "password": {
+      "title": "Change Password",
+      "current": "Current Password",
+      "new": "New Password",
+      "confirm": "Confirm New Password",
+      "change": "Change Password",
+      "saving": "Changing Password...",
+      "success": "Password changed successfully",
+      "error": "Error changing password"
     },
     "preferences": {
       "title": "Preferences",
@@ -442,7 +457,9 @@
       "theme": "Theme",
       "emailNotifications": "Email Notifications",
       "pushNotifications": "Push Notifications",
-      "dataRefresh": "Data Refresh Rate"
+      "dataRefresh": "Data Refresh Rate",
+      "tax_percentage": "Tax Percentage",
+      "tax_percentage_help": "Enter the tax percentage that will be applied to transactions. Value must be between 0 and 100."
     }
   },
   "charts": {
@@ -483,11 +500,8 @@
     "title": "Configurations",
     "integrations": {
       "title": "Integrations",
-      "googleAds": "Google Ads",
-      "adMob": "AdMob",
-      "firebase": "Firebase",
-      "playStore": "Play Store",
-      "appStore": "App Store",
+      "google_ads": "Google Ads",
+      "ad_mob": "AdMob",
       "facebook": "Facebook Ads",
       "appsFlyer": "AppsFlyer",
       "adjust": "Adjust",
@@ -511,24 +525,48 @@
       "add_new_integration": "Add New Integration",
       "select_platform": "Select Platform",
       "email": "Email",
-      "connection_status": "Connection status"
+      "connection_status": "Connection status",
+      "noIntegrations": "No integrations found"
     },
     "team": {
       "title": "Team Management",
-      "members": "Team Members",
-      "invite": "Invite Member",
+      "invite": "Invite Team Member",
       "name": "Name",
       "email": "Email",
-      "role": "Role",
+      "isOwner": "Is Owner",
       "status": "Status",
       "actions": "Actions",
-      "permissions": "Permissions",
-      "select_permissions": "Select Permissions",
-      "invite_success": "Team member invited successfully",
-      "invite_error": "Failed to invite team member",
       "emailRequired": "Email is required",
       "invalidEmail": "Please enter a valid email address",
-      "minPermissionsRequired": "Please select at least one permission"
+      "minPermissionsRequired": "At least one permission is required",
+      "permissions": "Permissions",
+      "account": "Account",
+      "application": "Application",
+      "module": "Module",
+      "confirmDeleteMemberTitle": "Delete Team Member",
+      "confirmDeleteMemberContent": "Are you sure you want to delete this team member?",
+      "inviteSuccess": "Invite sent!",
+      "confirmResendInviteTitle": "Resend Invitation",
+      "confirmResendInviteContent": "Are you sure you want to resend the invitation to this team member?",
+      "emailAlreadyInvited": "This email has already been invited to the team",
+      "cannotInviteYourself": "You cannot invite yourself to the team",
+      "acceptInvite": {
+        "title": "Accept Invitation",
+        "welcomeMessage": "Welcome! Please complete your registration to join the team.",
+        "name": "Full Name",
+        "nameRequired": "Please enter your full name",
+        "password": "Password",
+        "passwordRequired": "Please enter a password",
+        "passwordMinLength": "Password must be at least 8 characters long",
+        "confirmPassword": "Confirm Password",
+        "confirmPasswordRequired": "Please confirm your password",
+        "passwordsDoNotMatch": "Passwords do not match",
+        "submit": "Complete Registration",
+        "submitting": "Processing...",
+        "invalidInvite": "Invalid Invitation",
+        "inviteExpiredOrInvalid": "This invitation link is invalid or has expired. Please request a new invitation.",
+        "acceptInviteError": "Failed to accept invitation. Please try again or contact support."
+      }
     }
   },
   "merchant": {
@@ -570,5 +608,22 @@
     "invalidCallback": "Invalid callback",
     "callbackError": "An error occurred while processing the callback",
     "backToOnboarding": "Back to Onboarding"
+  },
+  "validation": {
+    "required": "This field is required",
+    "email": "Please enter a valid email address",
+    "number": "Please enter a valid number",
+    "min": "Value must be at least {{min}}",
+    "max": "Value must be at most {{max}}",
+    "password": {
+      "min": "Password must be at least 8 characters",
+      "match": "Passwords do not match"
+    },
+    "tax_percentage": {
+      "required": "Tax percentage is required",
+      "number": "Tax percentage must be a number",
+      "min": "Tax percentage must be at least 0",
+      "max": "Tax percentage must be at most 100"
+    }
   }
 }
