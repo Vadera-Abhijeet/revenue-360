@@ -13,7 +13,7 @@ import {
   IInitialModalStateInterface,
   TDirection,
 } from "../interface";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const initialModalState: IInitialModalStateInterface = {
   index: -1,
@@ -31,6 +31,7 @@ const initialConfirmationPopUpState: IInitialConfirmationPopUpInterface = {
 const Configurations: React.FC = () => {
   const { t } = useTranslation();
   const location = useLocation();
+  const navigate = useNavigate();
   const [editModal, setEditModal] = useState(initialModalState);
   const [isLoading, setIsLoading] = useState(true);
   const [settings, setSettings] = useState<ISettings | null>(null);
@@ -47,6 +48,7 @@ const Configurations: React.FC = () => {
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setActionType("");
+    navigate("/configurations/integrations", { replace: true });
   };
 
   const isAddNewIntegrationModalOpen = useMemo(
